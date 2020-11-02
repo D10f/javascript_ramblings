@@ -23,3 +23,5 @@ TODO: Add option to roll multiple dices at once         d12({ repeat: 5 })      
 TODO: For multiple rolls, add option to sort results    d12({ repeat: 5, sort: true })  // [3, 3, 7, 9, 12]
 TODO: For multiple rolls, add option to group results   d12({ repeat: 5, group: true }) // 2 threes, 1 seven, 1 nine, 1 twelve
 ```
+### Update: started working on learning the fundamentals of Three.js
+![](cubes.png)

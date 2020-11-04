@@ -1,4 +1,6 @@
-# dice_master
+This is a collection of small collection of side-projects and scripts to explore different technologies in JavaScript.
+
+### [dice_master](https://github.com/herokunt/javascript_ramblings/blob/main/dice.js)
 
 A very simple script to simulate dice rolls. Create dice with any number of sides and optionally provide any numbers that should be re-rolled.
 
@@ -25,5 +27,16 @@ TODO: For multiple rolls, add option to sort results    d12({ repeat: 5, sort: t
 TODO: For multiple rolls, add option to group results   d12({ repeat: 5, group: true }) // 2 threes, 1 seven, 1 nine, 1 twelve
 */
 ```
-### Update: started working on learning the fundamentals of Three.js
+Update: started working on learning the fundamentals of Three.js
 ![](cubes.png)
+
+---
+
+### [Solar System](https://github.com/herokunt/javascript_ramblings/blob/main/planets.js)
+
+A solar system 3D simulation built with Three.js
+
+
+### [No YouTube](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)
+
+A simple bookmarklet that replaces references to Youtube in the current page with Invidious instances.

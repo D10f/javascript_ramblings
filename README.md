@@ -42,7 +42,7 @@ Update: started working on learning the fundamentals of Three.js
 
 A simple 3D simulation of the solar system built with Three.js as an introduction to how the library works
 
-![solar system in 3D](docs/solar.png)
+![solar system in 3D](solar.png)
 
 ---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)

@@ -7,44 +7,44 @@ class Ball {
     this.r = sqrt(m) * 10; // 10 here is arbitrary
   }
 
+  // The larger the object, the less a force affects it
   applyForce(force) {
     const f = p5.Vector.div(force, this.mass);
     this.acc.add(f);
   }
-  
+
   applyGravity(force){
     this.acc.add(force);
   }
 
   applyFriction(){
-    
-    // Get vector of opposite velocity of magnitude 1.
+    // Get vector of opposite direction of magnitude 1.
     let friction = this.vel.copy();
     friction.normalize();
     friction.mult(-1);
-    
-    // Arbitrary constant based on the mass of the object.
+
+    // Arbitrary constant set to be the mass of the object.
     const normal = this.mass;
-    
-    // Calculate the magnitude
+
+    // Calculate the magnitude of the friction vector.
     friction.setMag(mu * normal);
-    
+
     this.applyForce(friction);
   }
-  
+
   applyDragForce(){
-    // similar to friction
+    // Get vector of opposite direction of magnitude 1.
     let drag = this.vel.copy();
     drag.normalize();
     drag.mult(-1);
-    
-    // but based on the object's velocity e.g., fluids
+
+    // Calculate the magnitude of the drag vector.
     const speedSq = this.vel.magSq();
-    
     drag.setMag(dragConstant * speedSq);
+
     this.applyForce(drag);
   }
-  
+
   edgeDetection() {
     if (this.pos.x >= width - this.r) {
       this.pos.x = width - this.r;
@@ -74,9 +74,10 @@ class Ball {
 }
 
 // Friction and drag constants
-const mu = 0.01;
+const mu = 0.02;
 const dragConstant = 0.1;
 
+// Init objects and forces
 const objects = [];
 let gravity, wind;
 
@@ -91,23 +92,24 @@ function setup() {
     new Ball(350, 100, 10)
   );
 
-  gravity = createVector(0, 0.2);
+  gravity = createVector(0, 0.5);
   wind = createVector(0.1, 0);
 }
 
 function draw() {
   background(220);
 
-  // represents water
+  // Body of water which applies drag force
   fill(200, 200, 255);
   rect(0, height / 2, width, height);
 
   for (const ball of objects) {
     if (mouseIsPressed) {
+      // Yes, underwater-wind force all right?
       ball.applyForce(wind);
     }
 
-    // when ball enters the water apply drag force
+    // Object enters the water
     if (ball.pos.y >= height / 2) {
       ball.applyDragForce();
     }

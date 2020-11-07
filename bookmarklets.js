@@ -1,5 +1,6 @@
 /**
- *  Replaces all reference to Youtube, including link attributes, and replaces them with invidious links.
+ *  Replaces all references to Youtube, including link href attributes, and
+ *  replaces them with invidious links.
  */
 
 javascript:

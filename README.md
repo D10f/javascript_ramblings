@@ -66,6 +66,13 @@ A follow along of Daniel Shiffman's The Nature Of Code playlist. This basic demo
 A follow along of Daniel Shiffman's The Nature Of Code playlist. This basic demo uses p5.js to create an environment that simulates gravitational attraction between objects.
 
 ---
+### [2D - Perlin Noise](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_perlin_noise.js)
+
+[See demo](https://editor.p5js.org/fall-parameter/sketches/oGkwnNowr)
+
+A follow along of Daniel Shiffman's The Nature Of Code playlist. This is a visual representation of 2-dimensional Perlin noise.
+
+---
 ### [2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)
 
 A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist.

@@ -66,6 +66,13 @@ A follow along of Daniel Shiffman's The Nature Of Code playlist. This basic demo
 A follow along of Daniel Shiffman's The Nature Of Code playlist. This basic demo uses p5.js to create an environment that simulates gravitational attraction between objects.
 
 ---
+### [2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)
+
+A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist.
+
+[See demo](https://editor.p5js.org/fall-parameter/sketches/d-62o26oB)
+
+---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)
 
 A simple bookmarklet that replaces references to Youtube links in the current page with Invidious instances. This `https://youtu.be/70MQ-FugwbI` becomes `https://invidious.site/70MQ-FugwbI`

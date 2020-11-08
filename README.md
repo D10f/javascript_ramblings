@@ -73,6 +73,13 @@ A follow along of Daniel Shiffman's The Nature Of Code playlist. This basic demo
 A follow along of Daniel Shiffman's The Nature Of Code playlist. This is a visual representation of 2-dimensional Perlin noise.
 
 ---
+### [2D - Flow Field](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_flowfield.js)
+
+A follow along of Daniel Shiffman's The Nature Of Code playlist. This is a visual representation of 3-dimensional Perlin noise.
+
+[See demo](https://editor.p5js.org/fall-parameter/sketches/PxvmM0PMq)
+
+---
 ### [2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)
 
 A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist.

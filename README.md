@@ -84,7 +84,7 @@ A follow along of Daniel Shiffman's The Nature Of Code playlist. This is a visua
 
 A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist.
 
-[See demo](https://editor.p5js.org/fall-parameter/sketches/d-62o26oB)
+[See demo](https://editor.p5js.org/fall-parameter/sketches/KHmqjD_gx)
 
 ---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)

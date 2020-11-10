@@ -1,85 +1,79 @@
-class Snowflake {
-  constructor(m = random(5, 25)) {
-    this.pos = createVector();
+class Particle {
+  constructor() {
+    const x = random(width);
+    const y = random(-height, height / 4);
+    this.pos = createVector(x, y);
     this.acc = createVector();
-    this.mass = m;
-    this.r = sqrt(this.mass);
-    this.reset();
-  }
-
-  reset() {
-    this.pos.x = random(-50, width + 50);
-    this.pos.y = random(-50, 5);
-    this.vel = p5.Vector.random2D();
+    this.vel = createVector();
+    this.mass = abs(randomGaussian(0, 4) * 10);
+    this.size = constrain(sqrt(this.mass), 2, 20);
   }
 
   applyForce(force) {
     this.acc.add(force);
   }
 
-  applyDragForce(){
-    // apply drag only for wind, not gravity
-    let drag = createVector(this.vel.x, 0);
-    drag.normalize();
-    drag.mult(-1);
-
-    // but based on the object's velocity
-    const speedSq = this.vel.magSq();
-
-    drag.setMag(windDragForce * speedSq);
-    this.applyForce(drag);
+  applyWind(force) {
+    let f = p5.Vector.div(force, this.mass * 0.1);
+    this.acc.add(f);
   }
 
-  // once flakes move out of canvas re-set it's position
   edgeDetection() {
-    if (this.pos.y >= height + this.r){
-      this.reset();
+    if (this.pos.x > width + this.size) {
+      this.pos.x = -this.size;
+    } else if (this.pos.x < -this.size) {
+      this.pos.x = width + this.size;
     }
-    if (this.pos.x >= width + this.r){
-      this.pos.x = -this.r;
-    } else if (this.pos.x <= -this.r) {
-      this.pos.x = width + this.r;
+
+    if (this.pos.y > height + this.size) {
+      this.pos.y = random(-100, -50);
     }
   }
 
   update() {
     this.vel.add(this.acc);
+    this.vel.limit(this.size * 0.15);
     this.pos.add(this.vel);
     this.edgeDetection();
-    this.acc.set(0, 0);
+    this.acc.mult(0);
   }
 
   show() {
-    fill(200);
-    ellipse(this.pos.x, this.pos.y, this.r);
+    ellipse(this.pos.x, this.pos.y, this.size);
   }
 }
 
-const particles = 500;
-const windDragForce = 0.01;
-const snowflakes = [];
-let gravity, wind;
+const PARTICLES = 300;
+let snow, gravity, wind, windOffset, angle;
 
 function setup() {
   createCanvas(400, 400);
-  noStroke();
 
-  gravity = createVector(0, 0.005);
-  wind = createVector(random(-0.1, 0.1), 0);
+  gravity = createVector(0, 1);
+  windOffset = 0;
 
-  for (let i = 0; i < particles; i++) {
-    snowflakes.push(new Snowflake());
+  snow = [];
+  for (let i = 0; i < PARTICLES; i++) {
+    snow[i] = new Particle();
   }
+
 }
 
 function draw() {
   background(0);
+  noStroke();
+  fill(255);
 
-  for (const flake of snowflakes) {
-    if (mouseIsPressed){
-      flake.applyForce(wind);
-      flake.applyDragForce();
-    }
+  let x, y, z, f;
+  windOffset += 0.005;
+
+  for (const flake of snow) {
+    x = flake.pos.x / width;
+    y = flake.pos.y / height;
+    f = noise(x, y, windOffset) * TWO_PI;
+    wind = p5.Vector.fromAngle(f);
+    wind.mult(0.2);
+    flake.applyForce(wind);
     flake.applyForce(gravity);
     flake.update();
     flake.show();

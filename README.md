@@ -52,7 +52,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 ![solar system in 3D](3D/assets/solar.png)
 
 ---
-The following are exercises inspired by Daniel Shiffman's (The Coding Train), implementing slight modifications where to adjust my own style such as modern ES6 syntax.
+The following are exercises inspired by Daniel Shiffman's (The Coding Train), implementing slight modifications here and there to my own style including ES6+ syntax.
 
 **[2D - Forces](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_forces.js)**: This basic demo uses p5.js to create an environment that simulates real world forces, such as gravity, wind, friction and drag. [See demo](https://editor.p5js.org/fall-parameter/sketches/5KQupIlIW)
 
@@ -71,6 +71,8 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 **[2D - Joggler](https://github.com/herokunt/javascript_ramblings/blob/main/2D/joggler.js)**: Very simple game to mimic an interactive joggling in the canvas. [See demo](https://editor.p5js.org/fall-parameter/sketches/d5aRIpu00)
 
 **[2D - Fireworks](https://github.com/herokunt/javascript_ramblings/blob/main/2D/fireworks.js)**: A firework simulation in the browser canvas [See demo](https://editor.p5js.org/fall-parameter/sketches/oQ_ScPSZq)
+
+**[2D - Asteroids](https://github.com/herokunt/javascript_ramblings/blob/main/2D/asteroids.js)**: The classic 8-bit game Asteroids! [See demo](https://editor.p5js.org/fall-parameter/sketches/EBnF9Q-1N)
 
 **[2D - Non-overlapping circles](https://github.com/herokunt/javascript_ramblings/blob/main/2D/overlap.js)**: Fill the screen with circles that will never overlap with each other! [See demo](https://editor.p5js.org/fall-parameter/sketches/hm3joNACl)
 

@@ -91,19 +91,15 @@ function setup() {
   gravity = createVector(0, 0.12);
 }
 
-function mousePressed() {
-  console.log(fireworks.length)
-}
-
 function draw() {
   background(0, 40);
 
-  fireworks = fireworks.reduce((acc, f) => {
+  fireworks = fireworks.filter(f => {
     f.applyForce(gravity);
     f.update();
     f.show();
-    return f.done ? acc : [...acc, f];
-  }, []);
+    return f.done ? false : true;
+  });
 
   if (random(1) < 0.1) {
     fireworks.push(new Firework(random(width), height));

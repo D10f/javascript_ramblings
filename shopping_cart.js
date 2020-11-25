@@ -3,18 +3,6 @@ class ShoppingCart {
     this.items = [];
   }
 
-  getItems() {
-    return this.items;
-  }
-
-  emptyCart() {
-    this.items = [];
-  }
-
-  setCart(cart) {
-    this.items = cart;
-  }
-
   addItem(item) {
     const matchIdx = this.items.findIndex(cartItem => cartItem.id === item.id);
     if (matchIdx >= 0) {
@@ -29,5 +17,21 @@ class ShoppingCart {
     if (matchIdx >= 0) {
       this.items.splice(matchIdx, 1);
     }
+  }
+
+  getItems() {
+    return this.items;
+  }
+
+  getTotalPrice() {
+    return this.items.reduce((acc, val) => acc + val);
+  }
+
+  emptyCart() {
+    this.items = [];
+  }
+
+  setCart(cart) {
+    this.items = cart;
   }
 }

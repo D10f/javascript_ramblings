@@ -90,6 +90,9 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 
 ![Space Invaders](2D/assets/space_invaders.png)
 
+**[2D - Steering Behaviors](https://github.com/herokunt/javascript_ramblings/blob/main/2D/steering_behavior.js)**: Particle system where each particle reacts to it's environment in a "lifelike" manner. [See demo](https://editor.p5js.org/fall-parameter/sketches/Po7qTPFag)
+
+
 ---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)
 

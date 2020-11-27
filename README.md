@@ -72,11 +72,9 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 
 ![The Game Of Life](2D/assets/game_of_life.png)
 
-**[2D - Space Invaders](https://github.com/herokunt/javascript_ramblings/blob/main/2D/invaders.js)**: Another 8-bit classic game: space invaders!. [See demo](https://editor.p5js.org/fall-parameter/sketches/AULsRZPCm)
-
-![Space Invaders](2D/assets/space_invaders.png)
-
 **[2D - Joggler](https://github.com/herokunt/javascript_ramblings/blob/main/2D/joggler.js)**: Very simple game to mimic an interactive joggling in the canvas. [See demo](https://editor.p5js.org/fall-parameter/sketches/d5aRIpu00)
+
+**[2D - Matrix Letter Effect](https://github.com/herokunt/javascript_ramblings/blob/main/2D/matrix_letters.js)**: The classic digital letter "rain" effect from the movie: The Matrix. [See demo](https://editor.p5js.org/fall-parameter/sketches/7RUbiCt1b)
 
 **[2D - Maze Generator](https://github.com/herokunt/javascript_ramblings/blob/main/2D/maze_generator.js)**: A maze generator on the browser based on depth-first search recursive algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Y_IB8Scm4)
 
@@ -87,6 +85,10 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 **[2D - Perlin Noise](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_perlin_noise.js)**: This is a visual representation of 2-dimensional Perlin noise. [See demo](https://editor.p5js.org/fall-parameter/sketches/oGkwnNowr)
 
 **[2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)**: A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist. [See demo](https://editor.p5js.org/fall-parameter/sketches/KHmqjD_gx)
+
+**[2D - Space Invaders](https://github.com/herokunt/javascript_ramblings/blob/main/2D/invaders.js)**: Another 8-bit classic game: space invaders!. [See demo](https://editor.p5js.org/fall-parameter/sketches/AULsRZPCm)
+
+![Space Invaders](2D/assets/space_invaders.png)
 
 ---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)

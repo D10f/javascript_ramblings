@@ -3,8 +3,9 @@ class Particle {
     this.pos = createVector(x, y);
     this.vel = createVector();
     this.acc = createVector();
-    this.target = createVector(x, y); // it's original position
-    this.targetDistance = 0; // how far away is from target
+    this.target = createVector(x, y); // original position
+    this.targetDistance = 0; // distance from target
+    this.cursorAllergy = 35; // distance from cursor to move away from it
     this.maxSpeed = 10;
     this.steeringForce = 0.5;
   }
@@ -20,11 +21,12 @@ class Particle {
 
     const steer = p5.Vector.sub(targetDirection, this.vel);
     steer.limit(this.steeringForce);
+
     this.applyForce(steer);
   }
 
   avoidCursor() {
-    if (dist(mouseX, mouseY, this.pos.x, this.pos.y) < 35) {
+    if (dist(mouseX, mouseY, this.pos.x, this.pos.y) < this.cursorAllergy) {
       const force = p5.Vector.sub(createVector(mouseX, mouseY), this.pos);
       let distanceSq = force.magSq();
       distanceSq = constrain(distanceSq, 1, 5);

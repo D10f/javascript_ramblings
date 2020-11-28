@@ -44,6 +44,8 @@ TODO: Animation using three.js
 */
 ```
 
+![solar system in 3D](3D/assets/cubes.png)
+
 ---
 ### [Solar System](https://github.com/herokunt/javascript_ramblings/blob/main/3D/planets.js)
 

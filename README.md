@@ -56,6 +56,8 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 ---
 The following are exercises inspired by Daniel Shiffman's (The Coding Train), implementing slight modifications here and there to my own style including ES6+ syntax.
 
+**[2D - Angry Birds](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_birds.js)**: A (very) simplified clone of the popular game Angry Birds using Matter.js and P5.js as rendering engine. [See demo](https://editor.p5js.org/fall-parameter/sketches/aKA9ZXHO1)
+
 **[2D - Asteroids](https://github.com/herokunt/javascript_ramblings/blob/main/2D/asteroids.js)**: The classic 8-bit game Asteroids! [See demo](https://editor.p5js.org/fall-parameter/sketches/EBnF9Q-1N)
 
 **[2D - Attraction](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_physics.js)**: This basic demo uses p5.js to create an environment that simulates gravitational attraction between objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/HmzJS_pB8)

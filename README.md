@@ -80,6 +80,8 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 
 ![The Game Of Life](2D/assets/game_of_life.png)
 
+**[2D - Hanging Lightbulb](https://github.com/herokunt/javascript_ramblings/blob/main/2D/hanging_lightbulb.js)**: Combines raycasting with phyiscs engine to cast shadow dynamically on moving objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/iRAe03G1W)
+
 **[2D - Joggler](https://github.com/herokunt/javascript_ramblings/blob/main/2D/joggler.js)**: Very simple game to mimic an interactive joggling in the canvas. [See demo](https://editor.p5js.org/fall-parameter/sketches/d5aRIpu00)
 
 **[2D - Matrix Letter Effect](https://github.com/herokunt/javascript_ramblings/blob/main/2D/matrix_letters.js)**: The classic digital letter "rain" effect from the movie: The Matrix. [See demo](https://editor.p5js.org/fall-parameter/sketches/7RUbiCt1b)

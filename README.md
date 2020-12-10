@@ -100,6 +100,8 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 
 **[2D - Quadtree](https://github.com/herokunt/javascript_ramblings/blob/main/2D/quadtree.js)**: Visualization of a quadtree data structure for optimized performance in simulations of interacting particle systems. [See demo](https://editor.p5js.org/fall-parameter/sketches/wPjwEOd-i)
 
+**[2D - Raycasting3D](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting_3D.js)**: Raycasting implementation in P5 using mathematical algorithms to create a "3D" projection out of a 2D canvas. [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o)
+
 **[2D - Raycasting](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting.js)**: Visualization of a light-emitting object using raycasting algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Mr6WzNe5E)
 
 **[2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)**: A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist. [See demo](https://editor.p5js.org/fall-parameter/sketches/KHmqjD_gx)

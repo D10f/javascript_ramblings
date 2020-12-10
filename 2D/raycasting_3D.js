@@ -127,3 +127,130 @@ class Player {
     pop();
   }
 }
+
+class Ray {
+  constructor(x, y, angle) {
+    this.x = x;
+    this.y = y;
+    this.angle = this.normalizeAngle(angle);
+    this.targetX = Number.MAX_VALUE;
+    this.targetY = Number.MAX_VALUE;
+    this.length = 0;
+
+    this.isFacingSouth = this.angle > 0 && this.angle < PI;
+    this.isFacingNorth = !this.isFacingSouth;
+
+    this.isFacingEast  = this.angle < HALF_PI || this.angle > PI + HALF_PI;
+    this.isFacingWest  = !this.isFacingEast;
+  }
+
+  normalizeAngle(angle) {
+    let a = angle % TWO_PI;
+    if (a < 0) {
+      a += TWO_PI;
+    }
+    return a;
+  }
+
+  cast(columnId) {
+    let xintersect, yintersect, xstep, ystep;
+
+    /* HORIZONTAL RAY-GRID INTERSECTION */
+    let hasHorizontalTarget, horizontalTargetX, horizontalTargetY;
+
+    yintersect = this.isFacingSouth
+      ? floor(this.y / TILE_SIZE) * TILE_SIZE + TILE_SIZE
+      : floor(this.y / TILE_SIZE) * TILE_SIZE;
+
+    xintersect = this.x + (yintersect - this.y) / tan(this.angle);
+
+    ystep = this.isFacingNorth ? -TILE_SIZE : TILE_SIZE;
+    xstep = TILE_SIZE / tan(this.angle);
+
+    if ((this.isFacingWest && xstep > 0) || (this.isFacingEast && xstep < 0)) {
+      xstep *= -1;
+    }
+
+    if (this.isFacingNorth) { yintersect--; }
+
+    while (
+      xintersect >= 0 && xintersect <= width &&
+      yintersect >= 0 && yintersect <= height
+    ) {
+      if (grid.containsWall(xintersect, yintersect)) {
+        hasHorizontalTarget = true;
+        horizontalTargetX = xintersect;
+        horizontalTargetY = yintersect;
+        break;
+      }
+      xintersect += xstep;
+      yintersect += ystep;
+    }
+
+    /* VERTICAL RAY-GRID INTERSECTION */
+    let hasVerticalTarget, verticalTargetX, verticalTargetY;
+
+    xintersect = this.isFacingEast
+      ? floor(this.x / TILE_SIZE) * TILE_SIZE + TILE_SIZE
+      : floor(this.x / TILE_SIZE) * TILE_SIZE;
+
+    yintersect = this.y + (xintersect - this.x) * tan(this.angle);
+
+    xstep = this.isFacingWest ? -TILE_SIZE : TILE_SIZE;
+    ystep = TILE_SIZE * tan(this.angle);
+
+    if (
+      (this.isFacingNorth && ystep > 0) ||
+      (this.isFacingSouth && ystep < 0)
+    ) {
+      ystep *= -1;
+    }
+
+    if (this.isFacingWest) { xintersect--; }
+
+    while (
+      xintersect >= 0 && xintersect <= width &&
+      yintersect >= 0 && yintersect <= height
+    ) {
+      if (grid.containsWall(xintersect, yintersect)) {
+        hasVerticalTarget = true;
+        verticalTargetX = xintersect;
+        verticalTargetY = yintersect;
+        break;
+      }
+      xintersect += xstep;
+      yintersect += ystep;
+    }
+
+    // Find distance to horizontal and vertical ray-grid intersection points
+    const horizontalDist = hasHorizontalTarget
+      ? dist(this.x, this.y, horizontalTargetX, horizontalTargetY)
+      : Number.MAX_VALUE;
+
+    const verticalDist = hasVerticalTarget
+      ? dist(this.x, this.y, verticalTargetX, verticalTargetY)
+      : Number.MAX_VALUE;
+
+    if (horizontalDist < verticalDist) {
+      this.length = horizontalDist;
+      this.targetX = horizontalTargetX;
+      this.targetY = horizontalTargetY;
+    } else {
+      this.length = verticalDist;
+      this.targetX = verticalTargetX;
+      this.targetY = verticalTargetY;
+    }
+  }
+
+  render() {
+    push();
+    stroke(255, 125, 125, 100);
+    line(
+      this.x,
+      this.y,
+      this.targetX,
+      this.targetY
+    );
+    pop();
+  }
+}

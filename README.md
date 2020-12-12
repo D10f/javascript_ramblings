@@ -54,7 +54,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 ![solar system in 3D](3D/assets/solar.png)
 
 ---
-The following are exercises inspired by Daniel Shiffman's (The Coding Train), implementing slight modifications here and there to my own style including ES6+ syntax.
+The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implementing slight modifications here and there to my own style including ES6+ syntax.
 
 **[2D - Angry Birds](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_birds.js)**: A (very) simplified clone of the popular game Angry Birds using Matter.js and P5.js as rendering engine. [See demo](https://editor.p5js.org/fall-parameter/sketches/aKA9ZXHO1)
 
@@ -101,6 +101,8 @@ The following are exercises inspired by Daniel Shiffman's (The Coding Train), im
 **[2D - Quadtree](https://github.com/herokunt/javascript_ramblings/blob/main/2D/quadtree.js)**: Visualization of a quadtree data structure for optimized performance in simulations of interacting particle systems. [See demo](https://editor.p5js.org/fall-parameter/sketches/wPjwEOd-i)
 
 **[2D - Raycasting Rendering](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting_3D.js)**: Implementation of raycasting algorithm in p5.js that projects wall a la Wolfenstein 3D [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o)
+
+![Raycast Rendering](2D/assets/raycast_rendering.png)
 
 **[2D - Raycasting](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting.js)**: Visualization of a light-emitting object using raycasting algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Mr6WzNe5E)
 

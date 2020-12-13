@@ -54,17 +54,19 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 ![solar system in 3D](3D/assets/solar.png)
 
 ---
-The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implementing slight modifications here and there to my own style including ES6+ syntax.
+> The following are exercises inspired by Daniel Shiffman from The Coding Train, Gustavo Pezzi and others. I adopted my own implemention following modern ES6 syntax and other finishing touches here and there.
 
-**[2D - Angry Birds](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_birds.js)**: A (very) simplified clone of the popular game Angry Birds using Matter.js and P5.js as rendering engine. [See demo](https://editor.p5js.org/fall-parameter/sketches/aKA9ZXHO1)
+> Please note that the images below are in low resolution, make sure to click on "see demo" to see the working project and the code.
 
-**[2D - Angry Matter](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_matter.js)**: An improvement over previous project, this version features p5.js wrappers over matter.js bodies to handle rendering and physics independently. [See demo](https://editor.p5js.org/fall-parameter/sketches/Q6PcOhQBl)
+**[2D - Angry Matter](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_matter.js)**: A simplified version of Angry Birds, features p5.js wrappers over matter.js bodies to handle rendering and physics independently. [See demo](https://editor.p5js.org/fall-parameter/sketches/Q6PcOhQBl)
 
 ![](2D/assets/polygons.gif)
 
 **[2D - Asteroids](https://github.com/herokunt/javascript_ramblings/blob/main/2D/asteroids.js)**: The classic 8-bit game Asteroids! [See demo](https://editor.p5js.org/fall-parameter/sketches/EBnF9Q-1N)
 
 **[2D - Attraction](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_physics.js)**: This basic demo uses p5.js to create an environment that simulates gravitational attraction between objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/HmzJS_pB8)
+
+![Attraction](2D/assets/attraction.gif)
 
 **[2D - Attraction-Repulsion](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_attraction.js)**: A variation exercise to include attracting and repulsive forces. [See demo](https://editor.p5js.org/fall-parameter/sketches/5bTOj2boj)
 
@@ -74,6 +76,8 @@ The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implem
 
 **[2D - Fireworks](https://github.com/herokunt/javascript_ramblings/blob/main/2D/fireworks.js)**: A firework simulation in the browser canvas [See demo](https://editor.p5js.org/fall-parameter/sketches/oQ_ScPSZq)
 
+![Fireworks](2D/assets/fireworks.gif)
+
 **[2D - Flock Simulation](https://github.com/herokunt/javascript_ramblings/blob/main/2D/flock_simulation.js)**: Simulation of how individual particles interact as a flock in a complex system [See demo](https://editor.p5js.org/fall-parameter/sketches/cq-M6CW1k)
 
 **[2D - Flow Field](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_flowfield.js)**: A follow along of Daniel Shiffman's The Nature Of Code playlist. This is a visual representation of 3-dimensional Perlin noise. [See demo](https://editor.p5js.org/fall-parameter/sketches/PxvmM0PMq)
@@ -82,9 +86,11 @@ The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implem
 
 **[2D - Game Of Life](https://github.com/herokunt/javascript_ramblings/blob/main/2D/game_of_life.js)**: Classic John Conway's Game Of Life, a zero-player game based on an initial input that evolves by itself based on a basic set of rules. [See demo](https://editor.p5js.org/fall-parameter/sketches/NLFQKHvjr)
 
-![The Game Of Life](2D/assets/game_of_life.png)
+![The Game Of Life](2D/assets/game_life.gif)
 
 **[2D - Hanging Lightbulb](https://github.com/herokunt/javascript_ramblings/blob/main/2D/hanging_lightbulb.js)**: Combines raycasting with phyiscs engine to cast shadow dynamically on moving objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/iRAe03G1W)
+
+![hanging_lightbulb](2D/assets/hanging_lightbulb.gif)
 
 **[2D - Joggler](https://github.com/herokunt/javascript_ramblings/blob/main/2D/joggler.js)**: Very simple game to mimic an interactive joggling in the canvas. [See demo](https://editor.p5js.org/fall-parameter/sketches/d5aRIpu00)
 
@@ -104,23 +110,33 @@ The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implem
 
 **[2D - Plinko](https://github.com/herokunt/javascript_ramblings/blob/main/2D/plinko.js)**: The game of Plinko built with Matter.js and P5.js as rendering engine. [See demo](https://editor.p5js.org/fall-parameter/sketches/FD9i-1nL0F)
 
+![plinko](2D/assets/plinko.gif)
+
 **[2D - Quadtree](https://github.com/herokunt/javascript_ramblings/blob/main/2D/quadtree.js)**: Visualization of a quadtree data structure for optimized performance in simulations of interacting particle systems. [See demo](https://editor.p5js.org/fall-parameter/sketches/wPjwEOd-i)
+
+![quadtree](2D/assets/quadtree.gif)
 
 **[2D - Raycasting Rendering](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting_3D.js)**: Implementation of raycasting algorithm in p5.js that projects wall a la Wolfenstein 3D [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o)
 
-![Raycast Rendering](2D/assets/raycast_rendering.png)
+![Raycast Rendering](2D/assets/raycast_render.gif)
 
 **[2D - Raycasting](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting.js)**: Visualization of a light-emitting object using raycasting algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Mr6WzNe5E)
+
+![Raycast Rendering](2D/assets/raycasting.gif)
 
 **[2D - Snowfall](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_snowfall.js)**: A snowfall effect using p5.js inspired by Daniel Shiffman's The Nature Of Code playlist. [See demo](https://editor.p5js.org/fall-parameter/sketches/KHmqjD_gx)
 
 **[2D - Snake](https://github.com/herokunt/javascript_ramblings/blob/main/2D/snake.js)**: Another classic 8-bit game. [See demo](https://editor.p5js.org/fall-parameter/sketches/_B_A8i0d1)
+
+![snake_game](2D/assets/snake.gif)
 
 **[2D - Space Invaders](https://github.com/herokunt/javascript_ramblings/blob/main/2D/invaders.js)**: Another 8-bit classic game: space invaders!. [See demo](https://editor.p5js.org/fall-parameter/sketches/AULsRZPCm)
 
 ![Space Invaders](2D/assets/space_invaders.png)
 
 **[2D - Steering Behaviors](https://github.com/herokunt/javascript_ramblings/blob/main/2D/steering_behavior.js)**: Particle system where each particle reacts to it's environment in a "lifelike" manner. [See demo](https://editor.p5js.org/fall-parameter/sketches/Po7qTPFag)
+
+![steering behaviors](2D/assets/steering_behaviors.gif)
 
 ---
 ### [Invidious bookmarklet](https://github.com/herokunt/javascript_ramblings/blob/main/bookmarklets.js)

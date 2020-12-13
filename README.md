@@ -60,7 +60,7 @@ The following are exercises inspired by Daniel Shiffman and Gustavo Pezzi implem
 
 **[2D - Angry Matter](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_matter.js)**: An improvement over previous project, this version features p5.js wrappers over matter.js bodies to handle rendering and physics independently. _Demo not available_
 
-![testing webm file uploads](2D/assets/test.webm)
+![testing gif file uploads](2D/assets/testing.gif)
 
 **[2D - Asteroids](https://github.com/herokunt/javascript_ramblings/blob/main/2D/asteroids.js)**: The classic 8-bit game Asteroids! [See demo](https://editor.p5js.org/fall-parameter/sketches/EBnF9Q-1N)
 

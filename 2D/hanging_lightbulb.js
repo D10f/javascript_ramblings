@@ -3,7 +3,7 @@
 // on moving bodies
 
 const CANVAS_WALLS = true;
-const RENDER_BOXES = true;
+const RENDER_BODIES = false;
 
 // Matter.js module aliases
 const {
@@ -23,7 +23,7 @@ const world = engine.world;
 // Created objects in the "world" are stored here
 const bodies = [];
 
-// Boxes ainde this demo are items that cast shadow. Their surfaces are
+// Boxes are items that cast shadow. Their surfaces are
 // tracked separately and calculated on every frame.
 const boxes = [];
 let surfaces = [];
@@ -44,7 +44,7 @@ function setup() {
     }
   });
 
-  // create the lightbulb
+  // create the ball
   const light = new Light({
     x: width / 2 + 100,
     y: 100,
@@ -66,23 +66,71 @@ function setup() {
     }
   });
 
-  // create 3 boxes
-  for (let i = 0; i < 3; i++) {
-    const box = new Box({
-      x: 150 + 150 * i,
-      y: i === 1 ? height - 100 : height / 2,
-      w: 100,
-      h: 100,
-      options: {
-        noRender: !RENDER_BOXES,
-        isStatic: random(1) > 0.5 // randomize making boxes static
-      }
-    });
+  // Create a few objects that project shadows...
 
-    bodies.push(box);
-    boxes.push(box);
-  }
+  const ball1 = new Ball({
+    x: 150,
+    y: 50,
+    r: 10,
+    options: {
+      noRender: !RENDER_BODIES,
+      restitution: 0.55,
+      friction: 0.1
+    }
+  });
+  
+  const box1 = new Box({
+    x: 100,
+    y: 100,
+    w: 100,
+    h: 100,
+    options: {
+      noRender: !RENDER_BODIES,
+      isStatic: true,
+      angle: 1
+    }
+  });
+  
+  const poly1 = new Polygon({
+    x: 200,
+    y: 270,
+    s: 7,
+    r: 40,
+    options: {
+      noRender: !RENDER_BODIES,
+      isStatic: true,
+      angle: PI + 0.2
+    }
+  });
 
+  const poly2 = new Polygon({
+    x: 400,
+    y: 250,
+    s: 6,
+    r: 50,
+    options: {
+      noRender: !RENDER_BODIES,
+      isStatic: true
+    }
+  });
+  
+  const box2 = new Box({
+    x: 470,
+    y: 100,
+    w: 100,
+    h: 100,
+    options: {
+      noRender: !RENDER_BODIES,
+      isStatic: true,
+      angle: 1.8
+    }
+  });
+  
+  
+  // ...and add them to the world
+  bodies.push(ball1, box1, box2, poly1, poly2);
+  boxes.push(ball1, box1, box2, poly1, poly2);
+  
   // create mouse object and constraint
   const mouse = Mouse.create(canvas.elt);
   const mouseconstraint = MouseConstraint.create(engine, {
@@ -92,7 +140,6 @@ function setup() {
 
   Events.on(mouseconstraint, 'mousedown', (e) => {
 
-    // prevent changing lightbulb color when it's clicked directly
     if (e.source.body && e.source.body.id === 2) {
       return false;
     }
@@ -100,8 +147,7 @@ function setup() {
     light.c = color(
       random(100, 255),
       random(100, 255),
-      random(100, 255),
-      100
+      random(100, 255)
     );
   });
 
@@ -132,9 +178,7 @@ function draw() {
     });
   });
 
-  bodies.forEach(body => {
-    body.render();
-  });
+  bodies.forEach(body => body.render());
 
   if (CANVAS_WALLS) {
     surfaces.splice(4);

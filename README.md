@@ -55,7 +55,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 ---
 > The following are exercises inspired by Daniel Shiffman from The Coding Train, Gustavo Pezzi and others. I adopted my own implemention following modern ES6 syntax and other finishing touches here and there.
-
+>
 > Please note that the images below are in low resolution, make sure to click on "see demo" to see the working project and the code.
 
 **[2D - Angry Matter](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_matter.js)**: A simplified version of Angry Birds, features p5.js wrappers over matter.js bodies to handle rendering and physics independently. [See demo](https://editor.p5js.org/fall-parameter/sketches/Q6PcOhQBl)
@@ -64,11 +64,11 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 **[2D - Asteroids](https://github.com/herokunt/javascript_ramblings/blob/main/2D/asteroids.js)**: The classic 8-bit game Asteroids! [See demo](https://editor.p5js.org/fall-parameter/sketches/EBnF9Q-1N)
 
-**[2D - Attraction](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_physics.js)**: This basic demo uses p5.js to create an environment that simulates gravitational attraction between objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/HmzJS_pB8)
+**[2D - Attraction](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_physics.js)**: This basic demo simulates gravitational attraction towards a center object. [See demo](https://editor.p5js.org/fall-parameter/sketches/HmzJS_pB8)
 
 ![Attraction](2D/assets/attraction.gif)
 
-**[2D - Attraction-Repulsion](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_attraction.js)**: A variation exercise to include attracting and repulsive forces. [See demo](https://editor.p5js.org/fall-parameter/sketches/5bTOj2boj)
+**[2D - Attraction-Repulsion](https://github.com/herokunt/javascript_ramblings/blob/main/2D/noc_attraction.js)**: A variation to gravitational attraction that includes repulsion forces. [See demo](https://editor.p5js.org/fall-parameter/sketches/5bTOj2boj)
 
 **[2D - Beesweeper](https://github.com/herokunt/javascript_ramblings/blob/main/2D/beesweeper.js)**: Version of the classic game of minesweeper, using bees instead of mines. [See demo](https://editor.p5js.org/fall-parameter/sketches/ExafupoVm)
 
@@ -88,7 +88,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 ![The Game Of Life](2D/assets/game_life.gif)
 
-**[2D - Hanging Lightbulb](https://github.com/herokunt/javascript_ramblings/blob/main/2D/hanging_lightbulb.js)**: Combines raycasting with phyiscs engine to cast shadow dynamically on moving objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/iRAe03G1W)
+**[2D - Hanging Lightbulb](https://github.com/herokunt/javascript_ramblings/blob/main/2D/hanging_lightbulb.js)**: One of my favorites, it combines a raycasting algorithm and physics engine to project shadows off of moving objects. [See demo](https://editor.p5js.org/fall-parameter/sketches/iRAe03G1W)
 
 ![hanging_lightbulb](2D/assets/hanging_lightbulb.gif)
 
@@ -96,7 +96,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 **[2D - Matrix Letter Effect](https://github.com/herokunt/javascript_ramblings/blob/main/2D/matrix_letters.js)**: The classic digital letter "rain" effect from the movie: The Matrix. [See demo](https://editor.p5js.org/fall-parameter/sketches/7RUbiCt1b)
 
-**[2D - Maze Generator](https://github.com/herokunt/javascript_ramblings/blob/main/2D/maze_generator.js)**: A maze generator on the browser based on depth-first search recursive algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Y_IB8Scm4)
+**[2D - Maze Generator](https://github.com/herokunt/javascript_ramblings/blob/main/2D/maze_generator.js)**: A visualization in p5.js of a maze generator, based on the depth-first search recursive algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Y_IB8Scm4)
 
 ![Maze Generator](2D/assets/maze.gif)
 
@@ -112,11 +112,11 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 ![plinko](2D/assets/plinko.gif)
 
-**[2D - Quadtree](https://github.com/herokunt/javascript_ramblings/blob/main/2D/quadtree.js)**: Visualization of a quadtree data structure for optimized performance in simulations of interacting particle systems. [See demo](https://editor.p5js.org/fall-parameter/sketches/wPjwEOd-i)
+**[2D - Quadtree](https://github.com/herokunt/javascript_ramblings/blob/main/2D/quadtree.js)**: Visualization of a quadtree data structure for optimized performance in complex systems with interacting particles. [See demo](https://editor.p5js.org/fall-parameter/sketches/wPjwEOd-i)
 
 ![quadtree](2D/assets/quadtree.gif)
 
-**[2D - Raycasting Rendering](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting_3D.js)**: Implementation of raycasting algorithm in p5.js that projects wall a la Wolfenstein 3D [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o)
+**[2D - Raycasting Rendering](https://github.com/herokunt/javascript_ramblings/blob/main/2D/raycasting_3D.js)**: Implementation of a raycasting algorithm in p5.js à la Wolfenstein 3D, creating a 3D projection of the environment. [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o)
 
 ![Raycast Rendering](2D/assets/raycast_render.gif)
 

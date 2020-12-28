@@ -16,6 +16,8 @@ class Tetrimino {
   }
 
   getBlockCoordinates(position = this.pos) {
+    // Magic number 4 is the size of the tetromino's shape matrix
+
     const blocks = [];
     for (let x = 0; x < 4; x++) {
       for (let y = 0; y < 4; y++) {
@@ -39,12 +41,12 @@ class Tetrimino {
     for (let i = 0; i < nextBlocks.length; i++) {
 
       // Check if block is offscreen on the sides
-      if (nextBlocks[i].x < 0 || nextBlocks[i].x >= width) {
+      if (nextBlocks[i].x < 0 || nextBlocks[i].x >= BOARD_WIDTH) {
         return false;
       }
 
       // Check if block has reached bottom
-      if (nextBlocks[i].y >= height) {
+      if (nextBlocks[i].y >= BOARD_HEIGHT) {
         this.done = true;
         return false;
       }
@@ -57,18 +59,27 @@ class Tetrimino {
       );
 
       if (cell.occupied) {
-
         // Falling on top of another block means this one is done
         if (y > 0) {
           this.done = true;
         }
-
         return false;
       }
     }
 
+    // Finally make the move and return true
     this.pos = nextPosition;
     this.blocks = nextBlocks;
+
+    return true;
+  }
+
+  moveToBottom() {
+    // Recursively moves down by one until no longer possible
+    let moveDownOne = true;
+    while (moveDownOne) {
+      moveDownOne = this.move(0, BLOCK_SIZE);
+    }
   }
 
   turn() {
@@ -82,12 +93,43 @@ class Tetrimino {
       rect(block.x, block.y, BLOCK_SIZE);
     });
   }
+
+  preview() {
+    const previewBlocks = this.getBlockCoordinates({
+      x: 30,
+      y: 0
+    });
+
+    push();
+    translate(300, 0);
+
+    // Dark background on the side
+    fill(28);
+    noStroke();
+    rect(0, 0, 100, height);
+
+    // Preview background
+    fill(225);
+    rect(10, 0, 85);
+
+    // Draw the shape
+    fill(this.color);
+    stroke(1);
+    previewBlocks.forEach(block => {
+      rect(
+        SCALE_FACTOR * block.x,
+        SCALE_FACTOR * block.y,
+        SCALE_FACTOR * BLOCK_SIZE
+      );
+    });
+    pop();
+  }
 }
 
 class Grid {
-  constructor() {
-    this.cols = width / BLOCK_SIZE;
-    this.rows = height / BLOCK_SIZE;
+  constructor(w, h) {
+    this.cols = w / BLOCK_SIZE;
+    this.rows = h / BLOCK_SIZE;
     this.cells = this.createGrid();
   }
 
@@ -95,6 +137,7 @@ class Grid {
     const grid = [];
     for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
+
         const cell = {
           x: x * BLOCK_SIZE,
           y: y * BLOCK_SIZE,
@@ -112,18 +155,26 @@ class Grid {
     const finishedRows = [];
 
     for (let i = 0; i < this.rows; i++) {
-      const row = this.cells.slice(this.cols * i, this.cols * i + this.cols);
 
+      // Take subset of the grid, a row, and check if it's full
+      const row = this.cells.slice(this.cols * i, this.cols * i + this.cols);
       const rowFinished = row.every(cell => cell.occupied);
 
+      // Take note of which rows are full, and clear them
       if (rowFinished) {
-        finishedRows.push(BLOCK_SIZE * i);
+        const rowNumber = BLOCK_SIZE * i;
+        finishedRows.push(rowNumber);
         row.forEach(cell => cell.occupied = false);
       }
     }
 
     if (finishedRows.length > 0) {
+
+      // Loop the grid backwards, from bottom to top
       for (let i = this.cells.length - 1; i > 0; i--) {
+
+        // Move occupied cells, above the finished rows, by however many rows
+        // were cleared during last move
         if (this.cells[i].occupied && this.cells[i].y < max(finishedRows)) {
           this.cells[i].occupied = false;
           this.occupyCell(
@@ -144,41 +195,38 @@ class Grid {
 
   occupyCell(x, y, c) {
     const cell = this.getCell(x, y);
-    cell.color = c;
     cell.occupied = true;
-  }
-
-  freeCell(x, y) {
-    const cell = this.getCell(x, y);
-    cell.occupied = false;
+    cell.color = c;
   }
 
   render() {
     this.cells.forEach(cell => {
       if (cell.occupied) {
         fill(cell.color);
-      } else {
-        fill(255);
+        rect(cell.x, cell.y, BLOCK_SIZE);
       }
-      rect(cell.x, cell.y, BLOCK_SIZE);
     });
   }
 }
 
 const BLOCK_SIZE = 20;
+const BOARD_WIDTH = 300;
+const BOARD_HEIGHT = 400;
+const SCALE_FACTOR = 0.75;
 
-let grid, current, next, previous = [];
+let grid, current, next;
 
 function setup() {
-  createCanvas(300, 400);
-  grid = new Grid();
+  createCanvas(400, 400);
+  grid = new Grid(BOARD_WIDTH, BOARD_HEIGHT);
   current = new Tetrimino();
   next = new Tetrimino();
 }
 
 function draw() {
+  background(225);
 
-  if (frameCount % 60 === 0) {
+  if (frameCount % 30 === 0) {
     current.move(0, BLOCK_SIZE);
   }
 
@@ -187,8 +235,6 @@ function draw() {
       grid.occupyCell(block.x, block.y, current.color);
     });
 
-    previous.push(current);
-
     current = next;
     next = new Tetrimino();
 
@@ -196,8 +242,8 @@ function draw() {
   }
 
   grid.render();
-  // previous.forEach(t => t.render());
   current.render();
+  next.preview();
 }
 
 function keyPressed() {
@@ -215,7 +261,7 @@ function keyPressed() {
       current.move(0, BLOCK_SIZE);
       break;
     case 32:
-      current.move(0, BLOCK_SIZE * 5);
+      current.moveToBottom();
       break;
   }
 }

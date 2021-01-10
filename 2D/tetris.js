@@ -15,13 +15,16 @@ class Tetrimino {
     this.shape = shapesAndColors[idx].shape;
   }
 
-  getBlockCoordinates(position = this.pos) {
-    // Magic number 4 is the size of the tetromino's shape matrix
+  getBlockCoordinates(
+    position = this.pos,
+    angle = this.angle
+  ) {
 
+    // Magic number 4 is the size of the tetromino's shape matrix
     const blocks = [];
     for (let x = 0; x < 4; x++) {
       for (let y = 0; y < 4; y++) {
-        if (this.shape[this.angle][4 * y + x] === 1) {
+        if (this.shape[angle][4 * y + x] === 1) {
           blocks.push({
             x: position.x + BLOCK_SIZE * x,
             y: position.y + BLOCK_SIZE * y
@@ -83,8 +86,36 @@ class Tetrimino {
   }
 
   turn() {
-    this.angle = (this.angle + 1) % 4;
-    this.blocks = this.getBlockCoordinates();
+    const nextAngle = (this.angle + 1) % 4;
+    const nextBlocks = this.getBlockCoordinates(this.pos, nextAngle);
+
+    // TODO: Tidy things up a bit to avoid repited code
+    // TODO: Adjust position when going off the edges, if possible
+    for (let i = 0; i < nextBlocks.length; i++) {
+
+      // Cannot make turn if a block goes outside of the edges
+      if (
+        nextBlocks[i].x < 0 ||
+        nextBlocks[i].x >= BOARD_WIDTH ||
+        nextBlocks[i].y >= BOARD_HEIGHT
+      ) {
+        return false;
+      }
+
+      const cell = grid.getCell(
+        nextBlocks[i].x,
+        max(nextBlocks[i].y, 0)
+      );
+
+      // Cannot make turn if block overlaps an existing block
+      if (cell.occupied) {
+        return false;
+      }
+    }
+
+    // Turn is valid, update tetrimino
+    this.angle = nextAngle;
+    this.blocks = nextBlocks;
   }
 
   render() {
@@ -173,14 +204,16 @@ class Grid {
       // Loop the grid backwards, from bottom to top
       for (let i = this.cells.length - 1; i > 0; i--) {
 
-        // Move occupied cells, above the finished rows, by however many rows
-        // were cleared during last move
-        if (this.cells[i].occupied && this.cells[i].y < max(finishedRows)) {
-          this.cells[i].occupied = false;
+        const cell = this.cells[i];
+
+        // Cells above the finished row are pushed down by however many
+        // rows were completed.
+        if (cell.occupied && cell.y < max(finishedRows)) {
+          cell.occupied = false;
           this.occupyCell(
-            this.cells[i].x,
-            this.cells[i].y + BLOCK_SIZE * finishedRows.length,
-            this.cells[i].color
+            cell.x,
+            cell.y + BLOCK_SIZE * finishedRows.length,
+            cell.color
           );
         }
       }

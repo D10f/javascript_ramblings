@@ -22,9 +22,9 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 ![solar system in 3D](3D/assets/solar.png)
 
 ---
-> The following are exercises inspired by Daniel Shiffman from The Coding Train, Gustavo Pezzi and others. I adopted my own implemention following modern ES6 syntax and other finishing touches here and there.
+> The following are exercises inspired by Daniel Shiffman from The Coding Train, Gustavo Pezzi and others. I adapted them following modern ES6+ syntax and implemented additional finishing touches here and there.
 >
-> Please note that the images below are in low resolution, make sure to click on "see demo" to see the working project and the code.
+> Most of these are continuous work-in-progress while I experiment adding new features. Make sure to click on "see demo" to see how things are going!
 
 **[2D - Angry Matter](https://github.com/herokunt/javascript_ramblings/blob/main/2D/angry_matter.js)**: A simplified version of Angry Birds, features p5.js wrappers over matter.js bodies to handle rendering and physics independently. [See demo](https://editor.p5js.org/fall-parameter/sketches/Q6PcOhQBl)
 

@@ -3,7 +3,8 @@ class Particle {
     this.pos = createVector(random(width), random(height));
     this.vel = createVector();
     this.acc = createVector();
-    this.maxSpeed = 3;
+    this.maxSpeed = 4;
+    this.prev = this.pos.copy();
   }
 
   applyForce(force) {
@@ -17,17 +18,25 @@ class Particle {
     this.applyForce(vectors[index]);
   }
 
+  updatePrevious() {
+    this.prev = this.pos.copy();
+  }
+
   edgeDetection() {
     if (this.pos.x > width) {
       this.pos.x = 0;
+      this.updatePrevious()
     } else if (this.pos.x < 0) {
       this.pos.x = width;
+      this.updatePrevious()
     }
 
     if (this.pos.y > height) {
       this.pos.y = 0;
+      this.updatePrevious()
     } else if (this.pos.y < 0) {
       this.pos.y = height;
+      this.updatePrevious()
     }
   }
 
@@ -40,25 +49,24 @@ class Particle {
   }
 
   show() {
-    strokeWeight(3);
-    point(this.pos.x, this.pos.y);
+    strokeWeight(1);
+    stroke(175, 255, 235, 7);
+    line(this.pos.x, this.pos.y, this.prev.x, this.prev.y);
   }
 }
 
-const NOISE_OFFSET = 0.03;
-const GRID_SIZE = 20;
-const MAX_PARTICLES = 500;
+const NOISE_OFFSET = 0.07;
+const GRID_SIZE = 10;
+const MAX_PARTICLES = 200;
+const SHOW_FIELD = false;
 
-let cols,
-    rows,
-    xoff,
-    yoff,
-    zoff,
-    particles,
-    flowField;
-
+let cols, rows, xoff, yoff, zoff, particles, flowField;
+function mousePressed(){
+  noLoop();
+}
 function setup() {
-  createCanvas(400, 400);
+  // frameRate(30);
+  createCanvas(800, 400);
 
   cols = width / GRID_SIZE;
   rows = height / GRID_SIZE;
@@ -71,37 +79,41 @@ function setup() {
   }
 
   zoff = 0;
+  // background(0);
 }
 
 function draw() {
-  background(220);
+  background(225, 0);
 
   yoff = 0;
   for (let x = 0; x < cols; x++) {
     xoff = 0;
     for (let y = 0; y < rows; y++) {
       const index = x + y * cols;
-      const r = noise(xoff, yoff, zoff) * TWO_PI;
+      const r = noise(xoff, yoff, zoff) * TWO_PI * 2;
       const v = p5.Vector.fromAngle(r);
 
       flowField[index] = v;
 
-      // push();
-      // translate(x * GRID_SIZE, y * GRID_SIZE);
-      // rotate(v.heading());
-      // stroke(170, 50);
-      // line(0, 0, GRID_SIZE, 0);
-      // pop();
+      if (SHOW_FIELD) {
+        push();
+        translate(x * GRID_SIZE, y * GRID_SIZE);
+        rotate(v.heading());
+        stroke(210);
+        line(0, 0, GRID_SIZE, 0);
+        pop();
+      }
 
       xoff += NOISE_OFFSET;
     }
     yoff += NOISE_OFFSET;
   }
-  zoff += 0.01;
+  zoff += 0.008;
 
   particles.forEach(particle => {
     particle.follow(flowField);
     particle.update();
     particle.show();
+    particle.updatePrevious();
   });
 }

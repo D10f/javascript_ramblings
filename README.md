@@ -15,7 +15,7 @@ d12()   // 9
 d6()    // 4
 ```
 ---
-### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/colover_converter.js)
+### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/color_converter.js)
 
 A simple color code converter from hexadecimal format to RGB color format, and vice-versa.
 

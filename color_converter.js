@@ -49,7 +49,7 @@ const rgbToHex = (r, g, b) => {
 
   const colorCodes = rgbCode.matchAll(/\d{1,3}/g);
 
-  for ([color] of colorCodes) {
+  for (const [color] of colorCodes) {
 
     colorCode = parseInt(color, 10);
 
@@ -59,6 +59,7 @@ const rgbToHex = (r, g, b) => {
 
     const temp = [];
 
+    // Math explanation: https://www.rapidtables.com/convert/number/how-decimal-to-hex.html
     for (let quotient = 1; quotient > 0; colorCode = quotient) {
       quotient        = Math.floor(parseInt(colorCode, 10) / 16);
       const remainder = colorCode % 16;

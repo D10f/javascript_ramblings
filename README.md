@@ -15,6 +15,27 @@ d12()   // 9
 d6()    // 4
 ```
 ---
+### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/colover_converter.js)
+
+A simple color code converter from hexadecimal format to RGB color format, and vice-versa.
+
+```js
+hexToRgb('#56BCF1')         // from hex to rgb
+> 'rgb(86, 188, 241)'
+
+rgbToHex(86,188,241)        // accepts numbers
+> '#56BCF1'
+
+rgbToHex('86','188','241')  // accepts strings
+> '#56BCF1'
+
+rgbToHex([86,188,241])      // accepts an array
+> '#56BCF1'
+
+```
+
+
+---
 ### [Solar System](https://github.com/herokunt/javascript_ramblings/blob/main/3D/planets.js)
 
 A simple 3D simulation of the solar system built with [Three.js](https://threejs.org) as an introduction to how the library works (in progress...)

@@ -61,11 +61,8 @@ const MAX_PARTICLES = 200;
 const SHOW_FIELD = false;
 
 let cols, rows, xoff, yoff, zoff, particles, flowField;
-function mousePressed(){
-  noLoop();
-}
+
 function setup() {
-  // frameRate(30);
   createCanvas(800, 400);
 
   cols = width / GRID_SIZE;
@@ -79,7 +76,6 @@ function setup() {
   }
 
   zoff = 0;
-  // background(0);
 }
 
 function draw() {

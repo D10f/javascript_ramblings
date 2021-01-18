@@ -28,49 +28,49 @@ const hexToRgb = hexCode => {
 * @param  {string, number, array}  r The red component or a full array
 * @param  {string, number}         g The green component
 * @param  {string, number}         b The blue component
-* @return {string} A string with the hexcode e.g., #0C56B1
+* @return {string}                 A string with the hexcode e.g., #0C56B1
 */
 const rgbToHex = (r, g, b) => {
-const hexValues = '0123456789ABCDEF';
-const hexResult = [];
-let rgbCode;
+  const hexValues = '0123456789ABCDEF';
+  const hexResult = [];
+  let rgbCode;
 
-if (r === undefined) {
-return 'Invalid RGB code provided';
-}
+  if (r === undefined) {
+    return 'Invalid RGB code provided';
+  }
 
-if (typeof r !== 'object' && (!g === undefined || !b === undefined)) {
-return 'Invalid RGB code provided'
-} else if (typeof r === 'object') {
-rgbCode = r.join(',')
-} else {
-rgbCode = `${r},${g},${b}`;
-}
+  if (typeof r !== 'object' && (!g === undefined || !b === undefined)) {
+    return 'Invalid RGB code provided'
+  } else if (typeof r === 'object') {
+    rgbCode = r.join(',')
+  } else {
+    rgbCode = `${r},${g},${b}`;
+  }
 
-const colorCodes = rgbCode.matchAll(/\d{1,3}/g);
+  const colorCodes = rgbCode.matchAll(/\d{1,3}/g);
 
-for ([color] of colorCodes) {
+  for ([color] of colorCodes) {
 
-colorCode = parseInt(color, 10);
+    colorCode = parseInt(color, 10);
 
-if (colorCode < 0 || colorCode > 255) {
-return 'Invalid RGB code provided';
-}
+    if (colorCode < 0 || colorCode > 255) {
+      return 'Invalid RGB code provided';
+    }
 
-const temp = [];
+    const temp = [];
 
-for (let quotient = 1; quotient > 0; colorCode = quotient) {
-quotient        = Math.floor(parseInt(colorCode, 10) / 16);
-const remainder = colorCode % 16;
-const hexCode   = hexValues[remainder % 16];
-temp.unshift(hexCode);
-}
+    for (let quotient = 1; quotient > 0; colorCode = quotient) {
+      quotient        = Math.floor(parseInt(colorCode, 10) / 16);
+      const remainder = colorCode % 16;
+      const hexCode   = hexValues[remainder % 16];
+      temp.unshift(hexCode);
+    }
 
-if (temp.length < 2) {
-temp.unshift(0);
-}
-hexResult.push(temp.join(''));
-}
+    if (temp.length < 2) {
+      temp.unshift(0);
+    }
+    hexResult.push(temp.join(''));
+  }
 
-return `#${hexResult.join('')}`;
+  return `#${hexResult.join('')}`;
 };

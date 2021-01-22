@@ -1,38 +1,52 @@
-const dice = (sides) => {
-  
-  const roll = () => Math.floor(Math.random() * sides) + 1
-  
-  return (rollAgain = []) => {
-    
-    let result = roll()
-    
-    if (rollAgain.length === 0){
-      return result
-    }
-    
-    while (rollAgain.includes(result)) {
-      // error handling to avoid infinite loops
-      if (rollAgain.length === sides) {
-        throw new Error('You cannot exclude all possible roll results!')
-      }
-      result = roll()
-    }
-    
-    return result
+class Dice {
+  constructor(sides) {
+    this.sides = sides;
+    this.history = [];
   }
-}
 
-const d20 = dice(20)
-const d10 = dice(10)
-const d6  = dice(6)
-const d3  = dice(3)
+  _roll* () {
+    while (true) {
+      yield Math.floor(Math.random() * this.sides) + 1;
+    }
+  }
 
-/*
-*	Create as many new dices as needed with the logic built-in. Run the
-*	function to get a result as is, or with an optional array of numbers:
-*/
+  roll(repeat = 1, options = {}) {
+    if (repeat < 1) {
+      throw new Error('Invalid number not greater than 0');
+    }
 
-d20([1,2,7])				// will not return 1, 2 or 7
-d10()
-d6([4])							// will not return 4
-d3()
+    let results = [];
+
+    for (let i = 0; i < repeat; i++) {
+      results.push(this._roll());
+    }
+
+    this.history = [...this.history, ...results];
+
+    return results.length === 1 ? results[0] : results;
+  }
+
+  applyOptions(roll, options) {
+    let result = [...roll];
+
+    if (options.hasOwnProperty('min')) {
+      result = roll.filter(n => n >= options.min);
+    }
+    if (options.hasOwnProperty('max')) {
+      result = roll.filter(n => n <= options.max);
+    }
+
+    const diff = roll.length - result.length;
+
+    if (!diff) {
+      return result;
+    }
+
+    result = this.applyOptions(result)
+
+  }
+
+  recall(items = 1) {
+    return this.history.slice(this.history.length - items);
+  }
+};

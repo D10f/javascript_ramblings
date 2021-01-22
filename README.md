@@ -34,6 +34,10 @@ rgbToHex([86,188,241])      // accepts an array
 
 ```
 
+---
+### [shopping_cart](https://github.com/herokunt/javascript_ramblings/blob/main/shopping_cart.js)
+
+A front-end shopping cart implemented using the JavaScript Map structure, ready to be used in e-commerce web apps.
 
 ---
 ### [Solar System](https://github.com/herokunt/javascript_ramblings/blob/main/3D/planets.js)

@@ -1,6 +1,6 @@
 /**
 * Changes the order of the items within an array, without changing the original.
-* @param  {object}  options Optional: Object specifying index values to left unchanged.
+* @param  {object}  options Object specifying index location from original and result array.
 * @return {array}   Copy of the original array with the items in random order.
 */
 Array.prototype.shuffle = function(options = {}) {
@@ -11,12 +11,14 @@ Array.prototype.shuffle = function(options = {}) {
 
   if (properties) {
 
+    // Error checking: cannot provide more indexes than there are items
     if (properties.length > this.length) {
       throw new Error('Unable to proccess more items than there are!')
     }
 
-    for (const [targetIdx, originIdx] of Object.entries(options)) {
+    for (const [originIdx, targetIdx] of Object.entries(options)) {
 
+      // Error checking: can't use out of bound or invalid (non-integer) indexes
       if (
         isNaN(Number(targetIdx)) ||
         isNaN(Number(originIdx)) ||
@@ -32,9 +34,9 @@ Array.prototype.shuffle = function(options = {}) {
     }
   }
 
-  const length = copy.length;
+  for (let i = 0; i < this.length; i++) {
 
-  for (let i = 0; i < length; i++) {
+    // If options were provided some spots will be defined already, skip them.
     if (result[i] !== undefined) {
       continue;
     }

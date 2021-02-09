@@ -35,6 +35,28 @@ rgbToHex([86,188,241])      // accepts an array
 ```
 
 ---
+### [shuffle_arrays](https://github.com/herokunt/javascript_ramblings/blob/main/shuffle_arrays.js)
+
+A useful utility to shuffle the items on an array without modifying the original. Alternatively, you may want to shuffle an array of items leaving certain items in place. That's what the `shuffleWithOptions` function is for.
+
+```js
+const positions = ['leftmost', 'left', 'center', 'right', 'rightmost'];
+positions.shuffle();
+
+// [ "right", "leftmost", "rightmost", "center", "left" ]
+
+const options = {
+  inputIdx: [0, positions.length - 1],
+  outputIdx: [0, positions.length - 1]
+};
+
+position.shuffleWithOptions(options);
+
+// first and last items always stay at their positions.
+// [ "leftmost", "right", "left", "center", "rightmost" ]
+```
+
+---
 ### [shopping_cart](https://github.com/herokunt/javascript_ramblings/blob/main/shopping_cart.js)
 
 A front-end shopping cart implemented using the JavaScript Map structure, ready to be used in e-commerce web apps.

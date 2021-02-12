@@ -3,16 +3,29 @@ JavaScript Ramblings - a collection of small scripts made with the sole purpose 
 ---
 ### [dice_simulator](https://github.com/herokunt/javascript_ramblings/blob/main/dice.js)
 
-Small, simple script to simulate dice rolls programatically. Create functions for every new type of dice you need, and provide parameters to adjust things like re-rolls or sorting results (in progress...)
+Small, simple script to simulate dice rolls programatically. Create instances for every new type of dice you need, roll them! You can provide options to filter down results as well:
 
 ```js
-const d20 = dice(20)
-const d12 = dice(12)
-const d6 = dice(6)
+const d3  = new Dice(3);
+const d6  = new Dice(6);
+const d20 = new Dice(20);
 
-d20()   // 15
-d12()   // 9
-d6()    // 4
+// rolls once by default
+d6.roll();
+> [4]
+
+// rolls any number of times
+d6.roll(9);
+> [ 1, 4, 4, 6, 5, 1, 1, 3, 5 ]
+
+// exclude results from roll
+d6.rollWithOptions(5, [4,5,6]);
+> [ 2, 3, 3, 1, 1 ]
+
+// narrow down based on custom logic
+d20.rollWithOptions(10, (num) => num % 2 !== 0);
+> [ 17, 11, 13, 9, 9, 1, 7, 13, 1, 17 ]
+
 ```
 ---
 ### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/color_converter.js)
@@ -43,7 +56,7 @@ A useful utility to shuffle the items on an array without modifying the original
 const positions = ['leftmost', 'left', 'center', 'right', 'rightmost'];
 positions.shuffle();
 
-// [ "right", "leftmost", "rightmost", "center", "left" ]
+> [ "right", "leftmost", "rightmost", "center", "left" ]
 
 const options = {
   inputIdx: [0, positions.length - 1],
@@ -53,7 +66,7 @@ const options = {
 position.shuffleWithOptions(options);
 
 // first and last items always stay at their positions.
-// [ "leftmost", "right", "left", "center", "rightmost" ]
+> [ "leftmost", "right", "left", "center", "rightmost" ]
 ```
 
 ---

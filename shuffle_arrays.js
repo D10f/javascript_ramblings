@@ -20,8 +20,8 @@ Array.prototype.shuffle = function() {
 
 /**
 * Changes the order of the items within an array, without changing the original.
-* @param  {object}  options Object specifying indexes on the output array that match values at index from input array
-* @return {array}   Copy of the original array with the items in random order.
+* @param  {object} options Object specifying indexes on the output array that match values at index from input array
+* @return {array}          Copy of the original array with the items in random order.
 */
 Array.prototype.shuffleWithOptions = function(options = {}) {
 
@@ -41,7 +41,7 @@ Array.prototype.shuffleWithOptions = function(options = {}) {
   const outputIdx = Array.from(new Set(options.outputIdx));
 
   if (inputIdx.length !== outputIdx.length || inputIdx.length < 1) {
-    throw new Error('Input and output arrays must contain same number of elements and at least 1 element.')
+    throw new Error('Input and output arrays must contain same number of elements and at least 1 element.');
   }
 
   const invalidInput = inputIdx.some(item => {

@@ -1,6 +1,26 @@
 JavaScript Ramblings - a collection of small scripts made with the sole purpose of exploring different technologies in the JavaScript landscape.
 
 ---
+### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/color_converter.js)
+
+A simple color code converter from hexadecimal format to RGB color format, and vice-versa.
+
+```js
+hexToRgb('#56BCF1')         // from hex to rgb
+> 'rgb(86, 188, 241)'
+
+rgbToHex(86,188,241)        // accepts numbers
+> '#56BCF1'
+
+rgbToHex('86','188','241')  // accepts strings
+> '#56BCF1'
+
+rgbToHex([86,188,241])      // accepts an array
+> '#56BCF1'
+
+```
+
+---
 ### [dice_simulator](https://github.com/herokunt/javascript_ramblings/blob/main/dice.js)
 
 Small, simple script to simulate dice rolls programatically. Create instances for every new type of dice you need, roll them! You can provide options to filter down results as well:
@@ -25,25 +45,6 @@ d6.rollWithOptions(5, [4,5,6]);
 // narrow down based on custom logic
 d20.rollWithOptions(10, (num) => num % 2 !== 0);
 > [ 17, 11, 13, 9, 9, 1, 7, 13, 1, 17 ]
-
-```
----
-### [color_converter](https://github.com/herokunt/javascript_ramblings/blob/main/color_converter.js)
-
-A simple color code converter from hexadecimal format to RGB color format, and vice-versa.
-
-```js
-hexToRgb('#56BCF1')         // from hex to rgb
-> 'rgb(86, 188, 241)'
-
-rgbToHex(86,188,241)        // accepts numbers
-> '#56BCF1'
-
-rgbToHex('86','188','241')  // accepts strings
-> '#56BCF1'
-
-rgbToHex([86,188,241])      // accepts an array
-> '#56BCF1'
 
 ```
 

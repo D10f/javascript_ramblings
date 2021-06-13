@@ -159,6 +159,10 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 
 ![snake_game](2D/assets/snake.gif)
 
+**[2D - Solve The Maze](https://github.com/herokunt/javascript_ramblings/blob/main/2D/solve_the_maze.js)**: Algorithmically generated maze to be solved "in the dark". [See demo](https://editor.p5js.org/fall-parameter/sketches/IZi9kV1mB)
+
+![solve_the_maze](2D/assets/solve_the_maze.gif)
+
 **[2D - Space Invaders](https://github.com/herokunt/javascript_ramblings/blob/main/2D/invaders.js)**: Another 8-bit classic game: space invaders!. [See demo](https://editor.p5js.org/fall-parameter/sketches/AULsRZPCm)
 
 ![Space Invaders](2D/assets/space_invaders.png)

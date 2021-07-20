@@ -62,7 +62,7 @@ const calculatePasswordStrength = async (password) => {
   const results = await response.text();
   const data = results.split('\n').map(hash => hash.split(':')[0]);
 
-  const match = data.find(hash => hash.statsWith(hash.slice(6, 12).toUpperCase()));
+  const match = data.find(hash => hash.startsWith(hash.slice(6, 12).toUpperCase()));
 
   if (match) {
     console.log('Your password has been found on a public list of leaked passwords');

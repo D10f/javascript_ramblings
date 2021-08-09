@@ -27,12 +27,33 @@ const generatePassword = (length) => {
   return password;
 };
 
+const checkHIBP = async (password) => {
+  // Convert password into SHA-1 hash
+  const msgUint8 = new TextEncoder().encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+  // Check HIBP service
+  const url = `https://api.pwnedpasswords.com/range/${hash.slice(0,5)}`;
+
+  const response = await fetch(url);
+  const results = await response.text();
+  const data = results.split('\n').map(hash => hash.split(':')[0]);
+
+  const match = data.find(hash => hash.startsWith(hash.slice(6, 12).toUpperCase()));
+
+  return match
+    ? 'Your password has been found on a public list of leaked passwords'
+    : 'Your password has NOT been found on the public list of leaked passwords!';
+};
+
 /**
 * Calculates the theoretical entropy of a given password and the estimated time required to break it
-* @param  {string} password the password to check
-* @return {object} an object describing the entropy bits of the password and estimated time to break it.
+* @param  {string} password The password to check
+* @return {object}          An object with the theoretical time to break the password based on its entropy
 */
-const calculatePasswordStrength = async (password) => {
+const calculatePasswordStrength = (password) => {
   // Character set based on the unicode standard, assuming Englsh alphabet and
   // special characters such as !@#$%^&*() and others are used.
   const characterSetLength = 123;
@@ -49,22 +70,8 @@ const calculatePasswordStrength = async (password) => {
   const timeToAverageInSeconds = averageGuesses / 100_000_000_000;
   const timeToAverageInDays = timeToAverageInSeconds / 86400;
 
-  // Convert password into SHA-1 hash
-  const msgUint8 = new TextEncoder().encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-1', msgUint8);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-  // Check HIBP service
-  const url = `https://api.pwnedpasswords.com/range/${hash.slice(0,5)}`;
-
-  const response = await fetch(url);
-  const results = await response.text();
-  const data = results.split('\n').map(hash => hash.split(':')[0]);
-
-  const match = data.find(hash => hash.startsWith(hash.slice(6, 12).toUpperCase()));
-
-  if (match) {
-    console.log('Your password has been found on a public list of leaked passwords');
-  }
+  return {
+    timeToAverageInDays: `It would take ${timeToAverageInDays.toFixed(2)} days to crack this password!`,
+    bitsOfEntropy
+  };
 };

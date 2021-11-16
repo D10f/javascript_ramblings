@@ -29,15 +29,17 @@ function textTransition({
 
   timeout = setTimeout(() => (match = true), maxDuration);
 
-  const currentTextCharCodeArray: number[] = element.textContent!
-    .split("")
+  const currentTextCharCodeArray: number[] = element
+    .textContent!.split("")
     .map((letter: string) => letter.charCodeAt(0));
 
   const newTextCharCodeArray: number[] = newText
     .split("")
     .map((letter: string) => letter.charCodeAt(0));
 
-  let transitionTextCharCodeArray: ITransitionCharObject[] = new Array().fill({ charCode: 0, done: false });
+  let transitionTextCharCodeArray: ITransitionCharObject[] = new Array(
+    newText.length
+  ).fill({ charCode: 0, done: false });
 
   interval = setInterval(() => {
     transitionTextCharCodeArray = newTextCharCodeArray.map((charCode, idx) => {
@@ -61,7 +63,7 @@ function textTransition({
       };
     });
 
-    if (!match) {
+    if (match) {
       element.textContent = newText;
       clearTimeout(timeout);
       clearInterval(interval);
@@ -74,22 +76,23 @@ function textTransition({
           String.fromCharCode(charCode)
         )
         .join("");
-    } else {
-      element.innerHTML = transitionTextCharCodeArray
-        .map(({ charCode, done }: ITransitionCharObject) => {
-          let color = '';
-
-          if (highlight instanceof Array) {
-            color = highlight[Math.floor(Math.random() * highlight.length)];
-          }
-
-          return done
-            ? `<span>${String.fromCharCode(charCode)}</span>`
-            : `<span style="color: ${color || highlight}">${String.fromCharCode(
-                charCode
-              )}</span>`;
-        })
-        .join("");
+      return;
     }
+
+    element.innerHTML = transitionTextCharCodeArray
+      .map(({ charCode, done }: ITransitionCharObject) => {
+        let color = "";
+
+        if (highlight instanceof Array) {
+          color = highlight[Math.floor(Math.random() * highlight.length)];
+        }
+
+        return done
+          ? `<span>${String.fromCharCode(charCode)}</span>`
+          : `<span style="color: ${color || highlight}">${String.fromCharCode(
+              charCode
+            )}</span>`;
+      })
+      .join("");
   }, rate);
 }

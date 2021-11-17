@@ -1,10 +1,11 @@
 interface ITextTransition {
   element: HTMLElement;
   newText: string;
-  maxDuration: number;
-  entropy: number;
-  rate: number;
-  highlight: string | string[] | false;
+  maxDuration?: number;
+  entropy?: number;
+  rate?: number;
+  highlight?: string | string[] | false;
+  callback?: Function;
 }
 
 interface ITransitionCharObject {
@@ -15,17 +16,18 @@ interface ITransitionCharObject {
 /**
  * Changes the contents of the target HTML with a new value, transitioning characters individually in a random fashion.
  */
-function textTransition({
+export function textTransition({
   element,
   newText,
   maxDuration = 1000,
   entropy = 0.8,
   rate = 125,
   highlight = "#f4c862",
+  callback,
 }: ITextTransition) {
   let match = false;
-  let timeout: number;
-  let interval: number;
+  let timeout: ReturnType<typeof setTimeout>;
+  let interval: ReturnType<typeof setInterval>;
 
   timeout = setTimeout(() => (match = true), maxDuration);
 
@@ -42,6 +44,16 @@ function textTransition({
   ).fill({ charCode: 0, done: false });
 
   interval = setInterval(() => {
+    if (match) {
+      element.textContent = newText;
+      clearTimeout(timeout);
+      clearInterval(interval);
+      if (callback) {
+        callback();
+      }
+      return;
+    }
+
     transitionTextCharCodeArray = newTextCharCodeArray.map((charCode, idx) => {
       if (
         charCode === currentTextCharCodeArray[idx] ||
@@ -63,12 +75,10 @@ function textTransition({
       };
     });
 
-    if (match) {
-      element.textContent = newText;
-      clearTimeout(timeout);
-      clearInterval(interval);
-      return;
-    }
+    // This checks for matches to avoid waiting for the full maxDuration when not needed
+    match =
+      JSON.stringify(transitionTextCharCodeArray.map((obj) => obj.charCode)) ===
+      JSON.stringify(newTextCharCodeArray);
 
     if (!highlight) {
       element.textContent = transitionTextCharCodeArray

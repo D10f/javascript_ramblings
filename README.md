@@ -99,6 +99,30 @@ d20.rollWithOptions(10, (num) => num % 2 !== 0);
 ```
 
 ---
+### [fetch_wrapper](https://github.com/herokunt/javascript_ramblings/blob/main/fetch_wrapper.ts)
+
+A tiny wrapper around the native `window.fetch` that makes it easy to create an axios-like API. It supports intercepting outgoing requests (incoming responses coming soon) to automate and abstract common tasks like authentication tokens or implement any other custom logic.
+
+```ts
+const api = new apiService('https://mysite.com');
+
+api.addInterceptor((req: Request): Request => {
+  if (['/register', '/login'].includes(req.url)) {
+    // No authentication needed
+    return req;
+  }
+
+  const token = sessionStorage.getItem("token");
+
+  req.headers.set("Authorization", `Bearer ${token}`);
+
+  return req;
+});
+
+
+```
+
+---
 ### [shopping_cart](https://github.com/herokunt/javascript_ramblings/blob/main/shopping_cart.js)
 
 A front-end shopping cart implemented using the JavaScript Map structure, ready to be used in e-commerce web apps.

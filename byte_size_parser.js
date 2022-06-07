@@ -29,8 +29,14 @@ function parse(input) {
  * @param   {array} input a RegExpMatchArray
  * @returns {array} tuple of float and string, parsed into valid values representing a size of media storage
  */
-function _parseRegExpMatchResult([_original, value, _optionalSpace, unit]) {
-  return [parseFloat(value), unit.toLowerCase().replace(/bytes?/, "")];
+function _parseRegExpMatchResult(input) {
+  const value = parseFloat(input[1]);
+  let unit = input[3].toLowerCase();
+
+  unit =
+    unit === "byte" || unit === "bytes" ? unit : unit.replace(/bytes?/, "");
+
+  return [value, unit];
 }
 
 /**
@@ -50,13 +56,15 @@ function _getOrderOfMagnitude(unit) {
  * @return {number} the exponent of the operation based on the unit of measurement used
  */
 function _getDataExponent(unit) {
+  console.log(unit);
   const unitIndex = _multipleByteUnits.findIndex((u) => u === unit);
   // the unit arrays include both the long and short form to express units. Only
   // increase the exponent count up to half the size of the array due to this.
-  return (unitIndex % (_decimalUnits.length / 2)) + 1;
+  return unitIndex % (_decimalUnits.length / 2);
 }
 
 const _decimalUnits = [
+  "byte",
   "kilo",
   "mega",
   "giga",
@@ -65,6 +73,7 @@ const _decimalUnits = [
   "exa",
   "zetta",
   "yotta",
+  "b",
   "kb",
   "mb",
   "gb",
@@ -76,6 +85,7 @@ const _decimalUnits = [
 ];
 
 const _binaryUnits = [
+  "byte",
   "kibi",
   "mebi",
   "gibi",
@@ -84,6 +94,7 @@ const _binaryUnits = [
   "exbi",
   "zebi",
   "yobi",
+  "b",
   "kib",
   "mib",
   "gib",
@@ -97,6 +108,6 @@ const _binaryUnits = [
 const _multipleByteUnits = [..._decimalUnits, ..._binaryUnits];
 
 const _re = new RegExp(
-  `^(\\d+(\\.\\d+)?)\\s?(${_multipleByteUnits.join("|")})(bytes?)?$`,
+  `^(\\d+(\\.\\d+)?)\\s?(${_multipleByteUnits.join("|")})(s|bytes?)?$`,
   "i"
 );

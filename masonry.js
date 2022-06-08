@@ -23,6 +23,9 @@ function masonryLayout(selector) {
     /** Force cell to be as high as the content it wraps around */
     cell.style.height = "max-content";
 
+    /** Reset previous style updates (to work with window resizes) */
+    cell.style.transform = "";
+
     /** Select cell above, return if not found (nothing to do) */
     const cellAbove = cells[idx - columns.length];
 
@@ -48,19 +51,29 @@ function masonryLayout(selector) {
       columns
     );
 
-    remainingCellsInColumn.forEach((cell) => {
-      /** Shift cells up by the margin available */
-      const currentTopMargin = parseInt(
-        (cell.style.marginTop || "0px").replace("px", "")
-      );
-
-      const newMargin = currentTopMargin - marginAvailable;
-      cell.style.marginTop = `${newMargin}px`;
+    remainingCellsInColumn.forEach((_cell) => {
+      /** Updates the css properties as needed */
+      calculateTransformYDiff(_cell, marginAvailable);
 
       /** Update rows variable as cells are shifted upwards */
       rows = getComputedStyle(grid).gridTemplateRows.split(" ");
     });
   });
+}
+
+/**
+ * Updates an element's position relative to the margin available on the above row
+ * @param {HTMLElement} cell the item to be updated
+ * @param {number} marginAvailable the amount of pixels to move the element upwards
+ */
+function calculateTransformYDiff(cell, marginAvailable) {
+  const transformString = cell.style.transform || "translateY(0px)";
+  const currentTransformYOffset = parseInt(
+    transformString.match(/translateY\((.*)\)$/i)[1].replace("px", "")
+  );
+
+  const newDiff = currentTransformYOffset - marginAvailable;
+  cell.style.transform = `translateY(${newDiff}px)`;
 }
 
 /**

@@ -46,7 +46,7 @@ function _parseRegExpMatchResult(input) {
  */
 function _getOrderOfMagnitude(unit) {
   const unitIndex = _multipleByteUnits.findIndex((u) => u === unit);
-  const isDecimal = unitIndex < _decimalUnits.length;
+  const isDecimal = unitIndex < _metricUnits.length;
   return isDecimal ? 1000 : 1024;
 }
 
@@ -56,14 +56,13 @@ function _getOrderOfMagnitude(unit) {
  * @return {number} the exponent of the operation based on the unit of measurement used
  */
 function _getDataExponent(unit) {
-  console.log(unit);
   const unitIndex = _multipleByteUnits.findIndex((u) => u === unit);
   // the unit arrays include both the long and short form to express units. Only
   // increase the exponent count up to half the size of the array due to this.
-  return unitIndex % (_decimalUnits.length / 2);
+  return unitIndex % (_metricUnits.length / 2);
 }
 
-const _decimalUnits = [
+const _metricUnits = [
   "byte",
   "kilo",
   "mega",
@@ -105,7 +104,7 @@ const _binaryUnits = [
   "yit",
 ];
 
-const _multipleByteUnits = [..._decimalUnits, ..._binaryUnits];
+const _multipleByteUnits = [..._metricUnits, ..._binaryUnits];
 
 const _re = new RegExp(
   `^(\\d+(\\.\\d+)?)\\s?(${_multipleByteUnits.join("|")})(s|bytes?)?$`,

@@ -18,14 +18,14 @@ Vanilla JS implementation of a masonry layout. Does not handle any CSS styling i
 /* css */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 }
 ```
 
 ```js
 /* js */
-masonryLayout(".grid-container");
+new Masonry(".grid-container");
 ```
 
 ---

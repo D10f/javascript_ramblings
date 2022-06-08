@@ -1,100 +1,83 @@
-/**
- * Creates a masonry layout out of a grid container. Does not handle any CSS
- * styling, only calculates and adjusts the items' position inside the grid.
- * @param {string} selector css selector to the grid container
- */
-function masonryLayout(selector) {
-  /** Select grid container */
-  const grid = document.querySelector(selector);
+function debounce(fn, timeInMs) {
+  let timeFrame;
+  return function () {
+    clearTimeout(timeFrame);
+    timeFrame = setTimeout(fn, timeInMs);
+  };
+}
 
-  /** Select items in grid */
-  const cells = Array.from(grid.children);
-
-  /** Select grid properties */
-  const columns = getComputedStyle(grid).gridTemplateColumns.split(" ");
-  let rows = getComputedStyle(grid).gridTemplateRows.split(" ");
-
-  /** No need for arrangements if there's only 1 column */
-  if (columns.length === 1) {
-    return;
+class Masonry {
+  constructor(selector) {
+    this._grid = document.querySelector(selector);
+    this._listeners();
+    setTimeout(this._buildLayout.bind(this), 100);
   }
 
-  cells.forEach((cell, idx) => {
-    /** Force cell to be as high as the content it wraps around */
-    cell.style.height = "max-content";
+  get _columns() {
+    return getComputedStyle(this._grid).gridTemplateColumns.split(" ");
+  }
 
-    /** Reset previous style updates (to work with window resizes) */
-    cell.style.transform = "";
+  get _rows() {
+    return getComputedStyle(this._grid).gridTemplateRows.split(" ");
+  }
 
-    /** Select cell above, return if not found (nothing to do) */
-    const cellAbove = cells[idx - columns.length];
-
-    if (!cellAbove) {
-      return;
-    }
-
-    /** Check if cell above has some margin left */
-    const rowAbove = rows[_getRowAboveIdx(idx, rows, columns)];
-    const rowAboveHeight = parseFloat(rowAbove.replace("px", ""));
-    const cellAboveHeight = cellAbove.clientHeight;
-    const marginAvailable = rowAboveHeight - cellAboveHeight;
-
-    /** no margin, nothing to do */
-    if (!marginAvailable) {
-      return;
-    }
-
-    /** Select all cells below, in the same column */
-    const remainingCellsInColumn = _getRemainingCellsInColumn(
-      cells,
-      idx,
-      columns
+  _listeners() {
+    window.addEventListener(
+      "resize",
+      debounce(this._buildLayout.bind(this), 50)
     );
+  }
 
-    remainingCellsInColumn.forEach((_cell) => {
-      /** Updates the css properties as needed */
-      calculateTransformYDiff(_cell, marginAvailable);
+  _getAboveRowHeight(cellIdx) {
+    const rowIdx =
+      Math.floor((cellIdx / this._columns.length) % this._rows.length) - 1;
+    return parseFloat(this._rows[rowIdx].replace("px", ""));
+  }
 
-      /** Update rows variable as cells are shifted upwards */
-      rows = getComputedStyle(grid).gridTemplateRows.split(" ");
+  _calculateMarginTop(cells, cellIdx) {
+    const aboveCell = cells[cellIdx - this._columns.length];
+
+    if (!aboveCell) {
+      return null;
+    }
+
+    const aboveRowHeight = this._getAboveRowHeight(cellIdx);
+    const aboveCellHeight = aboveCell.clientHeight;
+
+    return aboveRowHeight - aboveCellHeight;
+  }
+
+  _getBelowCellsInColumn(cells, cellIdx) {
+    const subGrid = cells.slice(cellIdx);
+    return subGrid.filter((_, idx) => idx % this._columns.length === 0);
+  }
+
+  _applyStyles(cell, availableMargin) {
+    const yPos = /translateY\((.*)px\)/i;
+    cell.style.transform = cell.style.transform.replace(
+      yPos,
+      (_, $2) => `translateY(${$2 - availableMargin}px)`
+    );
+  }
+
+  _buildLayout() {
+    const cells = Array.from(this._grid.children);
+    cells.forEach((cell, idx) => {
+      /** Force cell to be as height as the content it wraps around */
+      cell.style.height = "max-content";
+
+      /** Reset any previous style updates */
+      cell.style.transform = "translateY(0px)";
+
+      const availableMargin = this._calculateMarginTop(cells, idx);
+
+      if (!availableMargin) {
+        return;
+      }
+
+      this._getBelowCellsInColumn(cells, idx).forEach((_cell) => {
+        this._applyStyles(_cell, availableMargin);
+      });
     });
-  });
-}
-
-/**
- * Updates an element's position relative to the margin available on the above row
- * @param {HTMLElement} cell the item to be updated
- * @param {number} marginAvailable the amount of pixels to move the element upwards
- */
-function calculateTransformYDiff(cell, marginAvailable) {
-  const transformString = cell.style.transform || "translateY(0px)";
-  const currentTransformYOffset = parseInt(
-    transformString.match(/translateY\((.*)\)$/i)[1].replace("px", "")
-  );
-
-  const newDiff = currentTransformYOffset - marginAvailable;
-  cell.style.transform = `translateY(${newDiff}px)`;
-}
-
-/**
- * Selects all cells from the same column that are below a given index
- * @param {array}  cells The HTML Elements inside the grid container
- * @param {number} currentCellIdx The current cell being processed
- * @param {array} columns Total number of columns in the grid container
- * @returns {array} Cells from the same column below the current cell
- */
-function _getRemainingCellsInColumn(cells, currentCellIdx, columns) {
-  const searchGrid = Array.from(cells).slice(currentCellIdx);
-  return searchGrid.filter((_, idx) => idx % columns.length === 0);
-}
-
-/**
- * Given an cell grid and an index, returns the number of the above row
- * @param {number} currentCellIdx The current cell being processed
- * @param {array} rows Total number of rows in the grid container
- * @param {array} columns Total number of columns in the grid container
- * @returns {number} The row above the active cell
- */
-function _getRowAboveIdx(currentCellIdx, rows, columns) {
-  return Math.floor((currentCellIdx / columns.length) % rows.length) - 1;
+  }
 }

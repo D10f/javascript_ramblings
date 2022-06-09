@@ -1,3 +1,5 @@
+import "./style.scss";
+
 function debounce(fn, timeInMs) {
   let timeFrame;
   return function () {
@@ -43,8 +45,15 @@ class Masonry {
 
     const aboveRowHeight = this._getAboveRowHeight(cellIdx);
     const aboveCellHeight = aboveCell.clientHeight;
+    const aboveCellYTranslate = this._getTranslateYValues(aboveCell);
 
-    return aboveRowHeight - aboveCellHeight;
+    return aboveRowHeight - aboveCellHeight - aboveCellYTranslate;
+  }
+
+  _getTranslateYValues(cell) {
+    const yPos = /translateY\((.*)px\)/i;
+    const translateAmount = cell.style.transform.match(yPos) || 0;
+    return parseInt(translateAmount[1]);
   }
 
   _getBelowCellsInColumn(cells, cellIdx) {

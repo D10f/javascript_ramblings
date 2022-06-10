@@ -25,12 +25,6 @@ export function textTransition({
   highlight = "#f4c862",
   callback,
 }: ITextTransition) {
-  let match = false;
-  let timeout: ReturnType<typeof setTimeout>;
-  let interval: ReturnType<typeof setInterval>;
-
-  timeout = setTimeout(() => (match = true), maxDuration);
-
   const currentTextCharCodeArray: number[] = element
     .textContent!.split("")
     .map((letter: string) => letter.charCodeAt(0));
@@ -43,66 +37,78 @@ export function textTransition({
     newText.length
   ).fill({ charCode: 0, done: false });
 
-  interval = setInterval(() => {
-    if (match) {
-      element.textContent = newText;
-      clearTimeout(timeout);
-      clearInterval(interval);
-      if (callback) {
-        callback();
-      }
-      return;
-    }
+  requestAnimationFrame(_textTransition);
 
-    transitionTextCharCodeArray = newTextCharCodeArray.map((charCode, idx) => {
-      if (
-        charCode === currentTextCharCodeArray[idx] ||
-        charCode === transitionTextCharCodeArray[idx]?.charCode ||
-        Math.random() > entropy
-      ) {
-        return {
-          charCode,
-          done: true,
-        };
-      }
+  let previousTick = 0;
+  let rateCounter = 0;
+  let intervalCounter = 0;
 
-      // included characters: A-Z a-z 0-9 "#$%&\'()*+,-./:;<=>?@[\\]^_`{|}
-      const randomNum = Math.max(32, Math.floor(Math.random() * 126));
+  function _textTransition(timestamp: number) {
+    const delta = timestamp - previousTick;
+    previousTick = timestamp;
+    intervalCounter += delta;
+    rateCounter += delta;
 
-      return {
-        charCode: randomNum,
-        done: false,
-      };
-    });
+    if (intervalCounter >= rate) {
+      intervalCounter = 0;
 
-    // This checks for matches to avoid waiting for the full maxDuration when not needed
-    match =
-      JSON.stringify(transitionTextCharCodeArray.map((obj) => obj.charCode)) ===
-      JSON.stringify(newTextCharCodeArray);
+      transitionTextCharCodeArray = newTextCharCodeArray.map(
+        (charCode, idx) => {
+          if (
+            charCode === currentTextCharCodeArray[idx] ||
+            charCode === transitionTextCharCodeArray[idx]?.charCode ||
+            Math.random() > entropy
+          ) {
+            return {
+              charCode,
+              done: true,
+            };
+          }
 
-    if (!highlight) {
-      element.textContent = transitionTextCharCodeArray
-        .map(({ charCode }: ITransitionCharObject) =>
-          String.fromCharCode(charCode)
-        )
-        .join("");
-      return;
-    }
+          // included characters: A-Z a-z 0-9 "#$%&\'()*+,-./:;<=>?@[\\]^_`{|}
+          const randomNum = Math.max(32, Math.floor(Math.random() * 126));
 
-    element.innerHTML = transitionTextCharCodeArray
-      .map(({ charCode, done }: ITransitionCharObject) => {
-        let color = "";
-
-        if (highlight instanceof Array) {
-          color = highlight[Math.floor(Math.random() * highlight.length)];
+          return {
+            charCode: randomNum,
+            done: false,
+          };
         }
+      );
 
-        return done
-          ? `<span>${String.fromCharCode(charCode)}</span>`
-          : `<span style="color: ${color || highlight}">${String.fromCharCode(
-              charCode
-            )}</span>`;
-      })
-      .join("");
-  }, rate);
+      if (rateCounter >= maxDuration) {
+        element.textContent = newText;
+        if (callback) {
+          callback();
+        }
+        return;
+      }
+
+      if (!highlight) {
+        element.textContent = transitionTextCharCodeArray
+          .map(({ charCode }: ITransitionCharObject) =>
+            String.fromCharCode(charCode)
+          )
+          .join("");
+        return;
+      }
+
+      element.innerHTML = transitionTextCharCodeArray
+        .map(({ charCode, done }: ITransitionCharObject) => {
+          let color = "";
+
+          if (highlight instanceof Array) {
+            color = highlight[Math.floor(Math.random() * highlight.length)];
+          }
+
+          return done
+            ? `<span>${String.fromCharCode(charCode)}</span>`
+            : `<span style="color: ${color || highlight}">${String.fromCharCode(
+                charCode
+              )}</span>`;
+        })
+        .join("");
+    }
+
+    requestAnimationFrame(_textTransition);
+  }
 }

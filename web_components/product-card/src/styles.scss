@@ -1,0 +1,140 @@
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: #333;
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  width: 20rem;
+  height: 70vh;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+  transform-style: preserve-3d;
+  padding: 2rem;
+  backface-visibility: hidden;
+  will-change: auto;
+  
+  &:hover &__image {
+    transform: scale(0.9) translateZ(3rem);
+  }
+
+  &__header,
+  &__content,
+  &__footer {
+    // width: 100%;
+    // padding: 2rem;
+    // z-index: 1;
+    // border: 2px dashed orangered;
+  }
+  
+  &__header {
+    color: #f4f4f4;
+    flex: 0 0 40%;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 40%;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      clip-path: polygon(0px 0px, 100% 0px, 100% 75%, 0 95%);
+    }
+
+    &--1::before {
+      background-image: linear-gradient(to right bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url(../static/thai-buffet.jpg);
+    }
+    &--2::before {
+      background-image: linear-gradient(to right bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url(../static/mexican-table.jpg);
+    }
+    &--3::before {
+      background-image: linear-gradient(to right bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url(../static/food-table.jpg);
+    }
+  }
+  
+  &__title {
+    font-size: 1.8rem;
+    text-shadow: 0.1rem 0.1rem 1rem rgba(0,0,0,0.8);
+  }
+
+  &__image {
+    position: absolute;
+    top: 5rem;
+    right: -2rem;
+    filter: drop-shadow(-0.5rem 0.5rem 1rem rgba(0,0,0,0.25));
+    z-index: 1;
+    transition: transform 0.4s ease-in-out;
+    transform: scale(0.9) translateZ(1rem);
+    shape-outside: circle(50% at 50% 50%);
+    
+    & img {
+      object-fit: contain;
+      max-width: 15rem;
+    }
+  }
+  
+  &__content {
+    padding-top: 1rem;
+    // text-align: center;
+    line-height: 1.6rem;
+  }
+  
+  &__footer {
+    
+    & button {
+      position: relative;
+      display: inline-block;
+      background: none;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      background-color: coral;
+      color: #f4f4f4;
+      
+      &:active,
+      &:hover,
+      &:focus {
+        cursor: pointer;
+        background-color: orangered;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &:active::before {
+        transform: scale(0.95);
+        opacity: 0.3;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,1);
+        opacity: 0.2;
+      }
+    }
+  }
+}

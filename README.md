@@ -164,6 +164,14 @@ api.addInterceptor((req: Request): Request => {
 
 ---
 
+### [Product Card](https://github.com/D10f/javascript_ramblings/blob/main/web_components/product-card)
+
+A product card showing a sample product. Uses vanilla-tilt.js for the hover effect.
+
+![animated gif of a product card with a 3D parallax effect on hover](assets/product-card.gif)
+
+---
+
 ### [Rock, Paper, Scissors](https://codepen.io/D10f/pen/JjpzvMx)
 
 A classic game of rock, paper, scissors.

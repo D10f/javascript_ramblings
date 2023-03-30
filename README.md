@@ -112,6 +112,19 @@ shortener(filename, { tailLength: 8, sepAmount: 5, sep: "_" }) >
 
 ---
 
+Calculate time differences and output them as human-readable strings.
+
+### [datetime_diff](https://github.com/D10f/javascript_ramblings/blob/main/datetime_diff.ts)
+
+```ts
+document.querySelector('.post__publishedAt').textContent = DateTime.humanDiff(
+  new Date(post.publishedAt),
+  new Date()
+);
+```
+
+---
+
 ### [dice_simulator](https://github.com/D10f/javascript_ramblings/blob/main/dice.js)
 
 Small, simple script to simulate dice rolls programatically. Create instances for every new type of dice you need, roll them! You can provide options to filter down results as well:

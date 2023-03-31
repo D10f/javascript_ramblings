@@ -1,6 +1,17 @@
 interface Sketch {
   render(): void;
-  destroy(): null;
+  destroy(): void;
+}
+
+interface GridCanvasComponent {
+  forEachCell(callback: Function);
+}
+
+function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
 }
 
 class Canvas {
@@ -9,7 +20,7 @@ class Canvas {
 
   private sketch: Sketch;
   private paused: boolean;
-  private fps: number;
+  private updateInterval: number;
   private timer: number;
   private animationFrameId: number;
   private lastAnimationTick: number;
@@ -19,7 +30,7 @@ class Canvas {
     this.el.width = window.innerWidth;
     this.el.height = window.innerHeight;
     this.ctx = this.el.getContext('2d');
-    this.fps = fps;
+    this.updateInterval = Math.floor(1000/fps);
     this.timer = 0;
     this.lastAnimationTick = 0;
     this.events();
@@ -40,34 +51,20 @@ class Canvas {
     this.sketch = sketch;
   }
 
+  play() {
+    this.paused = false;
+    this.animate(this.lastAnimationTick);
+  }
+
   pause() {
     this.paused = true;
   }
 
   destroy() {
     this.paused = true;
-    this.sketch = this.sketch.destroy();
     cancelAnimationFrame(this.animationFrameId)
-  }
-
-  play() {
-    this.paused = false;
-    this.animate(this.lastAnimationTick);
-
-    // this.animationFrameId = requestAnimationFrame((timestamp: number) => {
-    //   if (this.paused) return;
-
-    //   const deltaTime = timestamp - this.lastAnimationTick;
-    //   this.lastAnimationTick = timestamp;
-
-    //   if (this.timer < this.fps) {
-    //     this.timer += deltaTime;
-    //     return;
-    //   }
-
-    //   this.timer = 0;
-    //   this.sketch.render(timestamp);
-    // });
+    this.sketch.destroy();
+    this.sketch = null;
   }
 
   animate(timestamp: number) {
@@ -76,7 +73,7 @@ class Canvas {
       const deltaTime = timestamp - this.lastAnimationTick;
       this.lastAnimationTick = timestamp;
 
-      if (this.timer < this.fps) {
+      if (this.timer < this.updateInterval) {
         this.timer += deltaTime;
       } else {
         this.timer = 0;
@@ -88,10 +85,46 @@ class Canvas {
   }
 }
 
+class Cell {
+
+}
+
+class Particle {
+
+}
+
+class Grid implements GridCanvasComponent {
+
+  private cols: number;
+  private rows: number;
+  private grid: number;
+
+  constructor(width: number, height: number) {
+    this.createGrid();
+  }
+
+  private createGrid() {
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+
+      }
+    }
+  }
+
+  forEachCell(callback: Function) {
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        callback(this.grid[i + j * this.cols]);
+      }
+    }
+  }
+}
+
 class Flowfield implements Sketch {
 
   private x: number;
   private y: number;
+  private grid: Grid;
 
   constructor(
     private canvasEl: HTMLCanvasElement,
@@ -100,24 +133,20 @@ class Flowfield implements Sketch {
     this.x = 100;
     this.y = 100;
     this.mouseCoordinates = this.mouseCoordinates.bind(this);
-    this.events();
-  }
-
-  private events() {
     window.addEventListener('mousemove', this.mouseCoordinates);
   }
 
-  private mouseCoordinates({ x, y }) {
+  private mouseCoordinates({ x, y }: MouseEvent) {
     this.x = x;
     this.y = y;
   }
 
   destroy() {
     window.removeEventListener('mousemove', this.mouseCoordinates);
-    return null;
   }
 
   render() {
-    this.canvasCtx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+    // this.canvasCtx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+    drawLine(this.canvasCtx, this.canvasEl.width / 2, this.canvasEl.height / 2, this.x, this.y);
   }
 }

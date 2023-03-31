@@ -1,8 +1,6 @@
-document.addEventListener("DOMContentLoaded", main);
-
-function main() {
-  const canvas = new Canvas('#canvas');
-  canvas.createSketch(new Flowfield(canvas.el, canvas.ctx));
+interface Sketch {
+  render(): void;
+  destroy(): null;
 }
 
 class Canvas {
@@ -40,25 +38,6 @@ class Canvas {
     }
 
     this.sketch = sketch;
-    this.play();
-  }
-
-  play() {
-    this.paused = false;
-    this.animationFrameId = requestAnimationFrame((timestamp: number) => {
-      if (this.paused) return;
-
-      const deltaTime = timestamp - this.lastAnimationTick;
-      this.lastAnimationTick = timestamp;
-
-      if (this.timer < this.fps) {
-        this.timer += deltaTime;
-        return;
-      }
-
-      this.timer = 0;
-      this.sketch.render(timestamp);
-    });
   }
 
   pause() {
@@ -67,38 +46,78 @@ class Canvas {
 
   destroy() {
     this.paused = true;
-    this.sketch = null;
+    this.sketch = this.sketch.destroy();
     cancelAnimationFrame(this.animationFrameId)
+  }
+
+  play() {
+    this.paused = false;
+    this.animate(this.lastAnimationTick);
+
+    // this.animationFrameId = requestAnimationFrame((timestamp: number) => {
+    //   if (this.paused) return;
+
+    //   const deltaTime = timestamp - this.lastAnimationTick;
+    //   this.lastAnimationTick = timestamp;
+
+    //   if (this.timer < this.fps) {
+    //     this.timer += deltaTime;
+    //     return;
+    //   }
+
+    //   this.timer = 0;
+    //   this.sketch.render(timestamp);
+    // });
+  }
+
+  animate(timestamp: number) {
+
+    if (!this.paused) {
+      const deltaTime = timestamp - this.lastAnimationTick;
+      this.lastAnimationTick = timestamp;
+
+      if (this.timer < this.fps) {
+        this.timer += deltaTime;
+      } else {
+        this.timer = 0;
+        this.sketch.render();
+      }
+    }
+
+    this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
   }
 }
 
-interface Sketch {
-  paused: boolean;
-  render(timestamp: number): void;
-}
-
 class Flowfield implements Sketch {
-  public paused: boolean;
+
+  private x: number;
+  private y: number;
 
   constructor(
     private canvasEl: HTMLCanvasElement,
     private canvasCtx: CanvasRenderingContext2D,
-  ) {}
-
-  render(timestamp: number) {
-    this.canvasCtx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+  ) {
+    this.x = 100;
+    this.y = 100;
+    this.mouseCoordinates = this.mouseCoordinates.bind(this);
+    this.events();
   }
 
-  // draw(x: number, y: number) {
-  //   this.ctx.beginPath();
-  //   this.ctx.moveTo(x, y);
-  //   this.ctx.lineTo(x + 100, y + 100);
-  //   this.ctx.stroke();
-  // }
+  private events() {
+    window.addEventListener('mousemove', this.mouseCoordinates);
+  }
 
-  // animate() {
-  //   this.ctx.clearRect(0, 0, this.width, this.height);
-  //   this.draw(100, 100);
-  //   requestAnimationFrame(this.animate.bind(this));
-  // }
+  private mouseCoordinates({ x, y }) {
+    this.x = x;
+    this.y = y;
+  }
+
+  destroy() {
+    window.removeEventListener('mousemove', this.mouseCoordinates);
+    return null;
+  }
+
+  render() {
+    this.canvasCtx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+  }
 }

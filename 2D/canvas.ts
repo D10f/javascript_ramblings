@@ -14,6 +14,10 @@ function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: num
   ctx.stroke();
 }
 
+type SketchEvent = {
+  [K in keyof WindowEventMap]?: (this: Window, ev: WindowEventMap[keyof WindowEventMap]) => void;
+}
+
 class Canvas {
   public el: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
@@ -24,6 +28,7 @@ class Canvas {
   private timer: number;
   private animationFrameId: number;
   private lastAnimationTick: number;
+  private events: SketchEvent[];
 
   constructor(selector: string, fps = 60) {
     this.el = document.querySelector(selector);
@@ -33,17 +38,21 @@ class Canvas {
     this.updateInterval = Math.floor(1000/fps);
     this.timer = 0;
     this.lastAnimationTick = 0;
-    this.events();
-  }
 
-  private events() {
     window.addEventListener('resize', () => {
       this.el.width = window.innerWidth;
       this.el.height = window.innerHeight;
     });
   }
 
+  registerEvent<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void {
+    window.addEventListener(type, listener);
+    this.events.push({ [type]: listener });
+  }
+
   createSketch(sketch: Sketch) {
+    this.registerEvent('blur', console.log);
+
     if (this.sketch) {
       this.destroy();
     }

@@ -1,8 +1,9 @@
 const CELL_SIZE = 15;
 
 interface Sketch {
-  render(): void;
   destroy(): void;
+  update(): void;
+  render(): void;
 }
 
 function drawLine(
@@ -11,7 +12,7 @@ function drawLine(
   y1: number,
   x2: number,
   y2: number,
-  color: CanvasGradient | string = 'white',
+  color: string | CanvasGradient | CanvasPattern = 'white',
   weight = 3
 ) {
   ctx.beginPath();
@@ -53,14 +54,12 @@ class Canvas {
     });
   }
 
-  registerEvent<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void {
+  addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void {
     window.addEventListener(type, listener);
     this.events.push({ [type]: listener });
   }
 
   createSketch(sketch: Sketch) {
-    this.registerEvent('blur', console.log);
-
     if (this.sketch) {
       this.destroy();
     }
@@ -94,6 +93,7 @@ class Canvas {
         this.timer += deltaTime;
       } else {
         this.timer = 0;
+        this.sketch.update();
         this.sketch.render();
       }
     }
@@ -101,41 +101,6 @@ class Canvas {
     this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
   }
 }
-
-// class Cell {
-
-// }
-
-// class Particle {
-
-// }
-
-// class Grid {
-
-//   private cols: number;
-//   private rows: number;
-//   private grid: number;
-
-//   constructor(width: number, height: number) {
-//     this.createGrid();
-//   }
-
-//   private createGrid() {
-//     for (let i = 0; i < this.cols; i++) {
-//       for (let j = 0; j < this.rows; j++) {
-
-//       }
-//     }
-//   }
-
-//   forEachCell(callback: Function) {
-//     for (let i = 0; i < this.cols; i++) {
-//       for (let j = 0; j < this.rows; j++) {
-//         callback(this.grid[i + j * this.cols]);
-//       }
-//     }
-//   }
-// }
 
 class Flowfield implements Sketch {
 
@@ -150,26 +115,16 @@ class Flowfield implements Sketch {
     this.x = 100;
     this.y = 100;
     this.updateMouseCoordinates = this.updateMouseCoordinates.bind(this);
-    this.eventListeners();
-    this.createGradient();
-    this.createGrid();
+    this.setup();
   }
 
   private eventListeners() {
-    window.addEventListener('mousemove', this.updateMouseCoordinates);
+    this.canvasEl.addEventListener('mousemove', this.updateMouseCoordinates);
   }
 
   private updateMouseCoordinates({ x, y }: MouseEvent) {
     this.x = x;
     this.y = y;
-  }
-
-  private createGrid() {
-    for (let y = 0; y < this.canvasEl.height; y += CELL_SIZE) {
-      for (let x = 0; x < this.canvasEl.width; x += CELL_SIZE) {
-        drawLine(this.canvasCtx, x, y, x + 5, y + 5, this.gradient, 2);
-      }
-    }
   }
 
   private createGradient() {
@@ -184,11 +139,15 @@ class Flowfield implements Sketch {
   }
 
   destroy() {
-    window.removeEventListener('mousemove', this.updateMouseCoordinates);
+    this.canvasEl.removeEventListener('mousemove', this.updateMouseCoordinates);
   }
 
-  render() {
-    // this.canvasCtx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
-    // drawLine(this.canvasCtx, this.canvasEl.width / 2, this.canvasEl.height / 2, this.x, this.y);
+  setup() {
+    this.eventListeners();
+    this.createGradient();
   }
+
+  update() {}
+
+  render() {}
 }

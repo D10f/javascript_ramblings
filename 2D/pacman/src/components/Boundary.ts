@@ -1,26 +1,27 @@
-import { CELL_SIZE } from '../defs';
-
-type PositionCoordinates = {
-    x: number;
-    y: number;
-};
+// type BoundaryProps = {
+//     x: number;
+//     y: number;
+//     w: number;
+//     h?: number;
+// }
 
 class Boundary {
-
     public width: number;
     public height: number;
+    public x: number;
+    public y: number;
 
-    constructor(
-        private ctx: CanvasRenderingContext2D,
-        public pos: PositionCoordinates,
-    ) {
-        this.width = CELL_SIZE;
-        this.height = CELL_SIZE;
+    // constructor({ x, y, w, h }: BoundaryProps) {
+    constructor(x: number, y: number, w: number, h?: number) {
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h ?? w;
     }
 
-    draw() {
-        this.ctx.fillStyle = 'lightblue';
-        this.ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = 'coral';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
 

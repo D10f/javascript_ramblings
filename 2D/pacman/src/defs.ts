@@ -3,10 +3,13 @@ export type Coordinates = {
   y: number;
 }
 
+export const PLAYER_SPEED = 3;
+
 export const MAP_COLS = 15;
 export const MAP_ROWS = 20;
 
-export const CELL_SIZE = window.innerWidth / Math.max(MAP_COLS, MAP_ROWS);
+// Round m to number divisible by n: n * (Math.round(m / n))
+export const CELL_SIZE = PLAYER_SPEED * Math.round((window.innerWidth / Math.max(MAP_COLS, MAP_ROWS)) / PLAYER_SPEED);
 
 export const MAP = [
   ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'],
@@ -24,7 +27,7 @@ export const MAP = [
   ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
   ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
   ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
-  ['1', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
+  ['1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '0', '0', '1'],
   ['1', '0', '1', '0', '0', '1', '1', '1', '1', '1', '0', '0', '1', '0', '1'],
   ['1', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '1'],
   ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'],

@@ -1,4 +1,4 @@
-import { Coordinates, CELL_SIZE } from '../defs';
+import { Coordinates, PLAYER_SPEED, CELL_SIZE } from '../defs';
 
 class Player {
     private radius: number;
@@ -26,7 +26,7 @@ class Player {
         if (this.moving) return;
         switch (this.keyPressed) {
             case 'A':
-                this.velocity.x = -2;
+                this.velocity.x = -PLAYER_SPEED;
                 this.targetPosition = {
                     x: this.position.x - CELL_SIZE,
                     y: this.position.y
@@ -34,7 +34,7 @@ class Player {
                 this.moving = true;
                 break;
             case 'D':
-                this.velocity.x = 2;
+                this.velocity.x = PLAYER_SPEED;
                 this.targetPosition = {
                     x: this.position.x + CELL_SIZE,
                     y: this.position.y
@@ -42,7 +42,7 @@ class Player {
                 this.moving = true;
                 break;
             case 'W':
-                this.velocity.y = -2;
+                this.velocity.y = -PLAYER_SPEED;
                 this.targetPosition = {
                     x: this.position.x,
                     y: this.position.y - CELL_SIZE
@@ -50,7 +50,7 @@ class Player {
                 this.moving = true;
                 break;
             case 'S':
-                this.velocity.y = 2;
+                this.velocity.y = PLAYER_SPEED;
                 this.targetPosition = {
                     x: this.position.x,
                     y: this.position.y + CELL_SIZE
@@ -63,7 +63,11 @@ class Player {
     }
 
     move() {
-        if (this.position.x !== this.targetPosition.x || this.position.y !== this.targetPosition.y) {
+        // if (this.position.x !== this.targetPosition.x || this.position.y !== this.targetPosition.y) {
+        if (
+            this.position.x !== this.targetPosition.x ||
+            this.position.y !== this.targetPosition.y
+        ) {
             this.position.x += this.velocity.x;
             this.position.y += this.velocity.y;
         } else {

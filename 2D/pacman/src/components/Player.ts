@@ -1,11 +1,12 @@
-import { Coordinates, PLAYER_SPEED, CELL_SIZE } from '../defs';
+import { PLAYER_SPEED, CELL_SIZE, TILE_TYPE } from '../defs';
+import Grid from './Grid';
 import Vector from './Vector';
 
 class Player {
-    private radius: number;
-    private velocity: Vector;
-    private targetPosition: Vector;
     private position: Vector;
+    private targetPosition: Vector;
+    private velocity: Vector;
+    private radius: number;
     private keyPressed: string;
     private moving: boolean;
 
@@ -13,16 +14,10 @@ class Player {
         this.position = new Vector(x, y)
         this.targetPosition = new Vector(0, 0);
         this.velocity = new Vector(0, 0);
-        // this.targetPosition = { x: 0, y: 0 };
-        // this.velocity = { x: 0, y: 0 };
         this.radius = CELL_SIZE / 3;
         this.keyPressed = '';
         this.moving = false;
         this.events();
-    }
-
-    get direction() {
-        return this.position.subtract(this.targetPosition);
     }
 
     events() {
@@ -35,53 +30,54 @@ class Player {
         if (this.moving) return;
         switch (this.keyPressed) {
             case 'A':
-                this.velocity.x = -PLAYER_SPEED;
+                this.velocity.set(-PLAYER_SPEED, 0);
                 this.targetPosition.set(
                     this.position.x - CELL_SIZE,
                     this.position.y
                 );
-                // this.targetPosition = {
-                //     x: this.position.x - CELL_SIZE,
-                //     y: this.position.y
-                // };
-                this.moving = true;
                 break;
             case 'D':
-                this.velocity.x = PLAYER_SPEED;
+                this.velocity.set(PLAYER_SPEED, 0);
                 this.targetPosition.set(
                     this.position.x + CELL_SIZE,
                     this.position.y
                 );
-                this.moving = true;
                 break;
             case 'W':
-                this.velocity.y = -PLAYER_SPEED;
+                this.velocity.set(0, -PLAYER_SPEED);
                 this.targetPosition.set(
                     this.position.x,
                     this.position.y - CELL_SIZE
                 );
-                this.moving = true;
                 break;
             case 'S':
-                this.velocity.y = PLAYER_SPEED;
+                this.velocity.set(0, PLAYER_SPEED);
                 this.targetPosition.set(
                     this.position.x,
                     this.position.y + CELL_SIZE
                 );
-                this.moving = true;
                 break;
             default:
                 return;
         }
+        this.moving = true;
     }
 
     move() {
         if (this.position.distance(this.targetPosition) > 0) {
+            const tile = Grid.getTileAt(this.targetPosition);
+            if (tile === TILE_TYPE.BOUNDARY) {
+                return this.stop();
+            };
             this.position.add(this.velocity);
         } else {
-            this.velocity.set(0, 0);
-            this.moving = false;
+            this.stop();
         }
+    }
+
+    stop() {
+        this.velocity.set(0, 0);
+        this.moving = false;
     }
 
     update() {
@@ -97,7 +93,7 @@ class Player {
     }
 
     debug(ctx: CanvasRenderingContext2D) {
-        ctx.strokeStyle = 'red';
+        ctx.strokeStyle = 'white';
         ctx.strokeText(
             `x: ${this.position.x}`,
             this.position.x,
@@ -106,6 +102,16 @@ class Player {
         ctx.strokeText(
             `y: ${this.position.y}`,
             this.position.x,
+            this.position.y + 10
+        );
+        ctx.strokeText(
+            `Tx: ${this.targetPosition.x}`,
+            this.position.x + CELL_SIZE,
+            this.position.y
+        );
+        ctx.strokeText(
+            `Ty: ${this.targetPosition.y}`,
+            this.position.x + CELL_SIZE,
             this.position.y + 10
         );
     }

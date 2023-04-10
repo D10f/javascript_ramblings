@@ -22,4 +22,5 @@ body {
 
 canvas {
   background-color: #242424;
+  border: 1px solid white;
 }

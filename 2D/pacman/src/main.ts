@@ -11,7 +11,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const grid = new Grid();
-const player = new Player({ x: CELL_SIZE * 3, y: CELL_SIZE * 3 });
+// const player = new Player({ x: CELL_SIZE * 3, y: CELL_SIZE * 3 });
+const player = new Player(CELL_SIZE * 3, CELL_SIZE * 3);
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);

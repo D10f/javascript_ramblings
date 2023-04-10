@@ -1,19 +1,28 @@
 import { Coordinates, PLAYER_SPEED, CELL_SIZE } from '../defs';
+import Vector from './Vector';
 
 class Player {
     private radius: number;
-    private velocity: Coordinates;
-    private targetPosition: Coordinates;
+    private velocity: Vector;
+    private targetPosition: Vector;
+    private position: Vector;
     private keyPressed: string;
     private moving: boolean;
 
-    constructor(public position: Coordinates) {
-        this.targetPosition = { x: 0, y: 0 };
+    constructor(x: number, y: number) {
+        this.position = new Vector(x, y)
+        this.targetPosition = new Vector(0, 0);
+        this.velocity = new Vector(0, 0);
+        // this.targetPosition = { x: 0, y: 0 };
+        // this.velocity = { x: 0, y: 0 };
         this.radius = CELL_SIZE / 3;
-        this.velocity = { x: 0, y: 0 };
         this.keyPressed = '';
         this.moving = false;
         this.events();
+    }
+
+    get direction() {
+        return this.position.subtract(this.targetPosition);
     }
 
     events() {
@@ -27,34 +36,38 @@ class Player {
         switch (this.keyPressed) {
             case 'A':
                 this.velocity.x = -PLAYER_SPEED;
-                this.targetPosition = {
-                    x: this.position.x - CELL_SIZE,
-                    y: this.position.y
-                };
+                this.targetPosition.set(
+                    this.position.x - CELL_SIZE,
+                    this.position.y
+                );
+                // this.targetPosition = {
+                //     x: this.position.x - CELL_SIZE,
+                //     y: this.position.y
+                // };
                 this.moving = true;
                 break;
             case 'D':
                 this.velocity.x = PLAYER_SPEED;
-                this.targetPosition = {
-                    x: this.position.x + CELL_SIZE,
-                    y: this.position.y
-                };
+                this.targetPosition.set(
+                    this.position.x + CELL_SIZE,
+                    this.position.y
+                );
                 this.moving = true;
                 break;
             case 'W':
                 this.velocity.y = -PLAYER_SPEED;
-                this.targetPosition = {
-                    x: this.position.x,
-                    y: this.position.y - CELL_SIZE
-                };
+                this.targetPosition.set(
+                    this.position.x,
+                    this.position.y - CELL_SIZE
+                );
                 this.moving = true;
                 break;
             case 'S':
                 this.velocity.y = PLAYER_SPEED;
-                this.targetPosition = {
-                    x: this.position.x,
-                    y: this.position.y + CELL_SIZE
-                };
+                this.targetPosition.set(
+                    this.position.x,
+                    this.position.y + CELL_SIZE
+                );
                 this.moving = true;
                 break;
             default:
@@ -63,16 +76,10 @@ class Player {
     }
 
     move() {
-        // if (this.position.x !== this.targetPosition.x || this.position.y !== this.targetPosition.y) {
-        if (
-            this.position.x !== this.targetPosition.x ||
-            this.position.y !== this.targetPosition.y
-        ) {
-            this.position.x += this.velocity.x;
-            this.position.y += this.velocity.y;
+        if (this.position.distance(this.targetPosition) > 0) {
+            this.position.add(this.velocity);
         } else {
-            this.velocity.x = 0;
-            this.velocity.y = 0;
+            this.velocity.set(0, 0);
             this.moving = false;
         }
     }

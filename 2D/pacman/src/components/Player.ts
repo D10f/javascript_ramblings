@@ -1,4 +1,6 @@
 import { PLAYER_SPEED, CELL_SIZE, TILE_TYPE } from '../defs';
+import drawCircle from '../utils/drawCircle';
+import Food from './Food';
 import Grid from './Grid';
 import Vector from './Vector';
 
@@ -9,14 +11,19 @@ class Player {
     private radius: number;
     private keyPressed: string;
     private moving: boolean;
+    private color: string;
 
-    constructor(x: number, y: number) {
+    private grid: Grid;
+
+    constructor(x: number, y: number, grid: Grid) {
         this.position = new Vector(x, y)
         this.targetPosition = new Vector(0, 0);
         this.velocity = new Vector(0, 0);
         this.radius = CELL_SIZE / 3;
         this.keyPressed = '';
         this.moving = false;
+        this.color = '#e5c890';
+        this.grid = grid;
         this.events();
     }
 
@@ -63,16 +70,43 @@ class Player {
         this.moving = true;
     }
 
+    // move() {
+    //     if (this.position.distance(this.targetPosition) > 0) {
+    //         if (this.grid.getTileAt(this.targetPosition) === TILE_TYPE.BOUNDARY) {
+    //             return this.stop();
+    //         }
+    //         this.position.add(this.velocity);
+    //     } else {
+    //         this.stop();
+    //     }
+    // }
+
     move() {
-        if (this.position.distance(this.targetPosition) > 0) {
-            const tile = Grid.getTileAt(this.targetPosition);
-            if (tile === TILE_TYPE.BOUNDARY) {
+        const targetDistance = this.position.distance(this.targetPosition);
+        const targetTile = this.grid.getTileAt(this.targetPosition);
+
+        if (targetDistance > 0) {
+
+            if (targetTile === TILE_TYPE.BOUNDARY) {
                 return this.stop();
-            };
+            }
+
             this.position.add(this.velocity);
+
         } else {
+            if (targetDistance <= this.radius && targetTile === TILE_TYPE.FOOD) {
+                this.grid.eatFoodAt(this.position);
+            }
+
             this.stop();
         }
+
+        // if (targetDistance > 0 && targetTile === TILE_TYPE.BOUNDARY) {
+        //     return this.stop();
+        // } else if (targetDistance <= this.radius && targetTile === TILE_TYPE.FOOD) {
+        //     // targetTile.eat();
+        //     this.position.add(this.velocity);
+        // }
     }
 
     stop() {
@@ -117,15 +151,23 @@ class Player {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        ctx.beginPath();
-        ctx.save();
-        ctx.translate(this.position.x, this.position.y);
-        ctx.arc(this.radius + 10, this.radius + 10, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'yellow';
-        ctx.fill();
-        ctx.restore();
-        ctx.closePath();
-        this.debug(ctx);
+        // ctx.beginPath();
+        // ctx.save();
+        // ctx.translate(this.position.x, this.position.y);
+        // // ctx.arc(this.radius + 10, this.radius + 10, this.radius, 0, Math.PI * 2);
+        // ctx.arc(CELL_SIZE / 2, CELL_SIZE / 2, this.radius, 0, Math.PI * 2);
+        // ctx.fillStyle = 'yellow';
+        // ctx.fill();
+        // ctx.restore();
+        // ctx.closePath();
+        drawCircle({
+            ctx,
+            x: this.position.x,
+            y: this.position.y,
+            radius: this.radius,
+            color: this.color
+        });
+        // this.debug(ctx);
     }
 }
 

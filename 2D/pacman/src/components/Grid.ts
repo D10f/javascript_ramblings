@@ -1,40 +1,13 @@
-import { CELL_SIZE, MAP_COLS, MAP_ROWS, MAP, TILE_TYPE } from '../defs';
-import Boundary from './Boundary';
+import { CELL_SIZE, MAP, TILE_TYPE } from '../defs';
 import Vector from './Vector';
-import Food from './Food';
-import drawCircle from '../utils/drawCircle';
+import { drawCircle } from '../utils';
 
 class Grid {
-  private grid: (Food|Boundary)[];
+  private increasePoints: (amt: number) => void;
 
-  constructor() {
-    this.grid = [];
-    // this.createGrid();
+  constructor(increasePoints: (amt: number) => void) {
+    this.increasePoints = increasePoints;
   }
-
-  // createGrid() {
-  //   for (let x = 0; x < MAP_COLS; x++) {
-  //     for (let y = 0; y < MAP_ROWS; y++) {
-  //       switch(MAP[y][x]) {
-  //         case '5':
-  //           this.grid.push(new Boundary(
-  //             x * CELL_SIZE + 1,
-  //             y * CELL_SIZE + 1,
-  //             CELL_SIZE,
-  //           ));
-  //         break;
-  //         default:
-  //           this.grid.push(new Food(
-  //             x * CELL_SIZE + 1,
-  //             y * CELL_SIZE
-  //           ));
-  //           break;
-  //       }
-  //       // if (MAP[y][x] === '1') {
-  //       // }
-  //     }
-  //   }
-  // }
 
   getTileAt(v: Vector) {
     const { x, y } = this.getCoordinates(v);
@@ -49,27 +22,21 @@ class Grid {
 
   eatFoodAt(v: Vector) {
     const { x ,y } = this.getCoordinates(v);
+    this.increasePoints(MAP[y][x]);
     MAP[y][x] = 0;
+    this.checkWinCondition();
   }
 
-  // printCellIdx(ctx: CanvasRenderingContext2D) {
-  //   ctx.strokeStyle = 'white';
-  //   for (let x = 0; x < MAP_COLS; x++) {
-  //     for (let y = 0; y < MAP_ROWS; y++) {
-  //       if (x === 0) {
-  //         ctx.strokeText(y.toString(), x + CELL_SIZE / 4, y * CELL_SIZE + (CELL_SIZE / 2));
-  //       }
-  //       if (y === 0) {
-  //         ctx.strokeText(x.toString(), x * CELL_SIZE + (CELL_SIZE / 2), y + CELL_SIZE / 2);
-  //       }
-  //     }
-  //   }
-  // }
-
-  update() {}
+  checkWinCondition() {
+    for (let i = 0, rows = MAP.length; i < rows; i++) {
+      for (let j = 0, cols = MAP[i].length; j < cols; j++) {
+        if (MAP[i][j] === TILE_TYPE.FOOD || MAP[i][j] === TILE_TYPE.POWER) return;
+      }
+    }
+    console.log('win');
+  }
 
   draw(ctx: CanvasRenderingContext2D) {
-    // this.grid.forEach(item => item.draw(ctx));
     for (let i = 0, rows = MAP.length; i < rows; i++) {
       for (let j = 0, cols = MAP[i].length; j < cols; j++) {
         switch (MAP[i][j]) {
@@ -83,6 +50,15 @@ class Grid {
               x: j * CELL_SIZE,
               y: i * CELL_SIZE,
               radius: 3,
+              color: '#f2d5cf'
+            });
+            break;
+          case TILE_TYPE.POWER:
+            drawCircle({
+              ctx,
+              x: j * CELL_SIZE,
+              y: i * CELL_SIZE,
+              radius: 8,
               color: '#f2d5cf'
             });
         }

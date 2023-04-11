@@ -1,4 +1,4 @@
-import { CELL_SIZE } from '../defs';
+import { CELL_SIZE } from './defs';
 
 type DrawCircleProps = {
     ctx: CanvasRenderingContext2D,
@@ -6,9 +6,9 @@ type DrawCircleProps = {
     y: number,
     radius: number,
     color: string
-}
+};
 
-export default ({ ctx, x, y, radius, color }: DrawCircleProps) => {
+export const drawCircle = ({ ctx, x, y, radius, color }: DrawCircleProps) => {
     ctx.beginPath();
     ctx.save();
     ctx.translate(x, y);
@@ -18,3 +18,4 @@ export default ({ ctx, x, y, radius, color }: DrawCircleProps) => {
     ctx.restore();
     ctx.closePath();
 };
+

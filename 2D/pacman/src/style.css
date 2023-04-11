@@ -18,9 +18,10 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #303446;
 }
 
 canvas {
-  background-color: #242424;
-  border: 1px solid white;
+  background-color: #303446;
+  margin: 2rem;
 }

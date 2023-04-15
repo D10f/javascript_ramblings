@@ -1,12 +1,71 @@
 import { CELL_SIZE, MAP, TILE_TYPE } from '../defs';
 import Vector from './Vector';
 import { drawCircle } from '../utils';
+import PriorityQueue from '../utils/PriorityQueue';
 
 class Grid {
   private increasePoints: (amt: number) => void;
 
   constructor(increasePoints: (amt: number) => void) {
     this.increasePoints = increasePoints;
+  }
+
+  getShortestPath(start: Vector, end: Vector) {
+
+    const openSet = new PriorityQueue<Vector>();
+    openSet.enqueue({ value: start, priority: 0 });
+
+    const cameFrom = new Map<string, string>();
+
+    const gScore = new Map<string, number>();
+    gScore.set(start.toString(), 0);
+
+    const fScore = new Map<string, number>();
+    fScore.set(start.toString(), start.distance(end));
+
+    while (!openSet.isEmpty) {
+      const current = openSet.dequeue() as Vector;
+
+      if (current.distance(end) === 0) {
+        const shortestPath: Vector[] = [];
+
+        let previous = end.toString();
+        while (cameFrom.get(previous)) {
+          previous = cameFrom.get(previous) as string;
+          const [x, y] = previous.split(',');
+          shortestPath.push(new Vector(parseInt(x), parseInt(y)));
+        }
+
+        return shortestPath;
+      }
+
+      for (const neighbour of this.getNeighbors(current)) {
+
+        const neighbourKey = neighbour.toString();
+        const tentativeGScore = (gScore.get(current.toString()) ?? 0) + 1;
+
+        if (!gScore.has(neighbourKey) || tentativeGScore < (gScore.get(neighbourKey) as number)) {
+          const neighbourScore = tentativeGScore + neighbour.distance(end);
+          cameFrom.set(neighbourKey, current.toString());
+          gScore.set(neighbourKey, tentativeGScore);
+          fScore.set(neighbourKey, neighbourScore);
+
+          if (!openSet.contains(neighbour)) {
+            openSet.enqueue({ value: neighbour, priority: neighbourScore });
+          }
+        }
+      }
+    }
+
+    return [];
+  }
+
+  getNeighbors(v: Vector) {
+    const top = new Vector(v.x, v.y - CELL_SIZE);
+    const right = new Vector(v.x + CELL_SIZE, v.y);
+    const bottom = new Vector(v.x, v.y + CELL_SIZE);
+    const left = new Vector(v.x - CELL_SIZE, v.y);
+    return [top, right, bottom, left].filter(v => this.getTileAt(v) !== 5);
   }
 
   getTileAt(v: Vector) {

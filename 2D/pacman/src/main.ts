@@ -2,7 +2,6 @@ import './style.css';
 import { CELL_SIZE } from './defs';
 import Grid from './components/Grid';
 import Player from './components/Player';
-// import Enemy from './entities/Enemy';
 import ReactGhost from './entities/ReactGhost';
 import SvelteGhost from './entities/SvelteGhost';
 import AngularGhost from './entities/AngularGhost';
@@ -21,12 +20,14 @@ function increasePoints(amount: number) {
 
 const grid = new Grid(increasePoints);
 const player = new Player(CELL_SIZE * 3, CELL_SIZE * 3, grid);
+const r = new ReactGhost(CELL_SIZE * 6, CELL_SIZE * 8, player, grid);
+
 const entities = [
   player,
-  new ReactGhost(CELL_SIZE * 6, CELL_SIZE * 8, player, grid),
-  new SvelteGhost(CELL_SIZE * 7, CELL_SIZE * 8, player, grid),
-  new AngularGhost(CELL_SIZE * 8, CELL_SIZE * 8, player, grid),
-  new VueGhost(CELL_SIZE * 9, CELL_SIZE * 8, player, grid),
+  r,
+  // new SvelteGhost(CELL_SIZE * 7, CELL_SIZE * 8, player, grid),
+  // new AngularGhost(CELL_SIZE * 8, CELL_SIZE * 8, player, grid),
+  // new VueGhost(CELL_SIZE * 9, CELL_SIZE * 8, player, grid),
 ];
 
 function animate() {
@@ -47,5 +48,7 @@ function animate() {
 
   window.requestAnimationFrame(animate);
 }
+
+// console.log(grid.getShortestPath(r.position, player.position));
 
 animate();

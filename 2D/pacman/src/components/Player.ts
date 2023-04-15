@@ -123,8 +123,8 @@ class Player {
         ctx.strokeStyle = 'white';
         ctx.strokeText(`x: ${this.position.x}`, this.position.x, this.position.y);
         ctx.strokeText(`y: ${this.position.y}`, this.position.x, this.position.y + 10);
-        ctx.strokeText(`x: ${this.position.x}`, this.position.x + CELL_SIZE, this.position.y);
-        ctx.strokeText(`y: ${this.position.y}`, this.position.x + CELL_SIZE, this.position.y + 10);
+        ctx.strokeText(`x: ${this.targetPosition.x}`, this.position.x + CELL_SIZE, this.position.y);
+        ctx.strokeText(`y: ${this.targetPosition.y}`, this.position.x + CELL_SIZE, this.position.y + 10);
     }
 
     draw(ctx: CanvasRenderingContext2D) {

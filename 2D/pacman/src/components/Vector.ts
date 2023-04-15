@@ -1,3 +1,5 @@
+import { PLAYER_SPEED } from "../defs";
+
 class Vector {
 
     // private magnitude: number;
@@ -5,11 +7,25 @@ class Vector {
 
     constructor(public x: number, public y: number) {}
 
+    // Taxicab or Manhattan distance
     distance(v: Vector) {
-        return Math.sqrt(
-            (v.x - this.x) * (v.x - this.x) +
-            (v.y - this.y) * (v.y - this.y)
-        );
+        return Math.abs(this.x - v.x) + Math.abs(this.y - v.y);
+    }
+
+    // Euclidian distance
+    // distance(v: Vector) {
+    //     return Math.sqrt(
+    //         (v.x - this.x) * (v.x - this.x) +
+    //         (v.y - this.y) * (v.y - this.y)
+    //     );
+    // }
+
+    copy() {
+        return new Vector(this.x, this.y);
+    }
+
+    compare(v: Vector) {
+        return this.x === v.x && this.y === v.y;
     }
 
     set(x: number, y: number) {
@@ -23,10 +39,15 @@ class Vector {
     }
 
     subtract(v: Vector) {
-        return new Vector(
-            this.x - v.x,
-            this.y - v.y,
-        );
+        this.x - v.x;
+        this.y - v.y;
+    }
+
+    toJSON() {
+        return `${this.x},${this.y}`;
+    }
+    toString() {
+        return `${this.x},${this.y}`;
     }
 }
 

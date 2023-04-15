@@ -19,3 +19,8 @@ export const drawCircle = ({ ctx, x, y, radius, color }: DrawCircleProps) => {
     ctx.closePath();
 };
 
+// https://github.com/processing/p5.js/blob/v1.6.0/src/math/calculation.js#L71
+export const constrain = (n: number, high: number, low: number) => {
+    return Math.max(Math.min(n, high), low);
+};
+

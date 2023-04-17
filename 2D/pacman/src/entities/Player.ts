@@ -1,7 +1,7 @@
+import Grid from '../components/Grid';
 import { PLAYER_SPEED, CELL_SIZE, TILE_TYPE } from '../defs';
+import Vector from '../lib/Vector';
 import { drawCircle } from '../utils';
-import Grid from './Grid';
-import Vector from './Vector';
 
 class Player {
     public position: Vector;

@@ -1,24 +1,22 @@
-import { PLAYER_SPEED } from "../defs";
+import { taxicabDistance } from "../utils/math";
 
 class Vector {
 
-    // private magnitude: number;
-    // private direction: number;
-
     constructor(public x: number, public y: number) {}
 
-    // Taxicab or Manhattan distance
-    distance(v: Vector) {
-        return Math.abs(this.x - v.x) + Math.abs(this.y - v.y);
+    static add(v1: Vector, v2: Vector) {
+        return new Vector(v1.x + v2.x, v1.y + v2.y);
     }
 
-    // Euclidian distance
-    // distance(v: Vector) {
-    //     return Math.sqrt(
-    //         (v.x - this.x) * (v.x - this.x) +
-    //         (v.y - this.y) * (v.y - this.y)
-    //     );
-    // }
+    static sub(v1: Vector, v2: Vector) {
+        return new Vector(v1.x - v2.x, v1.y - v2.y);
+    }
+
+    distance(v: Vector) {
+        if (v === null || v === null) return Infinity;
+        return taxicabDistance(this.x, this.y, v.x, v.y);
+        // return Math.abs(this.x - v.x) + Math.abs(this.y - v.y);
+    }
 
     copy() {
         return new Vector(this.x, this.y);
@@ -43,9 +41,6 @@ class Vector {
         this.y - v.y;
     }
 
-    toJSON() {
-        return `${this.x},${this.y}`;
-    }
     toString() {
         return `${this.x},${this.y}`;
     }

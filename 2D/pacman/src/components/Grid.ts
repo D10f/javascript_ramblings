@@ -1,7 +1,7 @@
 import { CELL_SIZE, MAP, TILE_TYPE } from '../defs';
-import Vector from './Vector';
-import { drawCircle } from '../utils';
-import PriorityQueue from '../utils/PriorityQueue';
+import Vector from '../lib/Vector';
+import PriorityQueue from '../lib/PriorityQueue';
+import { drawCircle } from '../utils/geometry';
 
 class Grid {
   private increasePoints: (amt: number) => void;

@@ -103,8 +103,4 @@ class PriorityQueue<T extends { toString(): string }> {
   }
 }
 
-let pq = new PriorityQueue<{ a: 123 }>();
-
-pq.contains({ a: 123 });
-
 export default PriorityQueue;

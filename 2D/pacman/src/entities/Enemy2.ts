@@ -2,11 +2,12 @@ import Grid from "../components/Grid";
 import { CELL_SIZE } from "../defs";
 import Vector from "../lib/Vector";
 
-class Enemy2 {
+class Enemy2 implements Entity {
 
     public position: Vector;
     public velocity: Vector;
     public targetPosition: Vector;
+    public isMoving: boolean;
     public radius: number;
 
     constructor(
@@ -19,6 +20,7 @@ class Enemy2 {
         this.position = new Vector(x, y);
         this.velocity = new Vector(0, 0);
         this.targetPosition = new Vector(x, y);
+        this.isMoving = false;
         this.radius = CELL_SIZE / 3;
     }
 

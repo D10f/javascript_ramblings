@@ -5,7 +5,7 @@ class CollisionComponent {
 
     constructor(private targets: TILE_TYPE[]) {}
 
-    update(entity: any, world: Grid) {
+    update(entity: Entity, world: Grid) {
         const distance = entity.position.distance(entity.targetPosition);
         const targetTile = world.getTileAt(entity.targetPosition);
 

@@ -2,7 +2,7 @@ import { TILE_TYPE } from "../defs";
 import Grid from "./Grid";
 
 class MovementComponent {
-    update(entity: any) {
+    update(entity: Entity) {
         const distance = entity.position.distance(entity.targetPosition);
 
         if (distance > 0) {

@@ -2,7 +2,7 @@ import Grid from "../components/Grid";
 import { CELL_SIZE } from "../defs";
 import Vector from "../lib/Vector";
 
-class Player2 {
+class Player2 implements Entity {
 
     public position: Vector;
     public velocity: Vector;

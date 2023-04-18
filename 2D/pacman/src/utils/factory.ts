@@ -7,6 +7,8 @@ import PathGeneratorComponent from '../components/PathComponent';
 import RandomPathStrategy from '../components/RandomPathStrategy';
 import Enemy2 from "../entities/Enemy2";
 import Player2 from '../entities/Player2';
+import Vector from '../lib/Vector';
+import { TopLeftWanderer, TopRightWanderer, BottomLeftWanderer, BottomRightWanderer } from '../components/WanderStrategy';
 
 export const makeEnemyFactory = () => {
 
@@ -26,10 +28,17 @@ export const makeEnemyFactory = () => {
 
         posXIdx = (posXIdx + 1) % 4;
 
+        const strats = [
+            new TopLeftWanderer(),
+            new TopRightWanderer(),
+            new BottomLeftWanderer(),
+            new BottomRightWanderer()
+        ];
+
         return new Enemy2(
             x,
             y,
-            new PathGeneratorComponent(new RandomPathStrategy()),
+            new PathGeneratorComponent(strats[posXIdx]),
             new MovementComponent(),
             new GraphicComponent(enemy.image, enemy.color)
         );

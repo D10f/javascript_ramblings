@@ -26,6 +26,7 @@ const entities: Entity[] = [
     makeEnemy(),
     makeEnemy(),
 ];
+grid.entities = entities;
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);

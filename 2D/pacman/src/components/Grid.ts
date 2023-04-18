@@ -2,12 +2,15 @@ import { CELL_SIZE, MAP, TILE_TYPE } from '../defs';
 import Vector from '../lib/Vector';
 import PriorityQueue from '../lib/PriorityQueue';
 import { drawCircle } from '../utils/geometry';
+import { randomInt } from '../utils/math';
 
 class Grid {
   private increasePoints: (amt: number) => void;
+  public entities: Entity[];
 
   constructor(increasePoints: (amt: number) => void) {
     this.increasePoints = increasePoints;
+    this.entities = [];
   }
 
   getShortestPath(start: Vector, end: Vector) {
@@ -66,6 +69,12 @@ class Grid {
     const bottom = new Vector(v.x, v.y + CELL_SIZE);
     const left = new Vector(v.x - CELL_SIZE, v.y);
     return [top, right, bottom, left].filter(v => this.getTileAt(v) !== 5);
+  }
+
+  getRandomNeighbour(v: Vector) {
+    const neighbours = this.getNeighbors(v);
+    const randomIdx = randomInt(0, neighbours.length);
+    return neighbours[randomIdx];
   }
 
   getTileAt(v: Vector) {

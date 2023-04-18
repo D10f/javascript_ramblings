@@ -7,8 +7,8 @@ import PathGeneratorComponent from '../components/PathComponent';
 import RandomPathStrategy from '../components/RandomPathStrategy';
 import Enemy2 from "../entities/Enemy2";
 import Player2 from '../entities/Player2';
-import Vector from '../lib/Vector';
 import { TopLeftWanderer, TopRightWanderer, BottomLeftWanderer, BottomRightWanderer } from '../components/WanderStrategy';
+import HunterStrategy from '../components/HunterStrategy';
 
 export const makeEnemyFactory = () => {
 
@@ -32,7 +32,7 @@ export const makeEnemyFactory = () => {
             new TopLeftWanderer(),
             new TopRightWanderer(),
             new BottomLeftWanderer(),
-            new BottomRightWanderer()
+            new HunterStrategy()
         ];
 
         return new Enemy2(

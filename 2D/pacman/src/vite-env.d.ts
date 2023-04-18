@@ -11,6 +11,10 @@ interface Entity {
     draw: (ctx: CanvasRenderingContext2D) => void;
 }
 
+interface PathGenerationStrategy {
+    generate: (entity: Entity, world: Grid) => Vector;
+}
+
 type DrawCircleProps = {
     ctx: CanvasRenderingContext2D,
     x: number,

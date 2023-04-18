@@ -9,6 +9,7 @@ import Enemy2 from "../entities/Enemy2";
 import Player2 from '../entities/Player2';
 import { TopLeftWanderer, TopRightWanderer, BottomLeftWanderer, BottomRightWanderer } from '../components/WanderStrategy';
 import HunterStrategy from '../components/HunterStrategy';
+import PanicStrategy from '../components/PanicStrategy';
 
 export const makeEnemyFactory = () => {
 
@@ -38,7 +39,7 @@ export const makeEnemyFactory = () => {
         return new Enemy2(
             x,
             y,
-            new PathGeneratorComponent(strats[posXIdx]),
+            new PathGeneratorComponent(new PanicStrategy()),
             new MovementComponent(),
             new GraphicComponent(enemy.image, enemy.color)
         );

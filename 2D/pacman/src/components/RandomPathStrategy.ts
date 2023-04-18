@@ -10,7 +10,7 @@ class RandomPathStrategy {
         this.previous = new Vector(0, 0);
     }
 
-    generate(entity: any, world: Grid) {
+    generate(entity: Entity, world: Grid) {
         let neighbours = world
             .getNeighbors(entity.position)
             .filter(n => n.toString() !== this.previous.toString());

@@ -7,7 +7,7 @@ class GraphicComponent {
         private color: string
     ) {}
 
-    draw(entity: any, ctx: CanvasRenderingContext2D) {
+    draw(entity: Entity, ctx: CanvasRenderingContext2D) {
         drawCircle({
             ctx,
             x: entity.position.x,

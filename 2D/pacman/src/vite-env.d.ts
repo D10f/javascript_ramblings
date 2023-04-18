@@ -1,5 +1,16 @@
 /// <reference types="vite/client" />
 
+interface Entity {
+    position: Vector;
+    velocity: Vector;
+    targetPosition: Vector;
+    isMoving: boolean;
+    radius: number;
+
+    update: (world: Grid) => void;
+    draw: (ctx: CanvasRenderingContext2D) => void;
+}
+
 type DrawCircleProps = {
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -7,8 +18,6 @@ type DrawCircleProps = {
     radius: number,
     color: string
 };
-
-type Entity = {};
 
 type Character = {
     name: CharacterType;

@@ -1,9 +1,7 @@
 import './style.css';
-import { CELL_SIZE, CHAR_LIST } from './defs';
+import { CELL_SIZE } from './defs';
 import Grid from './components/Grid';
 import { makeEnemyFactory, makePlayer } from './utils/factory';
-import Enemy2 from './entities/Enemy2';
-import Player2 from './entities/Player2';
 
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -21,7 +19,7 @@ const grid = new Grid(increasePoints);
 // const enemy = new Enemy(CELL_SIZE * 6, CELL_SIZE * 8, player, grid);
 
 const makeEnemy = makeEnemyFactory();
-const entities: (Player2|Enemy2)[] = [
+const entities: Entity[] = [
     makePlayer(CELL_SIZE * 3, CELL_SIZE * 3),
     makeEnemy(),
     makeEnemy(),

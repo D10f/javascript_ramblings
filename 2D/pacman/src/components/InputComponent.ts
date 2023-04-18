@@ -11,7 +11,7 @@ class InputComponent {
         });
     }
 
-    update(entity: any) {
+    update(entity: Entity) {
         if (entity.isMoving) return;
         switch (this.keyPressed) {
             case 'A':

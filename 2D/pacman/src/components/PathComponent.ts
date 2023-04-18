@@ -6,7 +6,7 @@ class PathGeneratorComponent {
 
     constructor(private strategy: any) {}
 
-    update(entity: any, world: Grid) {
+    update(entity: Entity, world: Grid) {
         if (entity.isMoving) return;
         const targetPosition = this.strategy.generate(entity, world);
         entity.targetPosition = targetPosition;

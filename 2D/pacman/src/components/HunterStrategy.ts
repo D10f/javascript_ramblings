@@ -1,7 +1,8 @@
 import Vector from "../lib/Vector";
+import BasePathStrategy from "./BasePathStrategy";
 import Grid from "./Grid";
 
-class HunterStrategy implements PathGenerationStrategy {
+class HunterStrategy {
 
     private currentPath: Vector[];
 

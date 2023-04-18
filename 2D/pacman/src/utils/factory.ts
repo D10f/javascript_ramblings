@@ -30,16 +30,16 @@ export const makeEnemyFactory = () => {
         posXIdx = (posXIdx + 1) % 4;
 
         const strats = [
-            new TopLeftWanderer(),
-            new TopRightWanderer(),
-            new BottomLeftWanderer(),
-            new HunterStrategy()
+            [HunterStrategy, TopLeftWanderer, RandomPathStrategy],
+            [RandomPathStrategy, HunterStrategy, TopRightWanderer],
+            [RandomPathStrategy, BottomLeftWanderer, HunterStrategy],
+            [RandomPathStrategy, BottomRightWanderer, HunterStrategy]
         ];
 
         return new Enemy2(
             x,
             y,
-            new PathGeneratorComponent(new PanicStrategy()),
+            new PathGeneratorComponent({ strategies: strats[posXIdx] }),
             new MovementComponent(),
             new GraphicComponent(enemy.image, enemy.color)
         );

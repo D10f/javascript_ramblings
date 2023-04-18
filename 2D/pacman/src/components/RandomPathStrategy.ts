@@ -2,7 +2,7 @@ import Vector from "../lib/Vector";
 import { randomInt } from "../utils/math";
 import Grid from "./Grid";
 
-class RandomPathStrategy {
+class RandomPathStrategy implements PathGenerationStrategy {
 
     private previous: Vector;
 

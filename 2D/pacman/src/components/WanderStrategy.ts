@@ -2,7 +2,7 @@ import { CELL_SIZE } from "../defs";
 import Vector from "../lib/Vector";
 import Grid from "./Grid";
 
-class WanderStrategy {
+class WanderStrategy implements PathGenerationStrategy {
     private positions: Vector[];
     private nextPosition: Vector;
     private nextPositionIdx: number;

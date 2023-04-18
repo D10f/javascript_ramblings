@@ -4,7 +4,20 @@ import Grid from "./Grid";
 
 class PathGeneratorComponent {
 
-    constructor(private strategy: any) {}
+    private strategies: PathGenerationStrategy[];
+    private strategy: PathGenerationStrategy;
+
+    constructor(...strategies: PathGenerationStrategy[]) {
+        if (strategies.length === 0) {
+            throw new Error('You must provide at least one strategy.');
+        }
+        this.strategies = strategies;
+        this.strategy = strategies[0];
+    }
+
+    changeBehavior(newBehavior: PathGenerationStrategy) {
+        this.strategy = newBehavior;
+    }
 
     update(entity: Entity, world: Grid) {
         if (entity.isMoving) return;

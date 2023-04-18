@@ -1,4 +1,4 @@
-import { CELL_SIZE, TILE_TYPE } from "../defs";
+import { TILE_TYPE } from "../defs";
 import Grid from "./Grid";
 
 class CollisionComponent {

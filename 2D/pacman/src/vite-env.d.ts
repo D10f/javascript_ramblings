@@ -8,3 +8,22 @@ type DrawCircleProps = {
     color: string
 };
 
+type Entity = {};
+
+type Character = {
+    name: CharacterType;
+    color: string;
+    image: Path2D;
+};
+
+type CharacterType =
+    'ALPINE'
+    | 'ANGULAR'
+    | 'EMBER'
+    | 'JAVASCRIPT'
+    | 'JQUERY'
+    | 'REACT'
+    | 'REDWOOD'
+    | 'TYPESCRIPT'
+    | 'SVELTE'
+    | 'VUE';

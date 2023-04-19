@@ -13,7 +13,7 @@ class EventEmitter {
         this.eventStore.get(event)!.push(callback);
     }
 
-    emit<K>(event: string, data?: K) {
+    emit(event: string, data?: unknown) {
         if (!this.eventStore.has(event)) return;
         this.eventStore.get(event)!.forEach((cb) => cb(data));
     }

@@ -1,4 +1,4 @@
-import { CELL_SIZE, CHAR_LIST } from "../defs";
+import { CELL_SIZE, CHAR_LIST, PLAYER_POWERUP_DURATION } from "../defs";
 import Grid from "../systems/Grid";
 import Vector from "../lib/Vector";
 import GraphicComponent from "../components/GraphicComponent";
@@ -32,6 +32,7 @@ class Player implements Entity {
         this._powerUp = false;
         this.powerUpTimeout = 0;
         this.eventComponent.eventEmitter.subscribe('powerUp', this.powerUp.bind(this));
+        this.eventComponent.eventEmitter.subscribe('powerDown', this.restore.bind(this));
     }
 
     private powerUp() {
@@ -41,7 +42,9 @@ class Player implements Entity {
             new ImageDrawingStrategy(character.image, character.color)
         ),
         this._powerUp = true;
-        this.powerUpTimeout = setTimeout(() => this.restore(), 6000);
+        this.powerUpTimeout = setTimeout(() => {
+            this.eventComponent.eventEmitter.emit('powerDown');
+        }, PLAYER_POWERUP_DURATION);
     }
 
     private getChar(char: CharacterType) {
@@ -49,6 +52,7 @@ class Player implements Entity {
     }
 
     private restore() {
+        this._powerUp = false;
         const character = this.getChar('JAVASCRIPT');
         this.graphicComponent = new GraphicComponent(
             new ImageDrawingStrategy(character.image, character.color)

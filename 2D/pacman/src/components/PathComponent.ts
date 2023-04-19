@@ -1,4 +1,5 @@
-import { PLAYER_SPEED } from "../defs";
+import { PLAYER_POWERUP_DURATION, PLAYER_SPEED } from "../defs";
+import Enemy from "../entities/Enemy";
 import Grid from "../systems/Grid";
 import { constrain } from "../utils/math";
 import BasePathStrategy from "./PathStrategies/BasePathStrategy";
@@ -16,7 +17,7 @@ class PathGeneratorComponent {
     private behaviorIntervalMs: number;
     private behaviorInterval: ReturnType<typeof setInterval>;
 
-    constructor({ strategies, behaviorIntervalMs = 6_000 }: PathGeneratorComponentProps) {
+    constructor({ strategies, behaviorIntervalMs = PLAYER_POWERUP_DURATION }: PathGeneratorComponentProps) {
         if (strategies.length === 0) {
             throw new Error('You must provide at least one strategy.');
         }
@@ -41,11 +42,19 @@ class PathGeneratorComponent {
 
     update(entity: Entity, world: Grid) {
         if (entity.isMoving) return;
+
+        let speed = PLAYER_SPEED;
+        if ((entity as Enemy).isKilled) {
+            speed *= 2;
+        } else if ((entity as Enemy).isScared) {
+            speed -= 1;
+        }
+        // const speed = (entity as Enemy).isScared ? PLAYER_SPEED - 1 : PLAYER_SPEED;
         const targetPosition = this.strategy.generate(entity, world);
         entity.targetPosition = targetPosition;
         entity.velocity.set(
-            constrain(targetPosition.x - entity.position.x, PLAYER_SPEED, -PLAYER_SPEED),
-            constrain(targetPosition.y - entity.position.y, PLAYER_SPEED, -PLAYER_SPEED)
+            constrain(targetPosition.x - entity.position.x, speed, -speed),
+            constrain(targetPosition.y - entity.position.y, speed, -speed)
         );
         entity.isMoving = true;
     }

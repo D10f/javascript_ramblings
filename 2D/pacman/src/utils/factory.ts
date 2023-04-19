@@ -1,17 +1,19 @@
-import { CELL_SIZE, CHAR_LIST, TILE_TYPE } from '../defs';
+import { CELL_SIZE, CHAR_LIST } from '../defs';
 import CollisionComponent from '../components/CollisionComponent';
 import GraphicComponent from '../components/GraphicComponent';
 import InputComponent from '../components/InputComponent';
 import MovementComponent from '../components/MovementComponent';
 import PathGeneratorComponent from '../components/PathComponent';
-import RandomPathStrategy from '../components/RandomPathStrategy';
-import Enemy2 from "../entities/Enemy2";
-import Player2 from '../entities/Player2';
-import { TopLeftWanderer, TopRightWanderer, BottomLeftWanderer, BottomRightWanderer } from '../components/WanderStrategy';
-import HunterStrategy from '../components/HunterStrategy';
-import PanicStrategy from '../components/PanicStrategy';
+import RandomPathStrategy from '../components/PathStrategies/RandomPathStrategy';
+import { TopLeftWanderer, TopRightWanderer, BottomLeftWanderer, BottomRightWanderer } from '../components/PathStrategies/WanderStrategy';
+import HunterStrategy from '../components/PathStrategies/HunterStrategy';
+import EventComponent from '../components/EventComponent';
+import EventEmitter from '../systems/EventEmitter';
+import Enemy from "../entities/Enemy";
+import Player from '../entities/Player';
+import ImageDrawingStrategy from '../components/GraphicStrategies/ImageDrawingStrategy';
 
-export const makeEnemyFactory = () => {
+export const makeEnemyFactory = (eventEmitter: EventEmitter) => {
 
     let charIdx = 0;
     let posXIdx = 0;
@@ -32,28 +34,33 @@ export const makeEnemyFactory = () => {
         const strats = [
             [HunterStrategy, TopLeftWanderer, RandomPathStrategy],
             [RandomPathStrategy, HunterStrategy, TopRightWanderer],
-            [RandomPathStrategy, BottomLeftWanderer, HunterStrategy],
+            [BottomLeftWanderer, RandomPathStrategy, HunterStrategy],
             [RandomPathStrategy, BottomRightWanderer, HunterStrategy]
         ];
 
-        return new Enemy2(
+        return new Enemy(
             x,
             y,
             new PathGeneratorComponent({ strategies: strats[posXIdx] }),
             new MovementComponent(),
-            new GraphicComponent(enemy.image, enemy.color)
+            new GraphicComponent(new ImageDrawingStrategy(enemy.image, enemy.color)),
+            new EventComponent(eventEmitter),
         );
     };
 };
 
-export const makePlayer = (x: number, y: number) => {
-    const character = CHAR_LIST.find(c => c.name === 'JAVASCRIPT') as Character;
-    return new Player2(
-        x,
-        y,
-        new InputComponent(),
-        new GraphicComponent(character.image, character.color),
-        new MovementComponent(),
-        new CollisionComponent([TILE_TYPE.FOOD])
-    );
+export const makePlayerFactory = (eventEmitter: EventEmitter) => {
+
+    return (x = CELL_SIZE * 3, y = CELL_SIZE * 3) => {
+        const character = CHAR_LIST.find(c => c.name === 'JAVASCRIPT') as Character;
+        return new Player(
+            x,
+            y,
+            new InputComponent(eventEmitter),
+            new GraphicComponent(new ImageDrawingStrategy(character.image, character.color)),
+            new MovementComponent(),
+            new CollisionComponent(eventEmitter),
+            new EventComponent(eventEmitter),
+        );
+    };
 };

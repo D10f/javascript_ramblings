@@ -1,13 +1,14 @@
 import { PLAYER_SPEED, CELL_SIZE } from "../defs";
+import EventEmitter from "../systems/EventEmitter";
 
 class InputComponent {
 
     private keyPressed: string;
 
-    constructor() {
+    constructor(eventEmitter: EventEmitter) {
         this.keyPressed = '';
-        window.addEventListener('keydown', (ev: KeyboardEvent) => {
-            this.keyPressed = ev.key.toUpperCase();
+        eventEmitter.subscribe('keydown', (key: string) => {
+            this.keyPressed = key;
         });
     }
 

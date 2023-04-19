@@ -1,5 +1,5 @@
-import Vector from "../lib/Vector";
-import Grid from "./Grid";
+import Grid from "../../systems/Grid";
+import Vector from "../../lib/Vector";
 
 class PanicStrategy implements PathGenerationStrategy {
 

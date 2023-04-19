@@ -13,7 +13,7 @@ class Vector {
     }
 
     distance(v: Vector) {
-        if (v === null || v === null) return Infinity;
+        if (v === null || v === undefined) return Infinity;
         return taxicabDistance(this.x, this.y, v.x, v.y);
         // return Math.abs(this.x - v.x) + Math.abs(this.y - v.y);
     }

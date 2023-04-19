@@ -1,6 +1,6 @@
-import { CELL_SIZE } from "../defs";
-import Vector from "../lib/Vector";
-import Grid from "./Grid";
+import { CELL_SIZE } from "../../defs";
+import Grid from "../../entities/Grid";
+import Vector from "../../lib/Vector";
 
 class WanderStrategy implements PathGenerationStrategy {
     private positions: Vector[];

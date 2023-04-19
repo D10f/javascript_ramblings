@@ -1,7 +1,7 @@
 import { PLAYER_SPEED } from "../defs";
+import Grid from "../systems/Grid";
 import { constrain } from "../utils/math";
-import BasePathStrategy from "./BasePathStrategy";
-import Grid from "./Grid";
+import BasePathStrategy from "./PathStrategies/BasePathStrategy";
 
 type PathGeneratorComponentProps = {
     strategies: typeof BasePathStrategy[],
@@ -16,7 +16,7 @@ class PathGeneratorComponent {
     private behaviorIntervalMs: number;
     private behaviorInterval: ReturnType<typeof setInterval>;
 
-    constructor({ strategies, behaviorIntervalMs = 12_000 }: PathGeneratorComponentProps) {
+    constructor({ strategies, behaviorIntervalMs = 6_000 }: PathGeneratorComponentProps) {
         if (strategies.length === 0) {
             throw new Error('You must provide at least one strategy.');
         }

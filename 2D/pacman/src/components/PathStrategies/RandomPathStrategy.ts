@@ -1,6 +1,6 @@
-import Vector from "../lib/Vector";
-import { randomInt } from "../utils/math";
-import Grid from "./Grid";
+import Grid from "../../systems/Grid";
+import Vector from "../../lib/Vector";
+import { randomInt } from "../../utils/math";
 
 class RandomPathStrategy implements PathGenerationStrategy {
 

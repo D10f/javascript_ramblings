@@ -2,18 +2,23 @@
 
 interface Entity {
     position: Vector;
-    velocity: Vector;
-    targetPosition: Vector;
-    isMoving: boolean;
+    targetPosition?: Vector;
+    velocity?: Vector;
+    isMoving?: boolean;
     radius: number;
-
     update: (world: Grid) => void;
     draw: (ctx: CanvasRenderingContext2D) => void;
-}
+};
 
 interface PathGenerationStrategy {
     generate: (entity: Entity, world: Grid) => Vector;
 }
+
+interface GraphicDrawingStrategy {
+    draw(entity: Entity, ctx: CanvasRenderingContext2D): void;
+}
+
+type EventCallback = (data?: unkown) => void;
 
 type DrawCircleProps = {
     ctx: CanvasRenderingContext2D,
@@ -40,3 +45,4 @@ type CharacterType =
     | 'TYPESCRIPT'
     | 'SVELTE'
     | 'VUE';
+

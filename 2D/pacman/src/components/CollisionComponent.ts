@@ -1,11 +1,17 @@
 import { TILE_TYPE } from "../defs";
-import Grid from "./Grid";
+import Enemy from "../entities/Enemy";
+import Food from "../entities/Food";
+import Player from "../entities/Player";
+import Power from "../entities/Power";
+import EventEmitter from "../systems/EventEmitter";
+import Grid from "../systems/Grid";
 
 class CollisionComponent {
 
-    constructor(private targets: TILE_TYPE[]) {}
+    constructor(private eventEmitter: EventEmitter) {}
 
     update(entity: Entity, world: Grid) {
+
         const distance = entity.position.distance(entity.targetPosition);
         const targetTile = world.getTileAt(entity.targetPosition);
 
@@ -14,9 +20,34 @@ class CollisionComponent {
             entity.isMoving = false;
         }
 
-        for (let i = 0; i < this.targets.length; i++) {
-            if (distance <= entity.radius && targetTile === this.targets[i]) {
-                world.eatFoodAt(entity.position);
+        for (let i = world.entities.length; i >= 0; i--) {
+            if (
+                world.entities[i] instanceof Food &&
+                entity.position.distance(world.entities[i].position) <= entity.radius
+            ) {
+                this.eventEmitter.emit('score');
+                world.entities.splice(i, 1);
+                return;
+            }
+
+            if (
+                world.entities[i] instanceof Power &&
+                entity.position.distance(world.entities[i].position) <= entity.radius
+            ) {
+                this.eventEmitter.emit('powerUp');
+                world.entities.splice(i, 1);
+                return;
+            }
+
+            if (
+                world.entities[i] instanceof Enemy &&
+                entity.position.distance(world.entities[i].position) <= entity.radius
+            ) {
+                if ((entity as Player)._powerUp) {
+                    this.eventEmitter.emit('kill', world.entities[i]);
+                } else {
+                    this.eventEmitter.emit('lose');
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ import Scheduler from "./systems/Scheduler";
 import EventEmitter from "./systems/EventEmitter";
 import Renderer from "./systems/Renderer";
 import World from "./systems/World";
+import ScoreSystem from "./systems/Score";
 
 class Game {
 
@@ -9,18 +10,22 @@ class Game {
     private eventEmitter: EventEmitter;
     private scheduler: Scheduler;
     private renderer: Renderer;
-    private score: number;
+    private score: ScoreSystem;
 
     constructor(private canvasEl: HTMLCanvasElement) {
         this.eventEmitter = new EventEmitter();
         this.scheduler = new Scheduler(this.eventEmitter);
         this.renderer = new Renderer(this.canvasEl);
         this.world = new World(this.eventEmitter);
+        this.score = new ScoreSystem(this.eventEmitter);
+
         this.eventEmitter.subscribe('tick', () => {
+            this.renderer.clear();
             this.world.update();
-            this.renderer.render(this.world.entities);
+            this.renderer.add(this.score);
+            this.renderer.add(this.world.entities);
+            this.renderer.render();
         });
-        this.score = 0;
 
         this.keyboardEvents();
         this.gameEvents();
@@ -40,16 +45,12 @@ class Game {
     }
 
     private gameEvents() {
-        // this.eventEmitter.subscribe('win', () => {
-        //     this.scheduler.pause();
-        // });
+        this.eventEmitter.subscribe('win', () => {
+            this.scheduler.pause();
+        });
 
-        // this.eventEmitter.subscribe('lose', () => {
-        //     this.scheduler.pause();
-        // });
-
-        this.eventEmitter.subscribe('score', () => {
-            // console.log('nam nam')
+        this.eventEmitter.subscribe('gameOver', () => {
+            this.scheduler.pause();
         });
     }
 

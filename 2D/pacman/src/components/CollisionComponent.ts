@@ -43,10 +43,12 @@ class CollisionComponent {
                 world.entities[i] instanceof Enemy &&
                 entity.position.distance(world.entities[i].position) <= entity.radius
             ) {
+                if ((world.entities[i] as Enemy).isKilled) return;
+
                 if ((entity as Player)._powerUp) {
-                    this.eventEmitter.emit('kill', world.entities[i]);
+                    this.eventEmitter.emit('enemyKill', world.entities[i]);
                 } else {
-                    this.eventEmitter.emit('lose');
+                    this.eventEmitter.emit('gameOver');
                 }
             }
         }

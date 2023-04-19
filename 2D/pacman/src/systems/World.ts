@@ -1,6 +1,7 @@
 import Grid from "./Grid";
 import EventEmitter from "./EventEmitter";
 import { makeEnemyFactory, makePlayerFactory } from "../utils/factory";
+import Food from "../entities/Food";
 
 class World {
     private readonly grid: Grid;
@@ -20,6 +21,18 @@ class World {
             makeEnemy(),
         ];
         this.grid = new Grid(this.entities);
+
+        eventEmitter.subscribe('respawn', (enemy: Entity) => {
+            const idx = this._entities.findIndex(e => e === enemy);
+            this._entities.splice(idx, 1, makeEnemy());
+        });
+
+        eventEmitter.subscribe('score', () => {
+            for (let i = this._entities.length; i >= 0; i--) {
+                if (this._entities[i] instanceof Food) return;
+            }
+            eventEmitter.emit('win');
+        });
     }
 
     get entities() {

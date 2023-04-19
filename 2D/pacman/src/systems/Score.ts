@@ -10,8 +10,16 @@ class ScoreSystem {
         this.score = 0;
 
         this.eventEmitter.subscribe('score', () => {
-            this.score++;
+            this.inc();
         });
+
+        this.eventEmitter.subscribe('enemyKill', () => {
+            this.inc(10);
+        });
+    }
+
+    inc(amount = 1) {
+        this.score += amount;
     }
 
     draw(ctx: CanvasRenderingContext2D) {

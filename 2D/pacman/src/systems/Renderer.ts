@@ -24,16 +24,10 @@ class Renderer {
     }
 
     render() {
-
         let item = this.renderQueue.pop();
-
         do {
             item.draw(this.ctx);
         } while (item = this.renderQueue.pop());
-
-        // for (let i = entities.length - 1; i >= 0; i--) {
-        //     entities[i].draw(this.ctx);
-        // }
     }
 }
 

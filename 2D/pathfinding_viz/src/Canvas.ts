@@ -15,7 +15,7 @@ export default class Canvas {
         this.emitter = new EventEmitter();
         this.scheduler = new Scheduler(this.emitter);
         this.renderer = new Renderer(canvas);
-        this.grid = new Grid(this.emitter, this.renderer);
+        this.grid = new Grid(canvas, this.emitter, this.renderer);
         this.registerEvents();
     }
 
@@ -24,6 +24,12 @@ export default class Canvas {
             this.renderer.clear();
             this.grid.update();
             this.grid.render();
+        });
+
+        this.canvas.addEventListener('click', (e: MouseEvent) => {
+            const c = this.canvas.getBoundingClientRect();
+            // console.log(`x: ${e.x - c.x}, y: ${e.y - c.y}`);
+            this.emitter.emit('click', { x: e.x - c.x, y: e.y - c.y });
         });
     }
 

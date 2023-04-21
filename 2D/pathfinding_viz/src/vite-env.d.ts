@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
 
-type EventCallback = (data?: unknown) => void;
+type EventCallback = (data?: any) => void;

@@ -1,4 +1,4 @@
-import { CELL_SIZE, COLS } from "./defs";
+import { ALLOW_DIAGONAL, CELL_SIZE, COLS } from "./defs";
 import Cell from "./Cell";
 import Renderer from "./Renderer";
 import PriorityQueue from "./PriorityQueue";
@@ -45,6 +45,7 @@ export default class World {
 
         if (this.start && this.end) {
             const map = this.getShortestPath(this.start, this.end);
+            if (!map) return;
             const path = this.reconstructPath(map, this.end);
             path.forEach(c => c.terrain.color = 'yellow');
             this.start = null;
@@ -108,7 +109,7 @@ export default class World {
     }
 
     getCell(x: number, y: number) {
-        if (x < 0 || x >= this.canvas.width || y < 0 || y >= this.canvas.height) {
+        if (x < 0 || x + CELL_SIZE >= this.canvas.width || y < 0 || y >= this.canvas.height) {
             return null;
         };
         x = Math.floor(x / CELL_SIZE);
@@ -117,14 +118,27 @@ export default class World {
     }
 
     getNeighbours(cell: Cell) {
-        const top = this.getCell(cell.x, cell.y - CELL_SIZE);
-        const right = this.getCell(cell.x + CELL_SIZE, cell.y);
-        const bottom = this.getCell(cell.x, cell.y + CELL_SIZE);
-        const left = this.getCell(cell.x - CELL_SIZE, cell.y);
+        // top, right, bottom, left
+        const neighbours = [
+            this.getCell(cell.x, cell.y - CELL_SIZE),
+            this.getCell(cell.x + CELL_SIZE, cell.y),
+            this.getCell(cell.x, cell.y + CELL_SIZE),
+            this.getCell(cell.x - CELL_SIZE, cell.y),
+        ];
 
-        return <Cell[]>[top, right, bottom, left].filter((cell) => (
+        if (ALLOW_DIAGONAL) {
+            // top right, top left, bottom right, bottom left
+            neighbours.push(
+                this.getCell(cell.x - CELL_SIZE, cell.y - CELL_SIZE),
+                this.getCell(cell.x + CELL_SIZE, cell.y - CELL_SIZE),
+                this.getCell(cell.x - CELL_SIZE, cell.y + CELL_SIZE),
+                this.getCell(cell.x + CELL_SIZE, cell.y + CELL_SIZE),
+            );
+        }
+
+        return neighbours.filter((cell) => (
             cell && cell.terrain.difficulty !== Infinity
-        ));
+        )) as Cell[];
     }
 
     getDistance(c1: Cell, c2: Cell) {

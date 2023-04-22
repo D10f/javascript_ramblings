@@ -6,11 +6,11 @@ type HeapNode<T> = {
 class PriorityQueue<T extends { id: string }> {
 
   private heap: HeapNode<T>[];
-  public membership: Map<string, boolean>;
+  public membership: Set<string>;
 
   constructor() {
     this.heap = [];
-    this.membership = new Map();
+    this.membership = new Set<string>();
   }
 
   get size() {
@@ -29,7 +29,7 @@ class PriorityQueue<T extends { id: string }> {
     if (node.value === null || node.value === undefined) return null;
 
     this.heap.push(node);
-    this.membership.set(node.value.id, true);
+    this.membership.add(node.value.id);
     this.bubbleUp(this.size - 1);
     return this.size;
   }

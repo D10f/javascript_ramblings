@@ -26,3 +26,10 @@ export const randomInt = (min: number, max: number) => {
     if (min === max) return min;
     return Math.floor(Math.random() * (max - min)) + min;
 };
+
+/**
+ * Selects a random item from the array
+ */
+export const randomItem = (arr: any[]) => {
+    return arr[randomInt(0, arr.length)];
+};

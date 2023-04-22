@@ -22,7 +22,7 @@ export default class Canvas {
     private registerEvents() {
         this.emitter.subscribe('tick', () => {
             this.renderer.clear();
-            this.grid.update();
+            // this.grid.update();
             this.grid.render();
         });
 

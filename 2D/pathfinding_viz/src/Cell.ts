@@ -3,13 +3,15 @@ import { CELL_SIZE } from "./main";
 
 export default class Cell {
 
+    public id: string;
     public color: string;
 
     constructor(public x: number, public y: number) {
+        this.id = `${x},${y}`;
         this.color = 'coral';
     }
 
-    update(grid: Grid) {}
+    // update(grid: Grid) {}
 
     render(ctx: CanvasRenderingContext2D) {
         ctx.fillStyle = this.color;

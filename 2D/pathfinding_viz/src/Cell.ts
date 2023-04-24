@@ -1,6 +1,4 @@
-import Grid from "./Grid";
 import { CELL_SIZE } from "./defs";
-import Floor from "./terrains/Floor";
 
 export default class Cell {
 

@@ -1,21 +1,23 @@
 import EventEmitter from './EventEmitter';
-import Grid from './Grid';
+// import World from './World';
+import HexGrid from './HexGrid';
 import Renderer from './Renderer';
 import Scheduler from './Scheduler';
-import { CELL_SIZE } from './defs';
 
 export default class Canvas {
 
     private emitter: EventEmitter;
     private scheduler: Scheduler;
     private renderer: Renderer;
-    private grid: Grid;
+    // private world: World;
+    private world: HexGrid;
 
-    constructor(private canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement) {
         this.emitter = new EventEmitter();
         this.scheduler = new Scheduler(this.emitter);
         this.renderer = new Renderer(canvas);
-        this.grid = new Grid(canvas);
+        // this.world = new World(canvas);
+        this.world = new HexGrid(canvas);
         this.registerEvents();
     }
 
@@ -23,7 +25,7 @@ export default class Canvas {
         this.emitter.subscribe('tick', () => {
             this.renderer.clear();
             // this.grid.update();
-            this.grid.render();
+            this.world.render();
         });
     }
 

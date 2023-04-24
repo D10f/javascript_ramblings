@@ -14,8 +14,16 @@ type HexagonLookupTable = {
 
 type EventCallback = (data?: any) => void;
 
+type TerrainType =
+    'FLOOR'
+    | 'GRASS'
+    | 'MOUNTAIN'
+    | 'WATER'
+    | 'WHEAT';
+
 type Terrain = {
-    type: 'FLOOR' | 'GRASS' | 'MOUNTAIN' | 'WATER';
+    type: TerrainType;
     color: string;
     difficulty: number;
+    texture: HTMLImageElement;
 };

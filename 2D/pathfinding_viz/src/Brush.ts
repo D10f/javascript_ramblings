@@ -15,9 +15,9 @@ export default class Brush {
 
     stroke(cell: Cell) {
         if (!this.selected) return;
-        // @ts-ignore
-        const terrain = new terrains[this.selected]() as Terrain;
-        cell.terrain = terrain;
+
+        //@ts-ignore
+        cell.terrain = terrains[this.selected.toLowerCase()];
     }
 
     private createListeners() {
@@ -27,12 +27,14 @@ export default class Brush {
             this.selected = target.getAttribute('terrain-type') as string;
 
             this.buttons.forEach((button) => {
-                button.style.backgroundColor = '';
-                button.style.color = '';
+                // button.style.backgroundColor = '';
+                // button.style.color = '';
+                button.style.filter = 'grayscale(1)';
             });
 
-            target.style.backgroundColor = 'coral';
-            target.style.color = '#333';
+            // target.style.backgroundColor = 'coral';
+            // target.style.color = '#333';
+            target.style.filter = 'grayscale(0)';
         });
     }
 
@@ -49,8 +51,15 @@ export default class Brush {
         const buttons = [];
         for (const terrain of Object.values(terrains)) {
             const button = document.createElement('button') as HTMLButtonElement;
+            button.style.filter = 'grayscale(1)';
             button.setAttribute('terrain-type', terrain.type);
-            button.textContent = terrain.type;
+
+            const img = document.createElement('img');
+            img.src = terrain.texture.src;
+            img.style.pointerEvents = 'none';
+
+            button.appendChild(img);
+            // button.textContent = terrain.type;
             buttons.push(button);
         }
         return buttons;

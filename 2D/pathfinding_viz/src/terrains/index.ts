@@ -1,16 +1,13 @@
 import Floor from './Floor';
 import Grass from './Grass';
 import Mountain from './Mountain';
+import Wheat from './Wheat';
 import Water from './Water';
 
 export default {
-    Floor,
-    Grass,
-    Mountain,
-    Water
+    floor: new Floor(),
+    grass: new Grass(),
+    mountain: new Mountain(),
+    wheat: new Wheat(),
+    water: new Water()
 };
-
-// export const Floor = floor;
-// export const Grass = grass;
-// export const Mountain = mountain;
-// export const Water = water;

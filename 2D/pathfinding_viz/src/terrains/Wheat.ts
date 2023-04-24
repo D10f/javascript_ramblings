@@ -1,6 +1,6 @@
-export default class Water implements Terrain {
+export default class Wheat implements Terrain {
 
-    static type = 'Water';
+    static type = 'Mountain';
 
     public readonly type: TerrainType;
     public readonly color: string;
@@ -8,10 +8,10 @@ export default class Water implements Terrain {
     public readonly texture: HTMLImageElement;
 
     constructor() {
-        this.type = 'WATER';
-        this.color = '#3377cc';
-        this.difficulty = Infinity;
+        this.type = 'WHEAT';
+        this.color = '#edd855';
+        this.difficulty = 5;
         this.texture = new Image();
-        this.texture.src = 'waterHex.png';
+        this.texture.src = 'wheatHex.png';
     }
 }

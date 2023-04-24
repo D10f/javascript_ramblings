@@ -2,9 +2,9 @@ import { CELL_SIZE, COLS, HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, ROWS 
 
 import Renderer from "./Renderer";
 import PriorityQueue from "./PriorityQueue";
-import Floor from "./terrains/Floor";
 import Brush from "./Brush";
 import Hexagon from "./Hexagon";
+import terrains from "./terrains";
 
 export default class HexGrid {
 
@@ -72,17 +72,21 @@ export default class HexGrid {
         }
     }
 
+    private getHex(pixelX: number, pixelY: number) {
+        const c = this.canvas.getBoundingClientRect();
+        const mouseX = pixelX - c.x;
+        const mouseY = pixelY - c.y;
+        const [x, y] = this.pixelToHex(mouseX, mouseY);
+        return this._entities[x][y];
+    }
+
     private handleMouseInput() {
         this.canvas.addEventListener('click', (e: MouseEvent) => {
+            const hex = this.getHex(e.x, e.y);
             if (e.shiftKey) {
-                const c = this.canvas.getBoundingClientRect();
-                const mouseX = e.x - c.x;
-                const mouseY = e.y - c.y;
-                const [x, y] = this.pixelToHex(mouseX, mouseY);
-                const hex = this._entities[x][y];
                 this.setStartOrEndPositions(hex);
             } else {
-                this.paintTile(e);
+                this.paintTile(hex);
             }
         });
 
@@ -96,7 +100,7 @@ export default class HexGrid {
 
         this.canvas.addEventListener('mousemove', (e: MouseEvent) => {
             if (!this.mousePressed || e.shiftKey) return;
-            this.paintTile(e);
+            this.paintTile(this.getHex(e.x, e.y));
         });
     }
 
@@ -149,12 +153,11 @@ export default class HexGrid {
         return this._entities[col + colModifier][row + rowModifier];
     }
 
-    private paintTile(e: MouseEvent) {
-        const c = this.canvas.getBoundingClientRect();
-        const mouseX = e.x - c.x;
-        const mouseY = e.y - c.y;
-        const [x, y] = this.pixelToHex(mouseX, mouseY);
-        const hex = this._entities[x][y];
+    private paintTile(hex: Hexagon) {
+        // const c = this.canvas.getBoundingClientRect();
+        // const mouseX = e.x - c.x;
+        // const mouseY = e.y - c.y;
+        // const hex = this.getHex(mouseX, mouseY);
         this.brush.stroke(hex);
     }
 
@@ -174,7 +177,7 @@ export default class HexGrid {
             for (let j = 0; j < cols; j++) {
                 const x = Math.round(i * HEX_OFFSET_X + (HEX_WIDTH / 2) * (j % 2));
                 const y = Math.round(j * HEX_OFFSET_Y);
-                row.push(new Hexagon(x, y, HEX_SIZE, i, j, new Floor()));
+                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.water));
             }
 
             this._entities.push(row);

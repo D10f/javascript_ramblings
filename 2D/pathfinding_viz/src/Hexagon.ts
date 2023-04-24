@@ -1,3 +1,5 @@
+import { HEX_SIZE, HEX_WIDTH } from "./defs";
+
 export default class Hexagon {
 
     public id: string;
@@ -9,7 +11,7 @@ export default class Hexagon {
         public col: number,
         public row: number,
         // public color = 'coral',
-        public terrain: Terrain,
+        public terrain: any,
     ) {
         this.id = `${col},${row}`;
     }
@@ -27,12 +29,17 @@ export default class Hexagon {
             ctx.rotate(Math.PI / 3);
         }
 
+        if (this.terrain.texture) {
+            ctx.drawImage(this.terrain.texture, -HEX_WIDTH * 0.5, -HEX_SIZE);
+        }
+
         ctx.restore();
         ctx.closePath();
 
-        ctx.fillStyle = this.terrain.color;
+        // ctx.fillStyle = this.terrain.color;
 
+        ctx.strokeStyle = '#303446';
         ctx.stroke();
-        ctx.fill();
+        // ctx.fill();
     }
 }

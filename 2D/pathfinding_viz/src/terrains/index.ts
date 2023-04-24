@@ -28,10 +28,11 @@ export class Terrain {
 }
 
 export default {
-    FLOOR: new Terrain('FLOOR', '', 1, 'desertHex.png'),
-    GRASS: new Terrain('GRASS', '', 2, 'sheepHex.png'),
-    MOUNTAIN: new Terrain('MOUNTAIN', '', 10, 'clayHex.png'),
-    WHEAT: new Terrain('WHEAT', '', 5, 'wheatHex.png'),
-    WATER: new Terrain('WATER', '', Infinity, 'waterHex.png'),
+    FLOOR: new Terrain('FLOOR', '', 1, 'desertHex.gif'),
+    GRASS: new Terrain('GRASS', '', 2, 'sheepHex.gif'),
+    MOUNTAIN: new Terrain('MOUNTAIN', '', 10, 'clayHex.gif'),
+    WATER: new Terrain('WATER', '', Infinity, 'waterHex.gif'),
+    WHEAT: new Terrain('WHEAT', '', 5, 'wheatHex.gif'),
+    WOOD: new Terrain('WOOD', '', 10, 'woodHex.gif')
 };
 

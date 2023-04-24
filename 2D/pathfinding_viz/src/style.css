@@ -19,6 +19,7 @@ body {
     min-height: 100vh;
 }
 canvas {
+    border: 1px solid coral;
     max-width: 800px;
     max-height: 600px;
 }

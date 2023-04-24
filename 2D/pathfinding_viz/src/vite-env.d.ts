@@ -19,7 +19,8 @@ type TerrainType =
     | 'GRASS'
     | 'MOUNTAIN'
     | 'WATER'
-    | 'WHEAT';
+    | 'WHEAT'
+    | 'WOOD';
 
 // type Terrain = {
 //     type: TerrainType;

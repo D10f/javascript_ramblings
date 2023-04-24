@@ -4,6 +4,7 @@ import { Terrain } from "./Terrain";
 export default class Hexagon {
 
     public id: string;
+    public flag: HTMLImageElement;
 
     constructor(
         public x: number,
@@ -15,6 +16,7 @@ export default class Hexagon {
         public terrain: Terrain,
     ) {
         this.id = `${col},${row}`;
+        this.flag = new Image();
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -32,6 +34,10 @@ export default class Hexagon {
 
         if (this.terrain.texture) {
             ctx.drawImage(this.terrain.texture, -HEX_WIDTH * 0.5, -HEX_SIZE);
+        }
+
+        if (this.flag) {
+            ctx.drawImage(this.flag, 0, 0, 32, 32, -HEX_WIDTH * 0.5, -HEX_SIZE * 0.75, 55, 32);
         }
 
         ctx.restore();

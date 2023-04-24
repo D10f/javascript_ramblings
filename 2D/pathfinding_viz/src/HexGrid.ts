@@ -5,6 +5,7 @@ import PriorityQueue from "./PriorityQueue";
 import Brush from "./Brush";
 import Hexagon from "./Hexagon";
 import terrains from "./Terrain";
+import Line from "./Line";
 
 export default class HexGrid {
 
@@ -16,6 +17,7 @@ export default class HexGrid {
 
     private brush: Brush;
     private renderer: Renderer
+    private path: Line[];
 
     private lookup: HexagonLookupTable;
 
@@ -28,6 +30,7 @@ export default class HexGrid {
 
         this.brush = new Brush(canvas);
         this.renderer = new Renderer(canvas);
+        this.path = [];
 
         this.lookup = {
             // even rows (0) odd rows (1)
@@ -53,11 +56,27 @@ export default class HexGrid {
         return e;
     }
 
+    private forEachHex(fn: (hex: Hexagon) => void) {
+        this.entities.forEach(fn);
+    }
+
     private setStartOrEndPositions(hex: Hexagon) {
         if (this.assignStart) {
+
+            if (this.start && this.end) {
+                // this.start.flag.src = '';
+                // this.end.flag.src = '';
+                this.forEachHex((hex) => hex.flag.src = '');
+                this.path = [];
+                this.start = null;
+                this.end = null;
+            }
+
             this.start = hex;
+            this.start.flag.src = './start.png';
         } else {
             this.end = hex;
+            this.end.flag.src = './target.png';
         }
 
         this.assignStart = !this.assignStart;
@@ -66,9 +85,13 @@ export default class HexGrid {
             const map = this.getShortestPath(this.start, this.end);
             if (!map) return;
             const path = this.reconstructPath(map, this.end);
-            path.forEach(c => c.terrain.color = 'yellow');
-            this.start = null;
-            this.end = null;
+
+            path.reduce((acc, curr) => {
+                this.path.push(
+                    new Line(acc.x, acc.y, curr.x, curr.y)
+                );
+                return curr;
+            });
         }
     }
 
@@ -183,7 +206,7 @@ export default class HexGrid {
             for (let j = 0; j < cols; j++) {
                 const x = Math.round(i * HEX_OFFSET_X + (HEX_WIDTH / 2) * (j % 2));
                 const y = Math.round(j * HEX_OFFSET_Y);
-                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.WATER));
+                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.GRASS));
             }
 
             this._entities.push(row);
@@ -249,6 +272,7 @@ export default class HexGrid {
     render() {
         this.renderer.render(this.entities);
         this.renderer.render([this.brush.overlay]);
+        this.renderer.render(this.path);
     }
 }
 

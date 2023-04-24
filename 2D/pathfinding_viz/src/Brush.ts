@@ -1,23 +1,37 @@
-import Cell from './Cell';
-import terrains from './terrains';
+import Hexagon from './Hexagon';
+import { HEX_SIZE } from './defs';
+import terrains, { Terrain } from './terrains';
 
 export default class Brush {
 
     private selected: string;
     private buttons: HTMLButtonElement[];
+    public overlay: Hexagon;
 
     constructor(private canvas: HTMLCanvasElement) {
         this.selected = '';
         this.buttons = this.createButtons();
+        this.overlay = new Hexagon(
+            0, 0, HEX_SIZE, 0, 0,
+            new Terrain('WATER', '#fff', Infinity, '')
+        );
         this.appendButtons();
         this.createListeners();
     }
 
-    stroke(cell: Cell) {
+    stroke(hex: Hexagon) {
         if (!this.selected) return;
+        this.overlay.x = -10;
+        this.overlay.y = -10;
 
         //@ts-ignore
-        cell.terrain = terrains[this.selected.toLowerCase()];
+        hex.terrain = terrains[this.selected];
+    }
+
+    tint(hex: Hexagon) {
+        // if (!this.selected || this.selected === hex.terrain.type) return;
+        this.overlay.x = hex.x;
+        this.overlay.y = hex.y;
     }
 
     private createListeners() {
@@ -27,13 +41,9 @@ export default class Brush {
             this.selected = target.getAttribute('terrain-type') as string;
 
             this.buttons.forEach((button) => {
-                // button.style.backgroundColor = '';
-                // button.style.color = '';
                 button.style.filter = 'grayscale(1)';
             });
 
-            // target.style.backgroundColor = 'coral';
-            // target.style.color = '#333';
             target.style.filter = 'grayscale(0)';
         });
     }

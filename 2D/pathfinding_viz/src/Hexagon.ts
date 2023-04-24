@@ -1,4 +1,5 @@
 import { HEX_SIZE, HEX_WIDTH } from "./defs";
+import { Terrain } from "./terrains";
 
 export default class Hexagon {
 
@@ -11,7 +12,7 @@ export default class Hexagon {
         public col: number,
         public row: number,
         // public color = 'coral',
-        public terrain: any,
+        public terrain: Terrain,
     ) {
         this.id = `${col},${row}`;
     }
@@ -36,10 +37,12 @@ export default class Hexagon {
         ctx.restore();
         ctx.closePath();
 
-        // ctx.fillStyle = this.terrain.color;
 
-        ctx.strokeStyle = '#303446';
+        // ctx.strokeStyle = '#303446';
+        ctx.strokeStyle = this.terrain.color || '#303446';
         ctx.stroke();
+
+        // ctx.fillStyle = this.terrain.color;
         // ctx.fill();
     }
 }

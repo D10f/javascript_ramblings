@@ -21,9 +21,9 @@ type TerrainType =
     | 'WATER'
     | 'WHEAT';
 
-type Terrain = {
-    type: TerrainType;
-    color: string;
-    difficulty: number;
-    texture: HTMLImageElement;
-};
+// type Terrain = {
+//     type: TerrainType;
+//     color: string;
+//     difficulty: number;
+//     texture: HTMLImageElement;
+// };

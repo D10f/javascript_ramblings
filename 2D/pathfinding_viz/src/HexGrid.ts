@@ -99,8 +99,13 @@ export default class HexGrid {
         });
 
         this.canvas.addEventListener('mousemove', (e: MouseEvent) => {
-            if (!this.mousePressed || e.shiftKey) return;
-            this.paintTile(this.getHex(e.x, e.y));
+            if (e.shiftKey) return;
+            const hex = this.getHex(e.x, e.y);
+            if (this.mousePressed) {
+                this.paintTile(hex);
+            } else {
+                this.hoverTile(hex);
+            }
         });
     }
 
@@ -161,6 +166,10 @@ export default class HexGrid {
         this.brush.stroke(hex);
     }
 
+    private hoverTile(hex: Hexagon) {
+        this.brush.tint(hex);
+    }
+
     private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
         const shortestPath = [current];
         while(cameFrom.has(current)) {
@@ -177,7 +186,7 @@ export default class HexGrid {
             for (let j = 0; j < cols; j++) {
                 const x = Math.round(i * HEX_OFFSET_X + (HEX_WIDTH / 2) * (j % 2));
                 const y = Math.round(j * HEX_OFFSET_Y);
-                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.water));
+                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.WATER));
             }
 
             this._entities.push(row);
@@ -242,6 +251,7 @@ export default class HexGrid {
 
     render() {
         this.renderer.render(this.entities);
+        this.renderer.render([this.brush.overlay]);
     }
 }
 

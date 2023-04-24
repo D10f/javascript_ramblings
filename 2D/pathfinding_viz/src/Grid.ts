@@ -114,6 +114,7 @@ export default class World {
         };
         x = Math.floor(x / CELL_SIZE);
         y = Math.floor(y / CELL_SIZE);
+        console.log(x, y);
         return this.entities[x + y * COLS];
     }
 

@@ -1,10 +1,10 @@
-import { CELL_SIZE, COLS, HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, ROWS } from "./defs";
+import { COLS, HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, ROWS } from "./defs";
 
 import Renderer from "./Renderer";
 import PriorityQueue from "./PriorityQueue";
 import Brush from "./Brush";
 import Hexagon from "./Hexagon";
-import terrains from "./terrains";
+import terrains from "./Terrain";
 
 export default class HexGrid {
 
@@ -86,7 +86,7 @@ export default class HexGrid {
             if (e.shiftKey) {
                 this.setStartOrEndPositions(hex);
             } else {
-                this.paintTile(hex);
+                this.brush.stroke(hex);
             }
         });
 
@@ -99,13 +99,10 @@ export default class HexGrid {
         });
 
         this.canvas.addEventListener('mousemove', (e: MouseEvent) => {
-            if (e.shiftKey) return;
             const hex = this.getHex(e.x, e.y);
-            if (this.mousePressed) {
-                this.paintTile(hex);
-            } else {
-                this.hoverTile(hex);
-            }
+            this.brush.hover(hex);
+            if (!this.mousePressed || e.shiftKey) return;
+            this.brush.stroke(hex);
         });
     }
 
@@ -158,17 +155,17 @@ export default class HexGrid {
         return this._entities[col + colModifier][row + rowModifier];
     }
 
-    private paintTile(hex: Hexagon) {
-        // const c = this.canvas.getBoundingClientRect();
-        // const mouseX = e.x - c.x;
-        // const mouseY = e.y - c.y;
-        // const hex = this.getHex(mouseX, mouseY);
-        this.brush.stroke(hex);
-    }
+    // private paintTile(hex: Hexagon) {
+    //     // const c = this.canvas.getBoundingClientRect();
+    //     // const mouseX = e.x - c.x;
+    //     // const mouseY = e.y - c.y;
+    //     // const hex = this.getHex(mouseX, mouseY);
+    //     this.brush.stroke(hex);
+    // }
 
-    private hoverTile(hex: Hexagon) {
-        this.brush.tint(hex);
-    }
+    // private hoverTile(hex: Hexagon) {
+    //     this.brush.tint(hex);
+    // }
 
     private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
         const shortestPath = [current];
@@ -223,7 +220,7 @@ export default class HexGrid {
                 const currentGScore = gScore.get(neighbour.id) ?? Infinity;
                 const tentativeGScore = (
                     gScore.get(current.id) as number
-                    + neighbour.terrain.difficulty * CELL_SIZE
+                    + neighbour.terrain.difficulty * HEX_SIZE
                     + this.getDistance(current, neighbour)
                 );
 

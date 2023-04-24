@@ -1,5 +1,5 @@
 import { HEX_SIZE, HEX_WIDTH } from "./defs";
-import { Terrain } from "./terrains";
+import { Terrain } from "./Terrain";
 
 export default class Hexagon {
 

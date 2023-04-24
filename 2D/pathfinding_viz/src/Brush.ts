@@ -1,6 +1,6 @@
 import Hexagon from './Hexagon';
 import { HEX_SIZE } from './defs';
-import terrains, { Terrain } from './terrains';
+import terrains, { Terrain } from './Terrain';
 
 export default class Brush {
 
@@ -21,14 +21,14 @@ export default class Brush {
 
     stroke(hex: Hexagon) {
         if (!this.selected) return;
-        this.overlay.x = -10;
-        this.overlay.y = -10;
+        this.overlay.x = -100;
+        this.overlay.y = -100
 
         //@ts-ignore
         hex.terrain = terrains[this.selected];
     }
 
-    tint(hex: Hexagon) {
+    hover(hex: Hexagon) {
         // if (!this.selected || this.selected === hex.terrain.type) return;
         this.overlay.x = hex.x;
         this.overlay.y = hex.y;

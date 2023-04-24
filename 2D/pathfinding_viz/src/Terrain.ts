@@ -1,17 +1,3 @@
-// import Floor from './Floor';
-// import Grass from './Grass';
-// import Mountain from './Mountain';
-// import Wheat from './Wheat';
-// import Water from './Water';
-
-// export default {
-//     FLOOR: new Floor(),
-//     GRASS: new Grass(),
-//     MOUNTAIN: new Mountain(),
-//     WHEAT: new Wheat(),
-//     WATER: new Water()
-// };
-
 export class Terrain {
 
     public texture: HTMLImageElement;

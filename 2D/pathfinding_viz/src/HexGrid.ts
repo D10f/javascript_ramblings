@@ -195,6 +195,7 @@ export default class HexGrid {
         while(cameFrom.has(current)) {
             current = cameFrom.get(current) as Hexagon;
             shortestPath.push(current);
+            // shortestPath.push(Object.assign({}, current));
         }
         return shortestPath;
     }
@@ -206,7 +207,8 @@ export default class HexGrid {
             for (let j = 0; j < cols; j++) {
                 const x = Math.round(i * HEX_OFFSET_X + (HEX_WIDTH / 2) * (j % 2));
                 const y = Math.round(j * HEX_OFFSET_Y);
-                row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.GRASS));
+                // row.push(new Hexagon(x, y, HEX_SIZE, i, j, terrains.GRASS));
+                row.push(new Hexagon(x, y, HEX_SIZE, terrains.GRASS, i, j));
             }
 
             this._entities.push(row);
@@ -238,23 +240,23 @@ export default class HexGrid {
                 return cameFrom;
             }
 
-            for (const neighbour of this.getNeighbors(current)) {
+            for (const neighbor of this.getNeighbors(current)) {
 
-                const currentGScore = gScore.get(neighbour.id) ?? Infinity;
+                const currentGScore = gScore.get(neighbor.id) ?? Infinity;
                 const tentativeGScore = (
                     gScore.get(current.id) as number
-                    + neighbour.terrain.difficulty * HEX_SIZE
-                    + this.getDistance(current, neighbour)
+                    + neighbor.terrain.difficulty * HEX_SIZE
+                    + this.getDistance(current, neighbor)
                 );
 
                 if (tentativeGScore < currentGScore) {
-                    const neighbourFScore = tentativeGScore + this.getDistance(neighbour, end);
-                    cameFrom.set(neighbour, current);
-                    gScore.set(neighbour.id, tentativeGScore);
-                    fScore.set(neighbour.id, neighbourFScore);
+                    const neighborFScore = tentativeGScore + this.getDistance(neighbor, end);
+                    cameFrom.set(neighbor, current);
+                    gScore.set(neighbor.id, tentativeGScore);
+                    fScore.set(neighbor.id, neighborFScore);
 
-                    if (!openSet.contains(neighbour)) {
-                        openSet.enqueue({ value: neighbour, priority: neighbourFScore });
+                    if (!openSet.contains(neighbor)) {
+                        openSet.enqueue({ value: neighbor, priority: neighborFScore });
                     }
                 }
             }

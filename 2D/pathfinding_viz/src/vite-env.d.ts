@@ -18,6 +18,7 @@ type TerrainType =
     'FLOOR'
     | 'GRASS'
     | 'MOUNTAIN'
+    | 'ORE'
     | 'WATER'
     | 'WHEAT'
     | 'WOOD';

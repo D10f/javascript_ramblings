@@ -1,6 +1,6 @@
 import Hexagon from './Hexagon';
 import { HEX_SIZE } from './defs';
-import terrains, { Terrain } from './Terrain';
+import terrains from './Terrain';
 
 export default class Brush {
 
@@ -11,11 +11,13 @@ export default class Brush {
     constructor(private canvas: HTMLCanvasElement) {
         this.selected = '';
         this.buttons = this.createButtons();
-        this.overlay = new Hexagon(
-            0, 0, HEX_SIZE, 0, 0,
-            new Terrain('WATER', '#fff', Infinity, '')
-        );
+        // this.overlay = new Hexagon(
+        //     0, 0, HEX_SIZE, 0, 0,
+        //     new Terrain('WATER', '#fff', Infinity, '')
+        // );
+        this.overlay = new Hexagon(0, 0, HEX_SIZE);
         this.appendButtons();
+        this.createEndpointButtons();
         this.createListeners();
     }
 
@@ -49,12 +51,27 @@ export default class Brush {
     }
 
     private appendButtons() {
+        // const wrapper = document.createElement('div') as HTMLDivElement;
+        // wrapper.style.display = 'flex';
+        // wrapper.style.gap = '10px';
+        // wrapper.style.padding = '10px';
+
+        const edgeTilesWrapper = this.createWrapper();
+        const edgeTilesButtons = this.createEndpointButtons();
+        edgeTilesButtons.forEach(b => edgeTilesWrapper.appendChild(b));
+        this.canvas.insertAdjacentElement('afterend', edgeTilesWrapper);
+
+        const terrainTilesWrapper = this.createWrapper();
+        this.buttons.forEach(b => terrainTilesWrapper.appendChild(b));
+        this.canvas.insertAdjacentElement('afterend', terrainTilesWrapper);
+    }
+
+    private createWrapper() {
         const wrapper = document.createElement('div') as HTMLDivElement;
         wrapper.style.display = 'flex';
         wrapper.style.gap = '10px';
         wrapper.style.padding = '10px';
-        this.buttons.forEach(b => wrapper.appendChild(b));
-        this.canvas.insertAdjacentElement('afterend', wrapper);
+        return wrapper;
     }
 
     private createButtons() {
@@ -72,6 +89,24 @@ export default class Brush {
             // button.textContent = terrain.type;
             buttons.push(button);
         }
+        return buttons;
+    }
+
+    private createEndpointButtons() {
+        const buttons = [];
+
+        const button = document.createElement('button') as HTMLButtonElement;
+        button.style.filter = 'grayscale(1)';
+        button.setAttribute('terrain-type', 'start');
+
+        const img = document.createElement('img');
+        img.src = 'start.png';
+        img.style.pointerEvents = 'none';
+
+        button.appendChild(img);
+        // button.textContent = terrain.type;
+        buttons.push(button);
+
         return buttons;
     }
 }

@@ -10,10 +10,10 @@ export default class Hexagon {
         public x: number,
         public y: number,
         public size: number,
-        public col: number,
-        public row: number,
+        public terrain = new Terrain('WATER', 'rgba(255,255,255,0.25)', Infinity, ''),
+        public col = 0,
+        public row = 0,
         // public color = 'coral',
-        public terrain: Terrain,
     ) {
         this.id = `${col},${row}`;
         this.flag = new Image();
@@ -35,20 +35,20 @@ export default class Hexagon {
         if (this.terrain.texture) {
             ctx.drawImage(this.terrain.texture, -HEX_WIDTH * 0.5, -HEX_SIZE);
         }
-
-        if (this.flag) {
-            ctx.drawImage(this.flag, 0, 0, 32, 32, -HEX_WIDTH * 0.5, -HEX_SIZE * 0.75, 55, 32);
+        if (this.terrain.color) {
+            ctx.fillStyle = this.terrain.color;
+            ctx.fill();
         }
 
-        ctx.restore();
-        ctx.closePath();
-
+        // ctx.drawImage(this.flag, 0, 0, 32, 32, -HEX_WIDTH * 0.5, -HEX_SIZE * 0.75, 55, 32);
+        ctx.drawImage(this.flag, -HEX_WIDTH * 0.5, -HEX_SIZE);
 
         // ctx.strokeStyle = '#303446';
         ctx.strokeStyle = this.terrain.color || '#303446';
         ctx.stroke();
 
-        // ctx.fillStyle = this.terrain.color;
-        // ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
     }
 }

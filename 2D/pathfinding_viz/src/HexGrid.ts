@@ -4,8 +4,7 @@ import Renderer from "./Renderer";
 import PriorityQueue from "./PriorityQueue";
 import Brush from "./Brush";
 import Hexagon from "./Hexagon";
-import terrains from "./Terrain";
-import Line from "./Line";
+import terrains, { Terrain } from "./Terrain";
 
 export default class HexGrid {
 
@@ -17,7 +16,9 @@ export default class HexGrid {
 
     private brush: Brush;
     private renderer: Renderer
-    private path: Line[];
+    // private path: Line[];
+    private path: Hexagon[];
+    private tentatives: Hexagon[];
 
     private lookup: HexagonLookupTable;
 
@@ -31,6 +32,7 @@ export default class HexGrid {
         this.brush = new Brush(canvas);
         this.renderer = new Renderer(canvas);
         this.path = [];
+        this.tentatives = [];
 
         this.lookup = {
             // even rows (0) odd rows (1)
@@ -68,15 +70,16 @@ export default class HexGrid {
                 // this.end.flag.src = '';
                 this.forEachHex((hex) => hex.flag.src = '');
                 this.path = [];
+                this.tentatives = [];
                 this.start = null;
                 this.end = null;
             }
 
             this.start = hex;
-            this.start.flag.src = './start.png';
+            this.start.flag.src = './startHex.png';
         } else {
             this.end = hex;
-            this.end.flag.src = './target.png';
+            this.end.flag.src = './endHex.png';
         }
 
         this.assignStart = !this.assignStart;
@@ -86,13 +89,30 @@ export default class HexGrid {
             if (!map) return;
             const path = this.reconstructPath(map, this.end);
 
-            path.reduce((acc, curr) => {
-                this.path.push(
-                    new Line(acc.x, acc.y, curr.x, curr.y)
-                );
-                return curr;
+            this.path = path.map(hex => {
+                return new Hexagon(hex.x, hex.y, HEX_SIZE, new Terrain('WATER', 'rgba(255,127,80,0.5)', Infinity, ''));
             });
+
+            this.path[0].flag.src = './endHex.png';
+            this.path[this.path.length - 1].flag.src = './startHex.png';
+
+
+            // path.reduce((acc, curr) => {
+            //     this.path.push(
+            //         new Line(acc.x, acc.y, curr.x, curr.y)
+            //     );
+            //     return curr;
+            // });
         }
+    }
+
+    private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
+        const shortestPath = [current];
+        while(cameFrom.has(current)) {
+            current = cameFrom.get(current) as Hexagon;
+            shortestPath.push(current);
+        }
+        return shortestPath;
     }
 
     private getHex(pixelX: number, pixelY: number) {
@@ -190,15 +210,6 @@ export default class HexGrid {
     //     this.brush.tint(hex);
     // }
 
-    private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
-        const shortestPath = [current];
-        while(cameFrom.has(current)) {
-            current = cameFrom.get(current) as Hexagon;
-            shortestPath.push(current);
-            // shortestPath.push(Object.assign({}, current));
-        }
-        return shortestPath;
-    }
 
     createGrid(cols: number, rows: number) {
         for (let i = 0; i < rows; i++) {
@@ -257,6 +268,10 @@ export default class HexGrid {
 
                     if (!openSet.contains(neighbor)) {
                         openSet.enqueue({ value: neighbor, priority: neighborFScore });
+
+                        this.tentatives.push(
+                            new Hexagon(neighbor.x, neighbor.y, HEX_SIZE, new Terrain('WATER', 'rgba(255,255,255,0.25)', Infinity, ''))
+                        );
                     }
                 }
             }
@@ -273,8 +288,9 @@ export default class HexGrid {
 
     render() {
         this.renderer.render(this.entities);
-        this.renderer.render([this.brush.overlay]);
+        this.renderer.render(this.tentatives);
         this.renderer.render(this.path);
+        this.renderer.render([this.brush.overlay]);
     }
 }
 

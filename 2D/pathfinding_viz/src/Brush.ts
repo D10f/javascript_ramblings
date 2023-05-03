@@ -6,7 +6,7 @@ export default class Brush {
 
     private selected: string;
     private buttons: HTMLButtonElement[];
-    public overlay: Hexagon;
+    public hoverOverlay: Hexagon;
 
     constructor(private canvas: HTMLCanvasElement) {
         this.selected = '';
@@ -15,7 +15,7 @@ export default class Brush {
         //     0, 0, HEX_SIZE, 0, 0,
         //     new Terrain('WATER', '#fff', Infinity, '')
         // );
-        this.overlay = new Hexagon(0, 0, HEX_SIZE);
+        this.hoverOverlay = new Hexagon(0, 0, HEX_SIZE);
         this.appendButtons();
         this.createEndpointButtons();
         this.createListeners();
@@ -23,8 +23,8 @@ export default class Brush {
 
     stroke(hex: Hexagon) {
         if (!this.selected) return;
-        this.overlay.x = -100;
-        this.overlay.y = -100
+        this.hoverOverlay.x = -100;
+        this.hoverOverlay.y = -100
 
         //@ts-ignore
         hex.terrain = terrains[this.selected];
@@ -32,8 +32,8 @@ export default class Brush {
 
     hover(hex: Hexagon) {
         // if (!this.selected || this.selected === hex.terrain.type) return;
-        this.overlay.x = hex.x;
-        this.overlay.y = hex.y;
+        this.hoverOverlay.x = hex.x;
+        this.hoverOverlay.y = hex.y;
     }
 
     private createListeners() {
@@ -95,17 +95,26 @@ export default class Brush {
     private createEndpointButtons() {
         const buttons = [];
 
-        const button = document.createElement('button') as HTMLButtonElement;
-        button.style.filter = 'grayscale(1)';
-        button.setAttribute('terrain-type', 'start');
+        const startBtn = document.createElement('button') as HTMLButtonElement;
+        startBtn.style.filter = 'grayscale(1)';
+        startBtn.setAttribute('terrain-type', 'start');
 
-        const img = document.createElement('img');
-        img.src = 'start.png';
-        img.style.pointerEvents = 'none';
+        const startImg = document.createElement('img');
+        startImg.src = 'startHex.png';
+        startImg.style.pointerEvents = 'none';
+        startBtn.appendChild(startImg);
 
-        button.appendChild(img);
-        // button.textContent = terrain.type;
-        buttons.push(button);
+        const endBtn = document.createElement('button') as HTMLButtonElement;
+        startBtn.style.filter = 'grayscale(1)';
+        startBtn.setAttribute('terrain-type', 'end');
+
+        const endImg = document.createElement('img');
+        endImg.src = 'endHex.png';
+        endImg.style.pointerEvents = 'none';
+
+        endBtn.appendChild(endImg);
+
+        buttons.push(startBtn, endBtn);
 
         return buttons;
     }

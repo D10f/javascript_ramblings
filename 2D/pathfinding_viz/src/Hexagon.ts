@@ -13,10 +13,11 @@ export default class Hexagon {
         public terrain = new Terrain('WATER', 'rgba(255,255,255,0.25)', Infinity, ''),
         public col = 0,
         public row = 0,
+        flag?: HTMLImageElement
         // public color = 'coral',
     ) {
         this.id = `${col},${row}`;
-        this.flag = new Image();
+        this.flag = flag ?? new Image();
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -35,13 +36,17 @@ export default class Hexagon {
         if (this.terrain.texture) {
             ctx.drawImage(this.terrain.texture, -HEX_WIDTH * 0.5, -HEX_SIZE);
         }
+
         if (this.terrain.color) {
             ctx.fillStyle = this.terrain.color;
             ctx.fill();
         }
 
         // ctx.drawImage(this.flag, 0, 0, 32, 32, -HEX_WIDTH * 0.5, -HEX_SIZE * 0.75, 55, 32);
-        ctx.drawImage(this.flag, -HEX_WIDTH * 0.5, -HEX_SIZE);
+
+        if (this.flag) {
+            ctx.drawImage(this.flag, -HEX_WIDTH * 0.5, -HEX_SIZE);
+        }
 
         // ctx.strokeStyle = '#303446';
         ctx.strokeStyle = this.terrain.color || '#303446';

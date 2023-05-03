@@ -1,6 +1,6 @@
 import EventEmitter from './EventEmitter';
 // import World from './World';
-import HexGrid from './HexGrid';
+import HexGrid from './HexGrid2';
 import Renderer from './Renderer';
 import Scheduler from './Scheduler';
 
@@ -17,7 +17,7 @@ export default class Canvas {
         this.scheduler = new Scheduler(this.emitter);
         this.renderer = new Renderer(canvas);
         // this.world = new World(canvas);
-        this.world = new HexGrid(canvas);
+        this.world = new HexGrid(canvas, this.renderer);
         this.registerEvents();
     }
 

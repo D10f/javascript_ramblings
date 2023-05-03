@@ -12,13 +12,41 @@ type HexagonLookupTable = {
     [key in HexagonRelativePosition]: number[][]
 }
 
+type HexagonProps = {
+    x: number;
+    y: number;
+    size?: number;
+    color?: string;
+    image?: string;
+    col?: number;
+    row?: number;
+    id?: string;
+};
+
+type TerrainProps = HexagonProps & {
+    terrainType: TerrainType;
+};
+
 type EventCallback = (data?: any) => void;
 
 type TerrainType =
-    'FLOOR'
+    'DESERT'
     | 'GRASS'
     | 'MOUNTAIN'
     | 'ORE'
     | 'WATER'
     | 'WHEAT'
     | 'WOOD';
+
+type TerrainTypeImageTable = {
+    [key in TerrainType]: string;
+};
+
+type TerrainTypeDifficultyTable = {
+    [key in TerrainType]: number;
+};
+
+type FlagType =
+    'START'
+    | 'END'
+    | 'ERROR';

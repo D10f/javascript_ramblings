@@ -14,3 +14,39 @@ export const ROWS = COLS;
 
 // export const COLS = 30;
 // export const ROWS = 30;
+
+export const ENDPOINT_TOKEN_IMG_TABLE = {
+    START: 'startHex.png',
+    END: 'endHex.png',
+    // ERROR: 'errorHex.png'
+};
+
+export const TERRAIN_TYPE_IMG_TABLE: TerrainTypeImageTable = {
+    DESERT: 'desertHex.gif',
+    GRASS: 'grassHex.gif',
+    MOUNTAIN: 'mountainHex.gif',
+    ORE: 'oreHex.gif',
+    WATER: 'waterHex.gif',
+    WHEAT: 'wheatHex.gif',
+    WOOD: 'woodHex.gif',
+};
+
+export const TERRAIN_TYPE_DIFFICULTY_TABLE: TerrainTypeDifficultyTable = {
+    DESERT: 5,
+    GRASS: 1,
+    MOUNTAIN: 10,
+    ORE: 8,
+    WATER: Infinity,
+    WHEAT: 3,
+    WOOD: 7,
+};
+
+export const HEXAGON_RELATIVE_POSITION_MODIFIER = {
+    // even rows (0) odd rows (1)
+    RIGHT: [[+1,  0], [+1,  0]],
+    TOP_RIGHT: [[ 0, -1],  [+1, -1]],
+    TOP_LEFT: [[-1, -1], [ 0, -1]],
+    LEFT: [[-1,  0], [-1,  0]],
+    BOTTOM_LEFT: [[-1, +1], [ 0, +1]],
+    BOTTOM_RIGHT: [[ 0, +1], [+1, +1]],
+};

@@ -90,11 +90,11 @@ export default class HexGrid {
             const path = this.reconstructPath(map, this.end);
 
             this.path = path.map(hex => {
-                return new Hexagon(hex.x, hex.y, HEX_SIZE, new Terrain('WATER', 'rgba(255,127,80,0.5)', Infinity, ''));
+                return new Hexagon(hex.x, hex.y, HEX_SIZE, new Terrain('WATER', 'rgba(255,127,80,0.5)', Infinity, ''), 0, 0, hex.flag);
             });
 
-            this.path[0].flag.src = './endHex.png';
-            this.path[this.path.length - 1].flag.src = './startHex.png';
+            // this.path[0].flag.src = './endHex.png';
+            // this.path[this.path.length - 1].flag.src = './startHex.png';
 
 
             // path.reduce((acc, curr) => {
@@ -290,7 +290,7 @@ export default class HexGrid {
         this.renderer.render(this.entities);
         this.renderer.render(this.tentatives);
         this.renderer.render(this.path);
-        this.renderer.render([this.brush.overlay]);
+        this.renderer.render([this.brush.hoverOverlay]);
     }
 }
 

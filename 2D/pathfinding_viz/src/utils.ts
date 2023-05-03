@@ -20,6 +20,13 @@ export const euclidianDistance = (x1: number, y1: number, x2: number, y2: number
 };
 
 /**
+ * Calculates the angle, in radians, between two points.
+ */
+export const angleBetweenPoints = (x1: number, y1: number, x2: number, y2: number) => {
+    return Math.atan2(y2 - y1, x2 - x1);
+};
+
+/**
  * Generates a random integer between min and (up to but not including) max.
  */
 export const randomInt = (min: number, max: number) => {

@@ -4,7 +4,7 @@ import PriorityQueue from "./PriorityQueue";
 import Renderer from "./Renderer";
 import Terrain from "./Terrain2";
 import { ROWS, COLS, HEX_OFFSET_X, HEX_WIDTH, HEX_OFFSET_Y, HEX_SIZE, HEXAGON_RELATIVE_POSITION_MODIFIER, ENDPOINT_TOKEN_IMG_TABLE, TERRAIN_TYPE_IMG_TABLE } from "./defs";
-import { taxicabDistance } from "./utils";
+import { angleBetweenPoints, taxicabDistance } from "./utils";
 
 export default class HexGrid {
 
@@ -14,11 +14,9 @@ export default class HexGrid {
     private brush: Brush;
 
     constructor(private canvas: HTMLCanvasElement, private renderer: Renderer, map?: number[][]) {
-        this.terrainLayer = this.generateTerrain(map);
         this.middleLayer = this.generateOverlayToken();
         this.topLayer = this.generateEndpointTokens();
-
-        this.printTerrainGrid();
+        this.terrainLayer = this.generateTerrain(map);
 
         // this.brush = new Brush(canvas, this.middleLayer, this.topLayer);
         this.brush = new Brush(this, canvas, [this.middleLayer, this.topLayer]);
@@ -50,12 +48,16 @@ export default class HexGrid {
             const path = this.reconstructPath(map, end);
 
             this.middleLayer.splice(1);
+            this.topLayer = [this.topLayer[0], this.topLayer[1]];
 
-            path.forEach(hex => {
-                this.middleLayer.push(new Hexagon({
+            path.forEach((hex, idx, arr) => {
+                if (hex === start || hex === end) return;
+
+                this.topLayer.push(new Hexagon({
                     x: hex.x,
                     y: hex.y,
-                    color: 'rgba(255,255,255,0.25)'
+                    image: 'arrow.png',
+                    imageAngle: angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y)
                 }));
             });
         });

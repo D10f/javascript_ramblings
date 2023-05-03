@@ -10,6 +10,7 @@ export default class Hexagon {
     public row: number;
     public color: string;
     public image: HTMLImageElement;
+    public imageAngle: number;
 
     constructor(props: HexagonProps) {
         this.x = props.x;
@@ -20,6 +21,7 @@ export default class Hexagon {
         this.color = props.color ?? '';
         this.image = new Image();
         this.image.src = props.image ?? '';
+        this.imageAngle = props.imageAngle ?? 0;
         // this.id = `${this.x},${this.y}`;
         this.id = props.id ?? crypto.randomUUID();
     }
@@ -45,7 +47,11 @@ export default class Hexagon {
     }
 
     protected drawImage(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.rotate(this.imageAngle);
+        ctx.fillStyle = 'red';
         ctx.drawImage(this.image, -HEX_WIDTH * 0.5, -HEX_SIZE)
+        ctx.restore();
     }
 
     protected drawColor(ctx: CanvasRenderingContext2D) {

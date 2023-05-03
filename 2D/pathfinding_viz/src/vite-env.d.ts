@@ -18,6 +18,7 @@ type HexagonProps = {
     size?: number;
     color?: string;
     image?: string;
+    imageAngle?: number;
     col?: number;
     row?: number;
     id?: string;

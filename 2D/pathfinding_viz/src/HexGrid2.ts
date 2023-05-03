@@ -1,8 +1,9 @@
 import Brush from "./Brush2";
 import Hexagon from "./Hexagon2";
+import PriorityQueue from "./PriorityQueue";
 import Renderer from "./Renderer";
 import Terrain from "./Terrain2";
-import { ROWS, COLS, HEX_OFFSET_X, HEX_WIDTH, HEX_OFFSET_Y, HEX_SIZE, HEXAGON_RELATIVE_POSITION_MODIFIER, ENDPOINT_TOKEN_IMG_TABLE } from "./defs";
+import { ROWS, COLS, HEX_OFFSET_X, HEX_WIDTH, HEX_OFFSET_Y, HEX_SIZE, HEXAGON_RELATIVE_POSITION_MODIFIER, ENDPOINT_TOKEN_IMG_TABLE, TERRAIN_TYPE_IMG_TABLE } from "./defs";
 import { taxicabDistance } from "./utils";
 
 export default class HexGrid {
@@ -12,27 +13,51 @@ export default class HexGrid {
     private topLayer: Hexagon[];
     private brush: Brush;
 
-    constructor(private canvas: HTMLCanvasElement, private renderer: Renderer) {
-        this.terrainLayer = this.generateTerrain();
+    constructor(private canvas: HTMLCanvasElement, private renderer: Renderer, map?: number[][]) {
+        this.terrainLayer = this.generateTerrain(map);
         this.middleLayer = this.generateOverlayToken();
         this.topLayer = this.generateEndpointTokens();
+
+        this.printTerrainGrid();
 
         // this.brush = new Brush(canvas, this.middleLayer, this.topLayer);
         this.brush = new Brush(this, canvas, [this.middleLayer, this.topLayer]);
 
-        this.handleMouseInput();
+        this.handleKeyboardInput();
     }
 
-    private handleMouseInput() {
-
-        this.canvas.addEventListener('mousemove', (e: MouseEvent) => {
-            const hex = this.getHex(e.x, e.y);
-            this.brush.update(hex);
+    private printTerrainGrid() {
+        (this.terrainLayer as Terrain[][]).forEach(col => {
+            const rowIdx: number[] = [];
+            col.forEach(row => {
+                const terrainTypes = Object.keys(TERRAIN_TYPE_IMG_TABLE);
+                rowIdx.push(terrainTypes.findIndex(t => t === row.type));
+            });
+            console.log(rowIdx.toString());
         });
+    }
 
-        this.canvas.addEventListener('click', (e: MouseEvent) => {
-            const hex = this.getHex(e.x, e.y) as Terrain;
-            this.brush.stroke(hex);
+    private handleKeyboardInput() {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
+            if (e.key === 'p') {
+                this.printTerrainGrid();
+            }
+            if (e.key !== ' ') return;
+
+            const start = this.getHex(this.topLayer[0].x, this.topLayer[0].y);
+            const end = this.getHex(this.topLayer[1].x, this.topLayer[1].y);
+            const map = this.getShortestPath(start, end);
+            const path = this.reconstructPath(map, end);
+
+            this.middleLayer.splice(1);
+
+            path.forEach(hex => {
+                this.middleLayer.push(new Hexagon({
+                    x: hex.x,
+                    y: hex.y,
+                    color: 'rgba(255,255,255,0.25)'
+                }));
+            });
         });
     }
 
@@ -48,7 +73,63 @@ export default class HexGrid {
         return this.terrainLayer[row][col];
     }
 
-    private generateTerrain() {
+    private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
+        const shortestPath = [current];
+        while (cameFrom.has(current)) {
+            current = cameFrom.get(current) as Hexagon;
+            shortestPath.push(current);
+        }
+        return shortestPath;
+    }
+
+    private getShortestPath(start: Hexagon, end: Hexagon) {
+
+        const openSet = new PriorityQueue<Hexagon>();
+        openSet.enqueue({ value: start, priority: 0 });
+
+        const cameFrom = new Map<Hexagon, Hexagon>();
+
+        const gScore = new Map<string, number>();
+        gScore.set(start.id, 0);
+
+        const fScore = new Map<string, number>();
+        fScore.set(start.id, HexGrid.getDistance(start, end));
+
+        while (!openSet.isEmpty) {
+
+            const current = openSet.dequeue() as Hexagon;
+
+            if (current === end) {
+                return cameFrom;
+            }
+
+            for (const neighbor of this.getNeighbors(current)) {
+
+                const currentGScore = gScore.get(neighbor.id) ?? Infinity;
+                const tentativeGScore = (
+                    gScore.get(current.id) as number
+                    // + neighbor.terrain.difficulty * HEX_SIZE
+                    + (neighbor as Terrain).difficulty * HEX_SIZE
+                    + HexGrid.getDistance(current, neighbor)
+                );
+
+                if (tentativeGScore < currentGScore) {
+                    const neighborFScore = tentativeGScore + HexGrid.getDistance(neighbor, end);
+                    cameFrom.set(neighbor, current);
+                    gScore.set(neighbor.id, tentativeGScore);
+                    fScore.set(neighbor.id, neighborFScore);
+
+                    if (!openSet.contains(neighbor)) {
+                        openSet.enqueue({ value: neighbor, priority: neighborFScore });
+                    }
+                }
+            }
+        }
+
+        return cameFrom;
+    }
+
+    private generateTerrain(map: number[][] | undefined) {
         const col: Hexagon[][] = [];
         for (let i = 0; i < ROWS; i++) {
 
@@ -58,13 +139,33 @@ export default class HexGrid {
 
                 const x = Math.round(i * HEX_OFFSET_X + (HEX_WIDTH / 2) * (j % 2));
                 const y = Math.round(j * HEX_OFFSET_Y);
-                row.push(new Terrain({
+
+                const isOutside = (
+                    x - HEX_SIZE <= 0 ||
+                    y - HEX_SIZE <= 0 ||
+                    x + HEX_SIZE > this.canvas.width ||
+                    y + HEX_SIZE > this.canvas.height + HEX_SIZE
+                );
+
+                let terrainType: TerrainType;
+
+                if (map) {
+                    const idx = map[i][j];
+                    terrainType = Object.keys(TERRAIN_TYPE_IMG_TABLE)[idx] as TerrainType;
+                } else {
+                    console.log(i, j)
+                    terrainType = isOutside ? 'WATER' : 'GRASS';
+                }
+
+                const hex = new Terrain({
                     x,
                     y,
-                    terrainType: 'GRASS',
+                    terrainType,
                     col: i,
                     row: j
-                }));
+                });
+
+                row.push(hex);
             }
 
             // this.terrainLayer.push(row);

@@ -74,10 +74,13 @@ export default class Brush {
         });
 
         canvas.addEventListener('mousemove', (e: MouseEvent) => {
+            const hex = grid.getHex(e.x, e.y);
+
             if (this.mousePressed) {
-                const hex = grid.getHex(e.x, e.y);
                 this.stroke(hex);
             };
+
+            this.update(hex);
         });
     }
 

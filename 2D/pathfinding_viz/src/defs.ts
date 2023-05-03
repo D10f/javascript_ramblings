@@ -15,7 +15,7 @@ export const ROWS = COLS;
 // export const COLS = 30;
 // export const ROWS = 30;
 
-export const ENDPOINT_TOKEN_IMG_TABLE = {
+export const ENDPOINT_TOKEN_IMG_TABLE: FlagTypeImageTable = {
     START: 'startHex.png',
     END: 'endHex.png',
     // ERROR: 'errorHex.png'
@@ -49,4 +49,10 @@ export const HEXAGON_RELATIVE_POSITION_MODIFIER = {
     LEFT: [[-1,  0], [-1,  0]],
     BOTTOM_LEFT: [[-1, +1], [ 0, +1]],
     BOTTOM_RIGHT: [[ 0, +1], [+1, +1]],
+};
+
+export enum LAYERS {
+    TERRAIN,
+    MIDDLE,
+    TOP
 };

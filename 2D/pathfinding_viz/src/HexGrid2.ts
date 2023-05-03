@@ -17,7 +17,8 @@ export default class HexGrid {
         this.middleLayer = this.generateOverlayToken();
         this.topLayer = this.generateEndpointTokens();
 
-        this.brush = new Brush(this.middleLayer, this.topLayer);
+        // this.brush = new Brush(canvas, this.middleLayer, this.topLayer);
+        this.brush = new Brush(this, canvas, [this.middleLayer, this.topLayer]);
 
         this.handleMouseInput();
     }

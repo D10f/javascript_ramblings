@@ -38,6 +38,10 @@ type TerrainType =
     | 'WHEAT'
     | 'WOOD';
 
+type FlagType =
+'START'
+| 'END';
+
 type TerrainTypeImageTable = {
     [key in TerrainType]: string;
 };
@@ -46,7 +50,7 @@ type TerrainTypeDifficultyTable = {
     [key in TerrainType]: number;
 };
 
-type FlagType =
-    'START'
-    | 'END'
-    | 'ERROR';
+type FlagTypeImageTable = {
+    [key in FlagType]: string;
+};
+

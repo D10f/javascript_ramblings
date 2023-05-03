@@ -5,7 +5,7 @@ const app = document.getElementById('app') as HTMLDivElement;
 const canvasEl = document.createElement('canvas') as HTMLCanvasElement;
 
 canvasEl.width = 800;
-canvasEl.height =  600
+canvasEl.height = 600;
 
 app.insertAdjacentElement('beforeend', canvasEl);
 

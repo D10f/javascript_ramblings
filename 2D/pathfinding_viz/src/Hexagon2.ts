@@ -49,7 +49,6 @@ export default class Hexagon {
     protected drawImage(ctx: CanvasRenderingContext2D) {
         ctx.save();
         ctx.rotate(this.imageAngle);
-        ctx.fillStyle = 'red';
         ctx.drawImage(this.image, -HEX_WIDTH * 0.5, -HEX_SIZE)
         ctx.restore();
     }

@@ -48,16 +48,26 @@ export default class HexGrid {
             const path = this.reconstructPath(map, end);
 
             this.middleLayer.splice(1);
-            this.topLayer = [this.topLayer[0], this.topLayer[1]];
+            this.topLayer.splice(2);
 
             path.forEach((hex, idx, arr) => {
-                if (hex === start || hex === end) return;
+                let imageAngle = hex === end
+                    ? 0
+                    : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
+
+                const image = hex === end ? 'mark.png' : 'arrow.png';
+
+                this.middleLayer.push(new Hexagon({
+                    x: hex.x,
+                    y: hex.y,
+                    color: 'rgba(0,0,0,0.2)'
+                }));
 
                 this.topLayer.push(new Hexagon({
                     x: hex.x,
                     y: hex.y,
-                    image: 'arrow.png',
-                    imageAngle: angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y)
+                    image,
+                    imageAngle
                 }));
             });
         });

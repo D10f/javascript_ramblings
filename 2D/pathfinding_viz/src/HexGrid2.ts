@@ -150,10 +150,20 @@ export default class HexGrid {
                 let terrainType: TerrainType;
 
                 if (map) {
-                    const idx = map[i][j];
+                    let idx = map[i][j];
+
+                    if (idx > 20) {
+                        this.topLayer[1].x = x;
+                        this.topLayer[1].y = y;
+                        idx -= 20;
+                    } else if (idx > 10) {
+                        this.topLayer[0].x = x;
+                        this.topLayer[0].y = y;
+                        idx -= 10;
+                    }
+
                     terrainType = Object.keys(TERRAIN_TYPE_IMG_TABLE)[idx] as TerrainType;
                 } else {
-                    console.log(i, j)
                     terrainType = isOutside ? 'WATER' : 'GRASS';
                 }
 

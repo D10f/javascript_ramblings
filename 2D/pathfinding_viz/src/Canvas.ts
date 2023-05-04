@@ -1,6 +1,6 @@
 import EventEmitter from './EventEmitter';
 // import World from './World';
-import HexGrid from './HexGrid2';
+import HexGrid from './HexGrid';
 import Renderer from './Renderer';
 import Scheduler from './Scheduler';
 import { map } from './defs';

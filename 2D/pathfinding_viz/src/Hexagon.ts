@@ -1,23 +1,29 @@
 import { HEX_SIZE, HEX_WIDTH } from "./defs";
-import { Terrain } from "./Terrain";
 
 export default class Hexagon {
 
     public id: string;
-    public flag: HTMLImageElement;
+    public x: number;
+    public y: number;
+    public size: number;
+    public col: number;
+    public row: number;
+    public color: string;
+    public image: HTMLImageElement;
+    public imageAngle: number;
 
-    constructor(
-        public x: number,
-        public y: number,
-        public size: number,
-        public terrain = new Terrain('WATER', 'rgba(255,255,255,0.25)', Infinity, ''),
-        public col = 0,
-        public row = 0,
-        flag?: HTMLImageElement
-        // public color = 'coral',
-    ) {
-        this.id = `${col},${row}`;
-        this.flag = flag ?? new Image();
+    constructor(props: HexagonProps) {
+        this.x = props.x;
+        this.y = props.y;
+        this.size = props.size ?? HEX_SIZE;
+        this.col = props.col ?? 0;
+        this.row = props.row ?? 0;
+        this.color = props.color ?? '';
+        this.image = new Image();
+        this.image.src = props.image ?? '';
+        this.imageAngle = props.imageAngle ?? 0;
+        // this.id = `${this.x},${this.y}`;
+        this.id = props.id ?? crypto.randomUUID();
     }
 
     render(ctx: CanvasRenderingContext2D) {
@@ -33,27 +39,22 @@ export default class Hexagon {
             ctx.rotate(Math.PI / 3);
         }
 
-        if (this.terrain.texture) {
-            ctx.drawImage(this.terrain.texture, -HEX_WIDTH * 0.5, -HEX_SIZE);
-        }
-
-        if (this.terrain.color) {
-            ctx.fillStyle = this.terrain.color;
-            ctx.fill();
-        }
-
-        // ctx.drawImage(this.flag, 0, 0, 32, 32, -HEX_WIDTH * 0.5, -HEX_SIZE * 0.75, 55, 32);
-
-        if (this.flag) {
-            ctx.drawImage(this.flag, -HEX_WIDTH * 0.5, -HEX_SIZE);
-        }
-
-        // ctx.strokeStyle = '#303446';
-        ctx.strokeStyle = this.terrain.color || '#303446';
-        ctx.stroke();
+        if (this.color) this.drawColor(ctx);
+        if (this.image) this.drawImage(ctx);
 
         ctx.closePath();
         ctx.restore();
+    }
 
+    protected drawImage(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.rotate(this.imageAngle);
+        ctx.drawImage(this.image, -HEX_WIDTH * 0.5, -HEX_SIZE)
+        ctx.restore();
+    }
+
+    protected drawColor(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.fill();
     }
 }

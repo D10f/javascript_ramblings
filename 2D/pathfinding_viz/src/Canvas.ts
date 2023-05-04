@@ -15,7 +15,7 @@ export default class Canvas {
 
     constructor(canvas: HTMLCanvasElement) {
         this.emitter = new EventEmitter();
-        this.scheduler = new Scheduler(this.emitter);
+        this.scheduler = new Scheduler({ emitter: this.emitter });
         this.renderer = new Renderer(canvas);
         // this.world = new World(canvas);
         this.world = new HexGrid(canvas, this.renderer, map);

@@ -1,7 +1,9 @@
 import Brush from "./Brush";
+import EventEmitter from "./EventEmitter";
 import Hexagon from "./Hexagon";
 import PriorityQueue from "./PriorityQueue";
 import Renderer from "./Renderer";
+import Scheduler from "./Scheduler";
 import Terrain from "./Terrain";
 import { ROWS, COLS, HEX_OFFSET_X, HEX_WIDTH, HEX_OFFSET_Y, HEX_SIZE, HEXAGON_RELATIVE_POSITION_MODIFIER, ENDPOINT_TOKEN_IMG_TABLE, TERRAIN_TYPE_IMG_TABLE } from "./defs";
 import { angleBetweenPoints, taxicabDistance } from "./utils";
@@ -13,7 +15,17 @@ export default class HexGrid {
     private topLayer: Hexagon[];
     private brush: Brush;
 
+    private scheduler: Scheduler;
+    private emitter: EventEmitter;
+
     constructor(private canvas: HTMLCanvasElement, private renderer: Renderer, map?: number[][]) {
+        this.emitter = new EventEmitter();
+        this.scheduler = new Scheduler({
+            emitter: this.emitter,
+        });
+        this.scheduler.pause();
+        this.scheduler.loop();
+
         this.middleLayer = this.generateOverlayToken();
         this.topLayer = this.generateEndpointTokens();
         this.terrainLayer = this.generateTerrain(map);
@@ -37,39 +49,93 @@ export default class HexGrid {
 
     private handleKeyboardInput() {
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (e.key === 'p') {
-                this.printTerrainGrid();
-            }
             if (e.key !== ' ') return;
 
-            this.middleLayer.splice(1);
-            this.topLayer.splice(2);
+            this.scheduler.togglePause();
 
             const start = this.getHex(this.topLayer[0].x, this.topLayer[0].y);
             const end = this.getHex(this.topLayer[1].x, this.topLayer[1].y);
-            const map = this.getShortestPath(start, end);
-            const path = this.reconstructPath(map, end);
 
-            path.forEach((hex, idx, arr) => {
-                let imageAngle = hex === end
-                    ? 0
-                    : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
+            const algorithm = this.getShortestPath(start, end);
 
-                const image = hex === end ? 'mark.png' : 'arrow.png';
+            this.emitter.subscribe('tick', () => {
+                const { value, done } = algorithm.next();
+
+                if (done) {
+                    this.scheduler.pause();
+                    const path = this.reconstructPath(value, end);
+
+                    this.middleLayer.splice(1);
+                    this.topLayer.splice(2);
+                    path.forEach((hex, idx, arr) => {
+                        let imageAngle = hex === end
+                            ? 0
+                            : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
+
+                        const image = hex === end ? 'mark.png' : 'arrow.png';
+
+                        this.middleLayer.push(new Hexagon({
+                            x: hex.x,
+                            y: hex.y,
+                            color: 'rgba(0,0,0,0.2)'
+                        }));
+
+                        this.topLayer.push(new Hexagon({
+                            x: hex.x,
+                            y: hex.y,
+                            image,
+                            imageAngle
+                        }));
+                    });
+
+                    return;
+                }
 
                 this.middleLayer.push(new Hexagon({
-                    x: hex.x,
-                    y: hex.y,
-                    color: 'rgba(0,0,0,0.2)'
-                }));
-
-                this.topLayer.push(new Hexagon({
-                    x: hex.x,
-                    y: hex.y,
-                    image,
-                    imageAngle
+                    x: value.x,
+                    y: value.y,
+                    color: 'rgba(200,75,175,0.5)'
                 }));
             });
+
+            // this.middleLayer.push(algorithm.next().value)
+            // this.middleLayer.push(algorithm.next().value)
+            // this.middleLayer.push(algorithm.next().value)
+            // this.middleLayer.push(algorithm.next().value)
+
+            // if (e.key === 'p') {
+            //     this.printTerrainGrid();
+            // }
+            // if (e.key !== ' ') return;
+
+            // this.middleLayer.splice(1);
+            // this.topLayer.splice(2);
+
+            // const start = this.getHex(this.topLayer[0].x, this.topLayer[0].y);
+            // const end = this.getHex(this.topLayer[1].x, this.topLayer[1].y);
+            // const map = this.getShortestPath(start, end);
+            // const path = this.reconstructPath(map, end);
+
+            // path.forEach((hex, idx, arr) => {
+            //     let imageAngle = hex === end
+            //         ? 0
+            //         : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
+
+            //     const image = hex === end ? 'mark.png' : 'arrow.png';
+
+            //     this.middleLayer.push(new Hexagon({
+            //         x: hex.x,
+            //         y: hex.y,
+            //         color: 'rgba(0,0,0,0.2)'
+            //     }));
+
+            //     this.topLayer.push(new Hexagon({
+            //         x: hex.x,
+            //         y: hex.y,
+            //         image,
+            //         imageAngle
+            //     }));
+            // });
         });
     }
 
@@ -94,7 +160,54 @@ export default class HexGrid {
         return shortestPath;
     }
 
-    private getShortestPath(start: Hexagon, end: Hexagon) {
+    // private getShortestPath(start: Hexagon, end: Hexagon) {
+
+    //     const openSet = new PriorityQueue<Hexagon>();
+    //     openSet.enqueue({ value: start, priority: 0 });
+
+    //     const cameFrom = new Map<Hexagon, Hexagon>();
+
+    //     const gScore = new Map<string, number>();
+    //     gScore.set(start.id, 0);
+
+    //     const fScore = new Map<string, number>();
+    //     fScore.set(start.id, HexGrid.getDistance(start, end));
+
+    //     while (!openSet.isEmpty) {
+
+    //         const current = openSet.dequeue() as Hexagon;
+
+    //         if (current === end) {
+    //             return cameFrom;
+    //         }
+
+    //         for (const neighbor of this.getNeighbors(current)) {
+
+    //             const currentGScore = gScore.get(neighbor.id) ?? Infinity;
+    //             const tentativeGScore = (
+    //                 gScore.get(current.id) as number
+    //                 // + neighbor.terrain.difficulty * HEX_SIZE
+    //                 + (neighbor as Terrain).difficulty * HEX_SIZE
+    //                 + HexGrid.getDistance(current, neighbor)
+    //             );
+
+    //             if (tentativeGScore < currentGScore) {
+    //                 const neighborFScore = tentativeGScore + HexGrid.getDistance(neighbor, end);
+    //                 cameFrom.set(neighbor, current);
+    //                 gScore.set(neighbor.id, tentativeGScore);
+    //                 fScore.set(neighbor.id, neighborFScore);
+
+    //                 if (!openSet.contains(neighbor)) {
+    //                     openSet.enqueue({ value: neighbor, priority: neighborFScore });
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return cameFrom;
+    // }
+
+    private *getShortestPath(start: Hexagon, end: Hexagon) {
 
         const openSet = new PriorityQueue<Hexagon>();
         openSet.enqueue({ value: start, priority: 0 });
@@ -133,6 +246,10 @@ export default class HexGrid {
 
                     if (!openSet.contains(neighbor)) {
                         openSet.enqueue({ value: neighbor, priority: neighborFScore });
+                        if (neighbor === end) {
+                            return cameFrom;
+                        }
+                        yield neighbor;
                     }
                 }
             }
@@ -268,6 +385,10 @@ export default class HexGrid {
         const dx = Math.round(x + 0.5*y) * (x*x >= y*y ? 1 : 0);
         const dy = Math.round(y + 0.5*x) * (x*x < y*y ? 1 : 0);
         return [xgrid + dx, ygrid + dy];
+    }
+
+    update() {
+        //
     }
 
     render() {

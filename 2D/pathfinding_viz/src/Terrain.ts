@@ -1,24 +1,22 @@
-export class Terrain {
+import Hexagon from "./Hexagon";
+import { TERRAIN_TYPE_DIFFICULTY_TABLE, TERRAIN_TYPE_IMG_TABLE } from "./defs";
 
-    public texture: HTMLImageElement;
+export default class Terrain extends Hexagon {
 
-    constructor(
-        public type: TerrainType,
-        public color: string,
-        public difficulty: number,
-        imageSrc: string
-    ) {
-        this.texture = new Image();
-        this.texture.src = imageSrc ?? '';
+    public type: TerrainType;
+    public difficulty: number;
+
+    constructor({ terrainType, ...rest }: TerrainProps) {
+        super({ ...rest });
+
+        this.type = terrainType;
+        this.difficulty = TERRAIN_TYPE_DIFFICULTY_TABLE[terrainType];
+        this.image.src = TERRAIN_TYPE_IMG_TABLE[terrainType];
+    }
+
+    setType(type: TerrainType) {
+        this.type = type;
+        this.difficulty = TERRAIN_TYPE_DIFFICULTY_TABLE[type];
+        this.image.src = TERRAIN_TYPE_IMG_TABLE[type];
     }
 }
-
-export default {
-    FLOOR: new Terrain('FLOOR', '', 1, 'desertHex.gif'),
-    GRASS: new Terrain('GRASS', '', 2, 'sheepHex.gif'),
-    MOUNTAIN: new Terrain('MOUNTAIN', '', 10, 'clayHex.gif'),
-    WATER: new Terrain('WATER', '', Infinity, 'waterHex.gif'),
-    WHEAT: new Terrain('WHEAT', '', 5, 'wheatHex.gif'),
-    WOOD: new Terrain('WOOD', '', 10, 'woodHex.gif')
-};
-

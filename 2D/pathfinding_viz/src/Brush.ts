@@ -1,75 +1,146 @@
-import Hexagon from './Hexagon';
-import { HEX_SIZE } from './defs';
-import terrains, { Terrain } from './Terrain';
+import HexGrid from "./HexGrid2";
+import Hexagon from "./Hexagon2";
+import Terrain from "./Terrain2";
+import { ENDPOINT_TOKEN_IMG_TABLE, LAYERS, TERRAIN_TYPE_IMG_TABLE } from "./defs";
+
+type SelectedHex = {
+    type: TerrainType | FlagType;
+    layer: number;
+};
 
 export default class Brush {
 
-    private selected: string;
-    private buttons: HTMLButtonElement[];
-    public overlay: Hexagon;
+    // private selected: TerrainType | FlagType | null;
+    // private currentLayer: LAYERS;
+    private selected: SelectedHex | null;
+    private middleLayer: Hexagon[];
+    private topLayer: Hexagon[];
+    private brush: Hexagon;
+    private mousePressed: boolean;
 
-    constructor(private canvas: HTMLCanvasElement) {
-        this.selected = '';
-        this.buttons = this.createButtons();
-        this.overlay = new Hexagon(
-            0, 0, HEX_SIZE, 0, 0,
-            new Terrain('WATER', '#fff', Infinity, '')
-        );
-        this.appendButtons();
-        this.createListeners();
+    constructor(grid: HexGrid, canvas: HTMLCanvasElement, layers: Hexagon[][]) {
+        this.selected = null;
+        this.middleLayer = layers[0];
+        this.topLayer = layers[1];
+        // this.currentLayer = LAYERS.MIDDLE;
+        this.brush = this.middleLayer[0];
+        this.mousePressed = false;
+        this.createUI(canvas);
+        this.createListeners(grid, canvas);
+    }
+
+    update(hex: Hexagon) {
+        this.brush.x = hex.x;
+        this.brush.y = hex.y;
     }
 
     stroke(hex: Hexagon) {
         if (!this.selected) return;
-        this.overlay.x = -100;
-        this.overlay.y = -100
 
-        //@ts-ignore
-        hex.terrain = terrains[this.selected];
+        const { type, layer } = this.selected;
+
+        switch (layer) {
+            case LAYERS.MIDDLE:
+                (hex as Terrain).setType(type as TerrainType);
+                break;
+            case LAYERS.TOP:
+                const h = this.topLayer.find(h => h.id === type) as Hexagon;
+                h.x = hex.x;
+                h.y = hex.y;
+                break;
+        }
+
+        // if (this.selected.type !== 'START' && this.selected.type !== 'END') {
+        //     hex.setType(this.selected.type as TerrainType);
+        // } else {
+        //     const h = this.topLayer.find(h => h.id === this.selected!.type) as Hexagon;
+        //     h.x = hex.x;
+        //     h.y = hex.y;
+        // }
     }
 
-    hover(hex: Hexagon) {
-        // if (!this.selected || this.selected === hex.terrain.type) return;
-        this.overlay.x = hex.x;
-        this.overlay.y = hex.y;
-    }
+    private createListeners(grid: HexGrid, canvas: HTMLCanvasElement) {
+        canvas.addEventListener('click', (e: MouseEvent) => {
+            const hex = grid.getHex(e.x, e.y);
+            this.stroke(hex);
+        });
 
-    private createListeners() {
-        window.addEventListener('click', (e: MouseEvent) => {
-            const target = e.target as HTMLButtonElement;
-            if (!target || !target.getAttribute('terrain-type')) return;
-            this.selected = target.getAttribute('terrain-type') as string;
+        canvas.addEventListener('mousedown', () => {
+            this.mousePressed = true;
+        });
 
-            this.buttons.forEach((button) => {
-                button.style.filter = 'grayscale(1)';
-            });
+        canvas.addEventListener('mouseup', () => {
+            this.mousePressed = false;
+        });
 
-            target.style.filter = 'grayscale(0)';
+        canvas.addEventListener('mousemove', (e: MouseEvent) => {
+            const hex = grid.getHex(e.x, e.y);
+
+            if (this.mousePressed) {
+                this.stroke(hex);
+            };
+
+            this.update(hex);
         });
     }
 
-    private appendButtons() {
-        const wrapper = document.createElement('div') as HTMLDivElement;
-        wrapper.style.display = 'flex';
-        wrapper.style.gap = '10px';
-        wrapper.style.padding = '10px';
-        this.buttons.forEach(b => wrapper.appendChild(b));
-        this.canvas.insertAdjacentElement('afterend', wrapper);
+    private createUI(canvas: HTMLCanvasElement) {
+
+        const terrainRow = this.createRow();
+        const terrainButtons = this.createTileControls(TERRAIN_TYPE_IMG_TABLE, 1);
+        terrainButtons.forEach(b => terrainRow.appendChild(b));
+
+        const endpointsRow = this.createRow();
+        const endpointsButtons = this.createTileControls(ENDPOINT_TOKEN_IMG_TABLE, 2);
+        endpointsButtons.forEach(b => endpointsRow.appendChild(b));
+
+        canvas.insertAdjacentElement('afterend', endpointsRow);
+        canvas.insertAdjacentElement('afterend', terrainRow);
+
+        canvas.parentElement!.addEventListener('click', (e: MouseEvent) => {
+            const target = e.target as HTMLButtonElement;
+
+            if (!target || !target.getAttribute('type')) return;
+
+            // target.parentElement!.querySelectorAll('button').forEach(btn => {
+            canvas.parentElement!.querySelectorAll('button').forEach(btn => {
+                btn.style.filter = 'grayscale(1)';
+                btn.style.border = '1px solid transparent';
+            });
+
+            target.style.filter = 'grayscale(0)';
+            target.style.border = '1px solid coral';
+
+            const layer = parseInt(target.getAttribute('layer')!);
+            const type = target.getAttribute('type') as TerrainType | FlagType;
+
+            this.selected = { layer, type };
+        });
     }
 
-    private createButtons() {
+    private createRow() {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.gap = '10px';
+        row.style.padding = '10px';
+        return row;
+    }
+
+    private createTileControls(tileset: TerrainTypeImageTable | FlagTypeImageTable, layer: 0 | 1 | 2) {
         const buttons = [];
-        for (const terrain of Object.values(terrains)) {
-            const button = document.createElement('button') as HTMLButtonElement;
+        for (const [terrain, texture] of Object.entries(tileset)) {
+            const button = document.createElement('button');
             button.style.filter = 'grayscale(1)';
-            button.setAttribute('terrain-type', terrain.type);
+            button.style.border = '1px solid transparent';
+            button.style.background = 'none';
+            button.setAttribute('type', terrain);
+            button.setAttribute('layer', layer.toString());
 
             const img = document.createElement('img');
-            img.src = terrain.texture.src;
+            img.src = texture;
             img.style.pointerEvents = 'none';
 
             button.appendChild(img);
-            // button.textContent = terrain.type;
             buttons.push(button);
         }
         return buttons;

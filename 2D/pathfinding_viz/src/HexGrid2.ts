@@ -42,13 +42,13 @@ export default class HexGrid {
             }
             if (e.key !== ' ') return;
 
+            this.middleLayer.splice(1);
+            this.topLayer.splice(2);
+
             const start = this.getHex(this.topLayer[0].x, this.topLayer[0].y);
             const end = this.getHex(this.topLayer[1].x, this.topLayer[1].y);
             const map = this.getShortestPath(start, end);
             const path = this.reconstructPath(map, end);
-
-            this.middleLayer.splice(1);
-            this.topLayer.splice(2);
 
             path.forEach((hex, idx, arr) => {
                 let imageAngle = hex === end

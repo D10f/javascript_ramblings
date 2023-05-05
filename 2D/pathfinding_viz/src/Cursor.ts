@@ -40,13 +40,13 @@ export default class Cursor {
 
         this.canvas.addEventListener('click', () => {
 
-            this.emitter.emit('click', { cursor: this.cursor });
-            // if (!this.selectedTile) return;
+            // this.emitter.emit('click', { cursor: this.cursor });
+            if (!this.selectedTile) return;
 
-            // this.emitter.emit(this.eventType, {
-            //     cursor: this.cursor,
-            //     tile: this.selectedTile
-            // });
+            this.emitter.emit(this.eventType, {
+                cursor: this.cursor,
+                tile: this.selectedTile
+            });
         });
 
         this.canvas.addEventListener('mousemove', (event: MouseEvent) => {
@@ -79,7 +79,7 @@ export default class Cursor {
 
     setTile(tile: TerrainType | FlagType) {
 
-        if (this.selectedTile && Object.keys(TERRAIN_TYPE_IMG_TABLE).includes(this.selectedTile)) {
+        if (Object.keys(TERRAIN_TYPE_IMG_TABLE).includes(tile)) {
             this.eventType = 'drawTerrain';
         } else {
             this.eventType = 'moveEndpoint';

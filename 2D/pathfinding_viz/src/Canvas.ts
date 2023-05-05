@@ -12,7 +12,7 @@ export default class Canvas {
     private scheduler: Scheduler;
     private renderer: Renderer;
     private world: World;
-    private cursor: Cursor;
+    public cursor: Cursor;
     // private world: HexGrid;
 
     constructor(canvas: HTMLCanvasElement) {

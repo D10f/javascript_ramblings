@@ -1,5 +1,5 @@
+import Cursor from './Cursor';
 import EventEmitter from './EventEmitter';
-// import World from './World';
 import HexGrid from './HexGrid';
 import Renderer from './Renderer';
 import Scheduler from './Scheduler';
@@ -12,6 +12,7 @@ export default class Canvas {
     private scheduler: Scheduler;
     private renderer: Renderer;
     private world: World;
+    private cursor: Cursor;
     // private world: HexGrid;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -20,7 +21,8 @@ export default class Canvas {
         this.renderer = new Renderer(canvas);
         // this.world = new World(canvas);
         // this.world = new HexGrid(canvas, this.renderer, map);
-        this.world = new World(canvas, this.renderer, this.emitter);
+        this.cursor = new Cursor(canvas, this.renderer, this.emitter);
+        this.world = new World(this.renderer, this.emitter);
         this.registerEvents();
     }
 
@@ -29,6 +31,7 @@ export default class Canvas {
             this.renderer.clear();
             // this.grid.update();
             this.world.render();
+            this.cursor.render();
         });
     }
 

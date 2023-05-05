@@ -10,7 +10,8 @@ import { angleBetweenPoints, taxicabDistance } from "./utils";
 
 export default class HexGrid {
 
-    private terrainLayer: Hexagon[][];
+    // private terrainLayer: Hexagon[][];
+    private terrainLayer: Hexagon[];
     private middleLayer: Hexagon[];
     private topLayer: Hexagon[];
     private brush: Brush;
@@ -148,7 +149,8 @@ export default class HexGrid {
         const mouseX = x - c.x;
         const mouseY = y - c.y;
         const [row, col] = this.pixelToHex(mouseX, mouseY);
-        return this.terrainLayer[row][col];
+        // return this.terrainLayer[row][col];
+        return this.terrainLayer[col + row * COLS];
     }
 
     private reconstructPath(cameFrom: Map<Hexagon, Hexagon>, current: Hexagon) {
@@ -259,10 +261,11 @@ export default class HexGrid {
     }
 
     private generateTerrain(map: number[][] | undefined) {
-        const col: Hexagon[][] = [];
+        // const col: Hexagon[][] = [];
+        const col: Hexagon[] = [];
         for (let i = 0; i < ROWS; i++) {
 
-            const row: Hexagon[] = [];
+            // const row: Hexagon[] = [];
 
             for (let j = 0; j < COLS; j++) {
 
@@ -305,11 +308,11 @@ export default class HexGrid {
                     row: j
                 });
 
-                row.push(hex);
+                col.push(hex);
             }
 
             // this.terrainLayer.push(row);
-            col.push(row);
+            // col.push(row);
         }
         return col;
     }
@@ -362,7 +365,8 @@ export default class HexGrid {
 
         if (col < 0 || col >= ROWS || row < 0 || row >= COLS) return null;
 
-        return this.terrainLayer[col][row];
+        // return this.terrainLayer[col][row];
+        return this.terrainLayer[row + col * COLS];
     }
 
     // TODO: Make these into utility functions

@@ -55,3 +55,7 @@ type FlagTypeImageTable = {
     [key in FlagType]: string;
 };
 
+type CursorEvent = {
+    cursor: Hexagon;
+    tile: TerrainType | FlagType | null;
+}

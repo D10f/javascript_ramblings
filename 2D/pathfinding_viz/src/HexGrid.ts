@@ -272,8 +272,9 @@ export default class HexGrid {
                 const isOutside = (
                     x - HEX_SIZE <= 0 ||
                     y - HEX_SIZE <= 0 ||
-                    x + HEX_SIZE > this.canvas.width ||
-                    y + HEX_SIZE > this.canvas.height + HEX_SIZE
+                    // x + HEX_SIZE > this.canvas.width ||
+                    x + HEX_SIZE > HEX_WIDTH * map!.length ||
+                    y + HEX_SIZE > HEX_WIDTH * map!.length + HEX_SIZE
                 );
 
                 let terrainType: TerrainType;

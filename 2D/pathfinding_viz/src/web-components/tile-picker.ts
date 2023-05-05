@@ -5,16 +5,17 @@ export default class TilePicker extends HTMLElement {
 
     private tilePicker: HTMLElement | null;
     private tileButtons: HTMLButtonElement[];
-    private canvasEl: HTMLCanvasElement | null;
+    private actionButtons: HTMLButtonElement[];
     private canvas: Canvas | null;
 
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
         this.tilePicker = null;
         this.tileButtons = [];
-        this.canvasEl = null;
+        this.actionButtons = [];
         this.canvas = null;
+
+        this.attachShadow({ mode: 'open' });
         this.render();
     }
 
@@ -22,17 +23,26 @@ export default class TilePicker extends HTMLElement {
         this.tilePicker!.addEventListener('click', (e: MouseEvent) => {
             const target = e.target as HTMLButtonElement;
 
-            if (!target || !target.getAttribute('type')) return;
+            if (target.nodeName !== 'BUTTON') return;
 
-            this.tileButtons.forEach(btn => {
-                if (btn === target) {
-                    target.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
+            if (target.hasAttribute('type')) {
+                this.toggleActiveButton(this.tileButtons, target);
+                this.canvas!.cursor.setTile(target.getAttribute('type') as TerrainType | FlagType);
+            } else if (target.hasAttribute('action')) {
+                this.toggleActiveButton(this.actionButtons, target);
+                this.canvas!.emitter.emit(target.getAttribute('action') as string);
+            }
 
-            this.canvas!.cursor.setTile(target.getAttribute('type') as TerrainType | FlagType);
+        });
+    }
+
+    toggleActiveButton(buttons: HTMLButtonElement[], active: HTMLButtonElement) {
+        buttons.forEach(btn => {
+            if (btn === active) {
+                active.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
     }
 
@@ -49,15 +59,17 @@ export default class TilePicker extends HTMLElement {
                 }
                 button {
                     filter: grayscale(1);
-                    border: 1px solid transparent;
+                    border: none;
                     background: none;
                 }
                 button:hover {
-                    border: 1px solid coral;
+                    filter: grayscale(0);
+                    cursor: pointer;
+                    background-color: rgba(255,255,255,0.25);
                 }
                 button.active {
                     filter: grayscale(0);
-                    border: 1px solid coral;
+                    background-color: rgba(255,255,255,0.25);
                 }
                 img {
                     pointer-events: none;
@@ -90,18 +102,26 @@ export default class TilePicker extends HTMLElement {
                     `).join('\n')}
                 </div>
 
-                <div class="row" slot="actionTiles"></div>
+                <div class="row" slot="actionTiles">
+                    <button action="play">
+                        <img src="play.png">
+                    </button>
+                    <button action="pause">
+                        <img src="pause.png">
+                    </button>
+                </div>
             </section>
         `;
 
         this.tilePicker = shadowRoot.querySelector('.tile-picker') as HTMLElement;
         this.tileButtons = Array.from(shadowRoot.querySelectorAll('button[type]')) as HTMLButtonElement[];
+        this.actionButtons = Array.from(shadowRoot.querySelectorAll('button[action]')) as HTMLButtonElement[];
 
-        this.canvasEl = shadowRoot.getElementById('pathfinding') as HTMLCanvasElement;
-        this.canvasEl.width = 800;
-        this.canvasEl.height = 600;
+        const canvasEl = shadowRoot.getElementById('pathfinding') as HTMLCanvasElement;
+        canvasEl.width = 800;
+        canvasEl.height = 600;
 
-        this.canvas = new Canvas(this.canvasEl);
+        this.canvas = new Canvas(canvasEl);
         this.canvas.init();
 
         this.attachEvents();

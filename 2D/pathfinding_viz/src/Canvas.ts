@@ -8,7 +8,7 @@ import { map } from './defs';
 
 export default class Canvas {
 
-    private emitter: EventEmitter;
+    public emitter: EventEmitter;
     private scheduler: Scheduler;
     private renderer: Renderer;
     private world: World;

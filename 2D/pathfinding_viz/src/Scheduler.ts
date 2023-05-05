@@ -5,6 +5,7 @@ type SchedulerProps = {
     emitter: EventEmitter,
     updateInterval?: number,
     fps?: number,
+    tickEvent?: string
 };
 
 export default class Scheduler {
@@ -14,6 +15,7 @@ export default class Scheduler {
     private lastTick: number;
     private timer: number;
     private animationFrameId: number;
+    private tickEvent: string;
     public paused: boolean;
 
 
@@ -25,6 +27,7 @@ export default class Scheduler {
         // this.updateInterval = 1000 / FPS;
         this.fps = props.fps ?? FPS;
         this.updateInterval = props.updateInterval ?? 1000 / this.fps;
+        this.tickEvent = props.tickEvent ?? 'tick';
         this.paused = false;
         this.animationFrameId = 0;
     }
@@ -54,7 +57,7 @@ export default class Scheduler {
                 // this.timer += delta;
                 this.increaseCount(delta);
             } else {
-                this.emitter.emit('tick', timestamp);
+                this.emitter.emit(this.tickEvent, timestamp);
                 this.timer = 0;
             }
         }

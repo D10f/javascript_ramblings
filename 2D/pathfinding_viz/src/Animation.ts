@@ -14,6 +14,10 @@ export default class Animation {
         this.animationEvents();
     }
 
+    get playing() {
+        return !this.scheduler.paused;
+    }
+
     private animationEvents() {
         this.emitter.subscribe('play', () => {
             this.pathfinder.calculatePath();

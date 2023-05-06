@@ -48,14 +48,13 @@ export default class World {
 
         this.emitter.subscribe('animationDone', (path: Hexagon[]) => {
             this.middleLayer.grid = [];
-            console.log(path)
 
             path.forEach((hex, idx, arr) => {
                 let imageAngle = idx === 0
                     ? 0
                     : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
 
-                // const image = hex === end ? 'mark.png' : 'arrow.png';
+                const image = idx === 0 ? 'mark.png' : 'arrow.png';
 
                 this.middleLayer.grid.push(new Hexagon({
                     x: hex.x,
@@ -66,7 +65,7 @@ export default class World {
                 this.topLayer.grid.push(new Hexagon({
                     x: hex.x,
                     y: hex.y,
-                    image: 'arrow.png',
+                    image,
                     imageAngle
                 }));
             });
@@ -87,6 +86,9 @@ export default class World {
         });
 
         this.emitter.subscribe('drawTerrain', ({ cursor, tile }: CursorEvent) => {
+
+            if (this.animation.playing) return;
+
             const hex = this.terrainLayer.grid.find(hex => (
                 hex.col === cursor.col && hex.row === cursor.row
             )) as Terrain;
@@ -95,6 +97,7 @@ export default class World {
         });
 
         this.emitter.subscribe('moveEndpoint', ({ cursor, tile }: CursorEvent) => {
+            if (this.animation.playing) return;
             const hex = this.topLayer.grid.find(hex => hex.id === tile) as Hexagon;
             hex.x = cursor.x;
             hex.y = cursor.y;

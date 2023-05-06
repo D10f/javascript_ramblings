@@ -1,7 +1,7 @@
 import EventEmitter from "./EventEmitter";
 import Hexagon from "./Hexagon";
 import Renderer from "./Renderer";
-import { HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, TERRAIN_TYPES, TERRAIN_TYPE_IMG_TABLE } from "./defs";
+import { HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, TERRAIN_TYPE_IMG_TABLE } from "./defs";
 import { pixelToHex } from "./utils";
 
 export default class Cursor {
@@ -40,7 +40,6 @@ export default class Cursor {
 
         this.canvas.addEventListener('click', () => {
 
-            // this.emitter.emit('click', { cursor: this.cursor });
             if (!this.selectedTile) return;
 
             this.emitter.emit(this.eventType, {

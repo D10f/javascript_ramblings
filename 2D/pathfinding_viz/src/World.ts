@@ -1,11 +1,11 @@
 import Animation from "./Animation";
 import EventEmitter from "./EventEmitter";
-import HexGrid from "./HexGrid2";
+import HexGrid from "./HexGrid";
 import Hexagon from "./Hexagon";
 import Pathfinder from "./Pathfinder";
 import Renderer from "./Renderer";
 import Terrain from "./Terrain";
-import { COLS, HEX_SIZE, map } from "./defs";
+import { map } from "./defs";
 import { angleBetweenPoints } from "./utils";
 
 export default class World {
@@ -50,11 +50,16 @@ export default class World {
             this.middleLayer.grid = [];
 
             path.forEach((hex, idx, arr) => {
-                let imageAngle = idx === 0
-                    ? 0
-                    : angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
 
-                const image = idx === 0 ? 'mark.png' : 'arrow.png';
+                let image, imageAngle;
+
+                if (idx === 0) {
+                    image = 'mark.png';
+                    imageAngle = 0;
+                } else {
+                    image = 'arrow.png';
+                    imageAngle = angleBetweenPoints(hex.x, hex.y, arr[idx - 1].x, arr[idx - 1].y);
+                }
 
                 this.middleLayer.grid.push(new Hexagon({
                     x: hex.x,
@@ -73,18 +78,6 @@ export default class World {
     }
 
     private cursorEvents() {
-        this.emitter.subscribe('click', ({ cursor }: CursorEvent) => {
-            this.middleLayer.grid = [];
-
-            const n = this.terrainLayer.getNeighbors(cursor);
-
-            this.middleLayer.grid = n.map(hex => new Hexagon({
-                x: hex.x,
-                y: hex.y,
-                color: 'rgba(100, 255, 100, 0.6)'
-            }));
-        });
-
         this.emitter.subscribe('drawTerrain', ({ cursor, tile }: CursorEvent) => {
 
             if (this.animation.playing) return;

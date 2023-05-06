@@ -25,7 +25,11 @@ export default class Animation {
         });
 
         this.emitter.subscribe('pause', () => {
-            this.scheduler.pause();
+            this.scheduler.togglePause();
+        });
+
+        this.emitter.subscribe('playbackSpeed', (speedMultiplier: number) => {
+            this.scheduler.fps = 60 * speedMultiplier;
         });
 
         this.emitter.subscribe('animationTick', () => {

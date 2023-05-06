@@ -1,4 +1,4 @@
-import HexGrid from "./HexGrid2";
+import HexGrid from "./HexGrid";
 import Hexagon from "./Hexagon";
 import PriorityQueue from "./PriorityQueue";
 import Terrain from "./Terrain";

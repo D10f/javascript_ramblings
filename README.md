@@ -2,6 +2,14 @@ JavaScript Ramblings - a collection of small scripts made with the sole purpose 
 
 ---
 
+### [pathfinding_visualization](https://github.com/D10f/javascript_ramblings/tree/main/2D/pathfinding_viz)
+
+A visualization of the A* pathfinding algorithm on a hexagonal grid with different terrain tiles, with a built-in tile editor to play around with.
+
+![animated gif of the pathfinding visualization](assets/pathfinding_visualization.gif)
+
+---
+
 ### [text_transition](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.js) | [.ts](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.ts)
 
 Changes the contents of the target HTML with a new value, transitioning characters individually in a random fashion.

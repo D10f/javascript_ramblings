@@ -10,6 +10,14 @@ A visualization of the A* pathfinding algorithm on a hexagonal grid with differe
 
 ---
 
+### [javascript_man](https://github.com/D10f/javascript_ramblings/tree/main/2D/pacman)
+
+A classic game of Pacman with a JavaScript theme: run away from the frameworks!
+
+![animated gif of "jsman" game](assets/jsman.gif)
+
+---
+
 ### [text_transition](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.js) | [.ts](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.ts)
 
 Changes the contents of the target HTML with a new value, transitioning characters individually in a random fashion.

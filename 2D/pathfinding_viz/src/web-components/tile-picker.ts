@@ -6,6 +6,7 @@ export default class TilePicker extends HTMLElement {
     private tilePicker: HTMLElement | null;
     private tileButtons: HTMLButtonElement[];
     private actionButtons: HTMLButtonElement[];
+    private playbackButtons: HTMLButtonElement[];
     private canvas: Canvas | null;
 
     constructor() {
@@ -13,6 +14,7 @@ export default class TilePicker extends HTMLElement {
         this.tilePicker = null;
         this.tileButtons = [];
         this.actionButtons = [];
+        this.playbackButtons = [];
         this.canvas = null;
 
         this.attachShadow({ mode: 'open' });
@@ -31,6 +33,9 @@ export default class TilePicker extends HTMLElement {
             } else if (target.hasAttribute('action')) {
                 this.toggleActiveButton(this.actionButtons, target);
                 this.canvas!.emitter.emit(target.getAttribute('action') as string);
+            } else if (target.hasAttribute('speed')) {
+                this.toggleActiveButton(this.playbackButtons, target);
+                this.canvas!.emitter.emit(target.getAttribute('playback') as string);
             }
 
         });
@@ -109,6 +114,18 @@ export default class TilePicker extends HTMLElement {
                     <button action="pause">
                         <img src="pause.png">
                     </button>
+                    <button speed="0.25">
+                        <img src="speed-quarter.png">
+                    </button>
+                    <button speed="0.5">
+                        <img src="speed-half.png">
+                    </button>
+                    <button speed="0.75">
+                        <img src="speed-three-quarters.png">
+                    </button>
+                    <button class="active" speed="1">
+                        <img src="speed-one.png">
+                    </button>
                 </div>
             </section>
         `;
@@ -116,6 +133,7 @@ export default class TilePicker extends HTMLElement {
         this.tilePicker = shadowRoot.querySelector('.tile-picker') as HTMLElement;
         this.tileButtons = Array.from(shadowRoot.querySelectorAll('button[type]')) as HTMLButtonElement[];
         this.actionButtons = Array.from(shadowRoot.querySelectorAll('button[action]')) as HTMLButtonElement[];
+        this.playbackButtons = Array.from(shadowRoot.querySelectorAll('button[speed]')) as HTMLButtonElement[];
 
         const canvasEl = shadowRoot.getElementById('pathfinding') as HTMLCanvasElement;
         canvasEl.width = 800;

@@ -25,7 +25,7 @@ export default class Animation {
         });
 
         this.emitter.subscribe('pause', () => {
-            this.scheduler.pause();
+            this.scheduler.togglePause();
         });
 
         this.emitter.subscribe('animationTick', () => {

@@ -28,6 +28,10 @@ export default class Animation {
             this.scheduler.togglePause();
         });
 
+        this.emitter.subscribe('playbackSpeed', (speedMultiplier: number) => {
+            this.scheduler.fps = 60 * speedMultiplier;
+        });
+
         this.emitter.subscribe('animationTick', () => {
             const { value, done } = this.pathfinder.next();
 

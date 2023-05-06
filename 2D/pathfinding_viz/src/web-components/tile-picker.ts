@@ -35,7 +35,7 @@ export default class TilePicker extends HTMLElement {
                 this.canvas!.emitter.emit(target.getAttribute('action') as string);
             } else if (target.hasAttribute('speed')) {
                 this.toggleActiveButton(this.playbackButtons, target);
-                this.canvas!.emitter.emit(target.getAttribute('playback') as string);
+                this.canvas!.emitter.emit('playbackSpeed', parseFloat(target.getAttribute('speed') as string));
             }
 
         });

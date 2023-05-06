@@ -1,7 +1,8 @@
-import HexGrid from "./HexGrid2";
-import Hexagon from "./Hexagon2";
-import Terrain from "./Terrain2";
-import { ENDPOINT_TOKEN_IMG_TABLE, LAYERS, TERRAIN_TYPE_IMG_TABLE } from "./defs";
+import HexGrid from "./HexGrid";
+import Hexagon from "./Hexagon";
+import Terrain from "./Terrain";
+import { ENDPOINT_TOKEN_IMG_TABLE, HEX_OFFSET_X, HEX_OFFSET_Y, HEX_SIZE, HEX_WIDTH, LAYERS, TERRAIN_TYPE_IMG_TABLE } from "./defs";
+import { pixelToHexCoordinates } from "./utils";
 
 type SelectedHex = {
     type: TerrainType | FlagType;
@@ -74,13 +75,28 @@ export default class Brush {
         });
 
         canvas.addEventListener('mousemove', (e: MouseEvent) => {
-            const hex = grid.getHex(e.x, e.y);
+            // const hex = grid.getHex(e.x, e.y);
 
-            if (this.mousePressed) {
-                this.stroke(hex);
-            };
+            // if (this.mousePressed) {
+            //     this.stroke(hex);
+            // };
 
-            this.update(hex);
+            // this.update(hex);
+
+            const canvasPos = canvas.getBoundingClientRect();
+            const mouseX = e.x - canvasPos.x;
+            const mouseY = e.y - canvasPos.y;
+            const { x, y } = pixelToHexCoordinates(
+                mouseX,
+                mouseY,
+                HEX_SIZE,
+                HEX_WIDTH,
+                HEX_OFFSET_X,
+                HEX_OFFSET_Y
+            );
+
+            this.brush.x = x;
+            this.brush.y = y;
         });
     }
 

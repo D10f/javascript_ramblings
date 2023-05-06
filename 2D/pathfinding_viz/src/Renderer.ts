@@ -10,9 +10,13 @@ export default class Renderer {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    render(entities: any[]) {
-        for (let i = 0, l = entities.length; i < l; i++) {
-            entities[i].render(this.ctx);
+    render(entities: any[] | any) {
+        if (entities instanceof Array) {
+            for (let i = 0, l = entities.length; i < l; i++) {
+                entities[i].render(this.ctx);
+            }
+        } else {
+            entities.render(this.ctx);
         }
     }
 }

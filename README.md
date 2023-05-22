@@ -288,7 +288,7 @@ A simple 3D simulation of the solar system built with [Three.js](https://threejs
 **[2D - Raycasting Rendering](https://github.com/D10f/javascript_ramblings/blob/main/2D/raycasting_rendering.js)**: Implementation of a raycasting algorithm in p5.js à la Wolfenstein 3D, creating a 3D projection of the environment. [See demo](https://editor.p5js.org/fall-parameter/sketches/lDJjXSG6o). See also [C implementation](https://github.com/D10f/raycasting).
 
 ![Raycast Rendering](2D/assets/raycast_render.gif)
-![Raycast Rendering in C](https://github.com/D10f/raycasting/public/preview.gif)
+![Raycast Rendering in C](https://github.com/D10f/raycasting/tree/master/public/preview.gif)
 
 **[2D - Raycasting](https://github.com/D10f/javascript_ramblings/blob/main/2D/raycasting.js)**: Visualization of a light-emitting object using raycasting algorithm. [See demo](https://editor.p5js.org/fall-parameter/sketches/Mr6WzNe5E)
 

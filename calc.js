@@ -1,3 +1,26 @@
+/**
+ * Simple calculator implemented using JavaScript arithmetic.
+ *
+ * Fully-featured calculator using an AST-based math interpreted:
+ * https://github.com/D10f/calculator_parser
+ *
+ * Codepen with graphical interface:
+ * https://codepen.io/D10f/pen/XWoMJZE
+ *
+ * TODO:
+ *   - Fix Bugs.
+ *   - Implement modulus operator.
+ *   - (web version only) Handle input.
+ *   - (web version only) Handle keyboard events.
+ *   - (web version only) Allow delete single characters from input.
+ *   - (web version only) Implement input history.
+ *   - (web version only) Display result of operation separately from input;
+ *
+ * KNOWN BUGS:
+ *   - Divide by 0 returns Infinity.
+ *   - (web version only) Cannot handle negative numbers.
+ */
+
 const assert = require("assert");
 
 function calculate(expression) {

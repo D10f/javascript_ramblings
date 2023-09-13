@@ -1,7 +1,11 @@
-export class Entity {
-    constructor(private readonly _id: number) {}
+export interface IEntity {
+  id: number;
+}
 
-    get id() {
-        return this._id;
-    }
+export class Entity implements IEntity {
+  constructor(private readonly _id: number) { }
+
+  get id() {
+    return this._id;
+  }
 }

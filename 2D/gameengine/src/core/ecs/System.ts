@@ -1,33 +1,34 @@
-import { Entity } from "./Entity";
-import { Component } from "./Component";
+import BitField from 'bitfield';
+import { IEntity } from './Entity';
+import { IComponent } from './Component';
+import TransformComponent from '../../common/components/Transform';
 
 export class System {
-    private _entities: Entity[];
-    private _systemComponentSignature: Bitfield;
+  private _entities: IEntity[];
+  private _systemComponentSignature: BitField;
 
-    constructor(components: Component[] = []) {
-        this._entities = [];
-        this._systemComponentSignature = new Bitfield(32);
-        this.requireComponents(components);
-    }
+  constructor() {
+    this._entities = [];
+    this._systemComponentSignature = new BitField(32); // TODO: setup global variable
+  }
 
-    private requireComponents(components: Component[]) {
-        components.forEach((component) =>
-            this._systemComponentSignature.set(component.id),
-        );
-    }
+  requireComponents(components: (typeof TransformComponent)[]) {
+    components.forEach((component) =>
+      this._systemComponentSignature.set(component.id),
+    );
+  }
 
-    addEntity(entity: Entity) {
-        this._entities.push(entity);
-    }
+  addEntity(entity: IEntity) {
+    this._entities.push(entity);
+  }
 
-    removeEntity(entity: Entity) {
-        this._entities = this._entities.filter((e) => e.id != entity.id);
-    }
+  removeEntity(entity: IEntity) {
+    this._entities = this._entities.filter((e) => e.id != entity.id);
+  }
 
-    getEntities() {
-        return this._entities;
-    }
+  getEntities() {
+    return this._entities;
+  }
 
-    getComponentSignature() {}
+  getComponentSignature() {}
 }

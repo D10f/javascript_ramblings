@@ -1,4 +1,4 @@
-import BaseComponent from '../../core/ecs/Component';
+import BaseComponent from '../../core/Component';
 import { Component, ComponentTypes } from './index';
 
 export default class ComponentFactory {
@@ -10,7 +10,7 @@ export default class ComponentFactory {
     this.componentIdMap = new Map();
   }
 
-  createComponent<T extends ComponentTypes>(args: T) {
+  create<T extends ComponentTypes>(args: T) {
     const id = this.calculateId(args.type);
     return new BaseComponent(id, args) as unknown as Component<T>;
   }

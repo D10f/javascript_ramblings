@@ -1,9 +1,10 @@
 import EventEmitter from './EventEmitter.ts';
 
+// TODO: still in review
 type TimerProps = {
-  emitter: EventEmitter;
+  emitter?: EventEmitter;
   fps?: number;
-  updateInterval: number;
+  updateInterval?: number;
 };
 
 export default class Timer {
@@ -14,7 +15,7 @@ export default class Timer {
   private paused: boolean;
   private _fps: number;
 
-  constructor(props: TimerProps) {
+  constructor(props: TimerProps = {}) {
     this.lastTick = 0;
     this.timer = 0;
     this.paused = false;

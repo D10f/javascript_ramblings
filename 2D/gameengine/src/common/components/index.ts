@@ -1,34 +1,35 @@
 import Vector2D from '../objects/Vector2D';
 
+type ComponentMap = {
+  transform: TransformComponent;
+  movement: MovementComponent;
+  sprite: SpriteComponent;
+  shape: ShapeComponent;
+};
+
 export type TransformComponent = {
-  type: 'Transform';
   position: Vector2D;
 };
 
 export type MovementComponent = {
-  type: 'Movement';
   velocity: Vector2D;
 };
 
 export type ShapeComponent = {
-  type: 'Shape';
   vertices: number;
   color: string;
 };
 
 export type SpriteComponent = {
-  type: 'Sprite';
   width: number;
   height: number;
 };
 
-export type ComponentTypes =
-  | TransformComponent
-  | MovementComponent
-  | ShapeComponent
-  | SpriteComponent;
+export type ComponentType = keyof ComponentMap;
 
-export type Component<T extends ComponentTypes> = T & IComponent;
+export type ComponentArgs<T extends ComponentType> = ComponentMap[T];
+
+export type Component<T extends ComponentType> = T & IComponent;
 
 export type IComponent = {
   id: number;

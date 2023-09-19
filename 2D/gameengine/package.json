@@ -15,7 +15,8 @@
         "@typescript-eslint/parser": "^6.7.0",
         "eslint": "^8.49.0",
         "rimraf": "^5.0.1",
-        "typescript": "^5.0.2"
+        "typescript": "^5.0.2",
+        "vitest": "^0.34.4"
     },
     "dependencies": {
         "bitfield": "^4.1.0"

@@ -1,21 +1,24 @@
 import BaseComponent from '../../core/Component';
-import { Component, ComponentTypes } from './index';
+import { ComponentArgs, ComponentType } from './index';
 
 export default class ComponentFactory {
   private componentTypeCounter: number;
-  private componentIdMap: Map<string, number>;
+  private componentIdMap: Map<ComponentType, number>;
 
   constructor() {
     this.componentTypeCounter = 0;
     this.componentIdMap = new Map();
   }
 
-  create<T extends ComponentTypes>(args: T) {
-    const id = this.calculateId(args.type);
-    return new BaseComponent(id, args) as unknown as Component<T>;
+  create<T extends ComponentType>(componentType: T, args: ComponentArgs<T>) {
+    return new BaseComponent(
+      this.calculateId(componentType),
+      componentType,
+      args,
+    );
   }
 
-  private calculateId(componentType: string) {
+  private calculateId(componentType: ComponentType) {
     let id = this.componentIdMap.get(componentType);
     if (id === undefined) {
       id = this.componentTypeCounter;

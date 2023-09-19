@@ -1,8 +1,10 @@
-export default class BaseComponent {
-  private readonly _id: number;
-  private readonly _type: string;
+import { ComponentArgs, ComponentType } from '../common/components';
 
-  constructor(id: number, { type, ...args }: any) {
+export default class BaseComponent<T extends ComponentType> {
+  private readonly _id: number;
+  private readonly _type: ComponentType;
+
+  constructor(id: number, type: T, args: ComponentArgs<T>) {
     this._id = id;
     this._type = type;
     Object.assign(this, args);

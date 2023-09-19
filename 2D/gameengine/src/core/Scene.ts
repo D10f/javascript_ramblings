@@ -1,5 +1,5 @@
 import Camera from '../modules/Camera';
-import EventEmitter from '../modules/EventEmitter';
+import EventBus from '../modules/EventBus';
 import Renderer from '../modules/Renderer';
 import Timer from '../modules/Timer';
 import AssetManager from './AssetManager';
@@ -8,7 +8,7 @@ import EntityManager from './EntityManager';
 export default class Scene {
   private entityManager: EntityManager;
   private assetManager: AssetManager;
-  private eventEmitter: EventEmitter;
+  private eventEmitter: EventBus;
   private renderer: Renderer;
   private timer: Timer;
   private camera: Camera;
@@ -19,7 +19,7 @@ export default class Scene {
   constructor(canvas: HTMLCanvasElement) {
     this.entityManager = new EntityManager();
     this.assetManager = new AssetManager();
-    this.eventEmitter = new EventEmitter();
+    this.eventEmitter = new EventBus();
     this.renderer = new Renderer(canvas);
     this.timer = new Timer();
     this.camera = new Camera();
@@ -33,7 +33,7 @@ export default class Scene {
 
   setup() {
     // Initialize events, load assets, parse map, level, etc.
-    this.eventEmitter.subscribe('tick', () => {
+    this.eventEmitter.subscribe('Tick', () => {
       this.renderer.clear();
     });
   }

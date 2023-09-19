@@ -1,4 +1,4 @@
-import Vector2D from '../objects/Vector2D';
+import Vector2D from '../../common/objects/Vector2D';
 
 type ComponentMap = {
   transform: TransformComponent;

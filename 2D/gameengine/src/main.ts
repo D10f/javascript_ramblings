@@ -1,4 +1,4 @@
-import ComponentFactory from './common/components/Factory';
+import ComponentFactory from './core/ComponentFactory';
 
 import Vector2D from './common/objects/Vector2D';
 

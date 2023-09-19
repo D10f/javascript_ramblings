@@ -1,5 +1,5 @@
-import { IEntity } from '../../core/Entity';
-import Vector2D from '../objects/Vector2D';
+import Vector2D from '../../common/objects/Vector2D';
+import { IEntity } from '../../core/Entities/Entity';
 
 type EventMap = {
   rectCollision: CollisionEvent;

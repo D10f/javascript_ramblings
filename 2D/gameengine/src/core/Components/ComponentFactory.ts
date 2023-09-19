@@ -1,5 +1,5 @@
-import BaseComponent from '../../core/Component';
-import { ComponentArgs, ComponentType } from './index';
+import BaseComponent from './Component';
+import { ComponentArgs, ComponentType } from './types';
 
 export default class ComponentFactory {
   private componentTypeCounter: number;

@@ -1,4 +1,4 @@
-import { ComponentArgs, ComponentType } from '../common/components';
+import { ComponentArgs, ComponentType } from './types';
 
 export default class BaseComponent<T extends ComponentType> {
   private readonly _id: number;

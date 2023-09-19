@@ -1,4 +1,4 @@
-import { EventArgs, EventType } from '../common/events';
+import { EventArgs, EventType } from './types';
 
 type EventCallback<T extends EventType> = (args: EventArgs<T>) => void;
 

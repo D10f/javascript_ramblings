@@ -2,12 +2,20 @@ import BaseComponent from './Component';
 import { ComponentArgs, ComponentType } from './types';
 
 export default class ComponentFactory {
-  private componentTypeCounter: number;
-  private componentIdMap: Map<ComponentType, number>;
+  static componentTypeCounter: number;
+  static componentIdMap: Map<ComponentType, number>;
 
   constructor() {
-    this.componentTypeCounter = 0;
-    this.componentIdMap = new Map();
+    ComponentFactory.componentTypeCounter = 0;
+    ComponentFactory.componentIdMap = new Map();
+  }
+
+  static getTypeId(type: ComponentType) {
+    const typeId = ComponentFactory.componentIdMap.get(type);
+    if (typeId === undefined) {
+      throw new Error('Component id does not exist');
+    }
+    return typeId;
   }
 
   create<T extends ComponentType>(componentType: T, args: ComponentArgs<T>) {
@@ -19,10 +27,13 @@ export default class ComponentFactory {
   }
 
   private calculateId(componentType: ComponentType) {
-    let id = this.componentIdMap.get(componentType);
+    let id = ComponentFactory.componentIdMap.get(componentType);
     if (id === undefined) {
-      id = this.componentTypeCounter;
-      this.componentIdMap.set(componentType, this.componentTypeCounter++);
+      id = ComponentFactory.componentTypeCounter;
+      ComponentFactory.componentIdMap.set(
+        componentType,
+        ComponentFactory.componentTypeCounter++,
+      );
     }
     return id;
   }

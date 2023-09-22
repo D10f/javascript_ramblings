@@ -1,4 +1,4 @@
-import EventEmitter from './EventEmitter.ts';
+import EventEmitter from './Events/EventBus';
 
 // TODO: still in review
 type TimerProps = {

@@ -88,23 +88,41 @@ export default class Registry {
     const componentId = ComponentFactory.getTypeId(type);
     const entityId = entity.id;
     const componentPool = this.componentPools[componentId];
-    return componentPool[entityId] as Component<T>;
+    const entityComponent = componentPool[entityId];
+
+    if (!entityComponent) {
+      throw new Error(
+        `Component ${type}(${componentId}) on entity ${entityId} not found!`,
+      );
+    }
+
+    return entityComponent;
   }
 
-  // addEntityToSystem(entity: Entity) {
-  //   const entityId = entity.id;
-  //   for (const system of this.systems) {
+  addEntityToSystem(entity: IEntity) {
+    const entityId = entity.id;
+    const bits: boolean[] = [];
+    this.componentSignatures[entityId].forEach((bit) => {
+      bits.push(bit);
+    });
 
-  // if (
-  //   (this.componentSignatures[entityId] & system.componentSignature) ===
-  //   system.componentSignature
-  // ) {
-  //   system.addEntity(entity);
-  // }
-  // }
-  // }
+    for (const system of this.systems) {
+      let isValid = true;
 
-  removeEntityFromSystem(entity: Entity) {
+      system.componentSignature.forEach((bit, idx) => {
+        if (bits[idx] !== bit) {
+          isValid = false;
+          return;
+        }
+      });
+
+      if (isValid) {
+        system.addEntity(entity);
+      }
+    }
+  }
+
+  removeEntityFromSystem(entity: IEntity) {
     for (const system of this.systems) {
       system.removeEntity(entity);
     }
@@ -112,16 +130,16 @@ export default class Registry {
 
   update() {
     for (const entity of this.addEntitiesQueue) {
-      // this.addEntityToSystem(entity);
+      this.addEntityToSystem(entity);
     }
 
     this.addEntitiesQueue = [];
 
     for (const entity of this.removeEntitiesQueue) {
       const entityId = entity.id;
-      // this.removeEntityFromSystem(entity);
-      // this.freeEntityIds.push(entityId);
-      // this.componentSignatures[entityId].forEach((bit) => (bit = false));
+      this.removeEntityFromSystem(entity);
+      this.freeEntityIds.push(entityId);
+      this.componentSignatures[entityId].forEach((bit) => (bit = false));
     }
 
     this.removeEntitiesQueue = [];

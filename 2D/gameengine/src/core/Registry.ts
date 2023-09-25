@@ -1,17 +1,15 @@
 import BitField from 'bitfield';
 import ComponentFactory from './Components/ComponentFactory';
-import {
-  ComponentType,
-  ComponentArgs,
-  IComponent,
-  Component,
-} from './Components/types';
+import { ComponentType, ComponentArgs, IComponent } from './Components/types';
 import Entity, { IEntity } from './Entities/Entity';
 import System from './Systems/System';
 import { resizeArray } from '../common/helpers/array';
+import SystemFactory from './Systems/SystemFactory';
+import { SystemType } from './Systems/types';
 
 export default class Registry {
   private componentFactory: ComponentFactory;
+  private systemFactory: SystemFactory;
   private totalEntities: number;
   private freeEntityIds: number[];
   private componentPools: IComponent[][];
@@ -21,7 +19,6 @@ export default class Registry {
   private removeEntitiesQueue: IEntity[];
 
   constructor() {
-    this.componentFactory = new ComponentFactory();
     this.totalEntities = 0;
     this.freeEntityIds = [];
     this.componentPools = [];
@@ -29,20 +26,23 @@ export default class Registry {
     this.systems = [];
     this.addEntitiesQueue = [];
     this.removeEntitiesQueue = [];
+    this.componentFactory = new ComponentFactory();
+    this.systemFactory = new SystemFactory(this);
   }
 
   createEntity() {
     let entityId = 0;
 
-    if (this.freeEntityIds.length === 0) {
-      entityId = this.totalEntities++;
+    // if (this.freeEntityIds.length === 0) {
+    //   entityId = this.totalEntities++;
 
-      if (entityId > this.componentSignatures.length) {
-        resizeArray(this.componentSignatures);
-      }
-    } else {
-      entityId = this.freeEntityIds.unshift();
-    }
+    //   if (entityId > this.componentSignatures.length) {
+    //     resizeArray(this.componentSignatures);
+    //   }
+    // } else {
+    //   entityId = this.freeEntityIds.unshift();
+    // }
+    entityId = this.freeEntityIds.unshift();
 
     const newEntity = new Entity(entityId);
     this.addEntitiesQueue.push(newEntity);
@@ -68,6 +68,7 @@ export default class Registry {
     }
 
     this.componentPools[componentId][entityId] = newComponent;
+
     this.componentSignatures[entityId] = new BitField(32);
     this.componentSignatures[entityId].set(componentId, true);
   }
@@ -99,9 +100,16 @@ export default class Registry {
     return entityComponent;
   }
 
+  addSystem(system: SystemType) {
+    const newSystem = this.systemFactory.create(system);
+    this.systems.push(newSystem);
+    return newSystem;
+  }
+
   addEntityToSystem(entity: IEntity) {
     const entityId = entity.id;
     const bits: boolean[] = [];
+
     this.componentSignatures[entityId].forEach((bit) => {
       bits.push(bit);
     });
@@ -109,7 +117,7 @@ export default class Registry {
     for (const system of this.systems) {
       let isValid = true;
 
-      system.componentSignature.forEach((bit, idx) => {
+      system.systemComponentSignature.forEach((bit, idx) => {
         if (bits[idx] !== bit) {
           isValid = false;
           return;
@@ -139,6 +147,7 @@ export default class Registry {
       const entityId = entity.id;
       this.removeEntityFromSystem(entity);
       this.freeEntityIds.push(entityId);
+      /* @ts-ignore */
       this.componentSignatures[entityId].forEach((bit) => (bit = false));
     }
 

@@ -2,14 +2,16 @@ import BitField from 'bitfield';
 import { IEntity } from '../Entities/Entity';
 import { ComponentType } from '../Components/types';
 import ComponentFactory from '../Components/ComponentFactory';
+import Registry from '../Registry';
+import { ISystem } from './types';
 
 const MAX_COMPONENTS = 32;
 
-export default class BaseSystem {
+export default class BaseSystem implements ISystem {
   private _entities: IEntity[];
   private _systemComponentSignature: BitField;
 
-  constructor() {
+  constructor(protected readonly registry: Registry) {
     this._entities = [];
     this._systemComponentSignature = new BitField(MAX_COMPONENTS);
   }
@@ -21,11 +23,11 @@ export default class BaseSystem {
     });
   }
 
-  protected getEntities() {
+  get entities() {
     return this._entities;
   }
 
-  get componentSignature() {
+  get systemComponentSignature() {
     return this._systemComponentSignature;
   }
 

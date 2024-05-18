@@ -1,9 +1,13 @@
 import BitField from 'bitfield';
 import ComponentFactory from './Components/ComponentFactory';
-import { ComponentType, ComponentArgs, IComponent } from './Components/types';
+import {
+  ComponentType,
+  ComponentArgs,
+  IComponent,
+  Component,
+} from './Components/types';
 import Entity, { IEntity } from './Entities/Entity';
 import System from './Systems/System';
-import { resizeArray } from '../common/helpers/array';
 import SystemFactory from './Systems/SystemFactory';
 import { SystemType } from './Systems/types';
 
@@ -31,8 +35,6 @@ export default class Registry {
   }
 
   createEntity() {
-    let entityId = 0;
-
     // if (this.freeEntityIds.length === 0) {
     //   entityId = this.totalEntities++;
 
@@ -42,7 +44,10 @@ export default class Registry {
     // } else {
     //   entityId = this.freeEntityIds.unshift();
     // }
-    entityId = this.freeEntityIds.unshift();
+    const entityId =
+      this.freeEntityIds.length > 0
+        ? this.freeEntityIds.unshift()
+        : this.totalEntities++;
 
     const newEntity = new Entity(entityId);
     this.addEntitiesQueue.push(newEntity);
@@ -97,7 +102,7 @@ export default class Registry {
       );
     }
 
-    return entityComponent;
+    return entityComponent as Component<T>;
   }
 
   addSystem(system: SystemType) {
@@ -125,6 +130,7 @@ export default class Registry {
       });
 
       if (isValid) {
+        console.log('sdfs');
         system.addEntity(entity);
       }
     }

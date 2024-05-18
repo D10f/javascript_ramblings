@@ -1,5 +1,5 @@
 import BaseComponent from './Component';
-import { ComponentArgs, ComponentType } from './types';
+import { Component, ComponentArgs, ComponentType } from './types';
 
 export default class ComponentFactory {
   static componentTypeCounter: number;

@@ -41,13 +41,16 @@ const ubuntuCodenames = [
   "Noble Numbat",
 ];
 
+type TypeWriterCursorType = "line" | "block" | "underline";
+
 type TypeWriterProps = {
   wordList: string[];
-  typeSpeed: number;
-  deleteSpeed: number;
-  showTextDuration: number;
-  pauseBeforeNext: number;
+  typeSpeed?: number;
+  deleteSpeed?: number;
+  showTextDuration?: number;
+  pauseBeforeNext?: number;
   elementRef: HTMLElement | string;
+  cursor?: TypeWriterCursorType;
 };
 
 class TypeWriter {
@@ -67,6 +70,7 @@ class TypeWriter {
     deleteSpeed = 100,
     showTextDuration = 1000,
     pauseBeforeNext = 1000,
+    cursor = null,
   }: TypeWriterProps) {
     this.typeSpeed = typeSpeed;
     this.deleteSpeed = deleteSpeed;
@@ -77,14 +81,31 @@ class TypeWriter {
       typeof elementRef === "string"
         ? document.querySelector(elementRef)
         : elementRef;
+
+    cursor && this.setCursor(cursor);
+  }
+
+  private setCursor(cursorType: TypeWriterCursorType) {
+    const span = document.createElement("span");
+    span.className = `typewriter__cursor typewriter__cursor--${cursorType}`;
+
+    switch (cursorType) {
+      case "block":
+        span.textContent = "❚";
+        break;
+      case "line":
+        span.textContent = "|";
+        break;
+      case "underline":
+        span.textContent = "_";
+        break;
+    }
+
+    this.element.insertAdjacentElement("afterend", span);
   }
 
   private get word() {
     return this.wordList[this.wordIdx];
-  }
-
-  private get cursor() {
-    return this.word[this.letterIdx];
   }
 
   private typeKey() {
@@ -124,11 +145,12 @@ class TypeWriter {
 
 const typeWriter = new TypeWriter({
   wordList: ubuntuCodenames,
-  elementRef: "#target",
-  typeSpeed: 75,
-  deleteSpeed: 40,
+  elementRef: "#typewriter",
+  typeSpeed: 100,
+  deleteSpeed: 60,
   showTextDuration: 500,
   pauseBeforeNext: 500,
+  cursor: "block",
 });
 
 typeWriter.start();

@@ -4,7 +4,7 @@ JavaScript Ramblings - a collection of small scripts made with the sole purpose 
 
 ### [pathfinding_visualization](https://github.com/D10f/javascript_ramblings/tree/main/2D/pathfinding_viz)
 
-A visualization of the A* pathfinding algorithm on a hexagonal grid with different terrain tiles, with a built-in tile editor to play around with.
+A visualization of the A\* pathfinding algorithm on a hexagonal grid with different terrain tiles, with a built-in tile editor to play around with.
 
 ![animated gif of the pathfinding visualization](assets/pathfinding_visualization.gif)
 
@@ -18,11 +18,19 @@ A classic game of Pacman with a JavaScript theme: run away from the frameworks!
 
 ---
 
-### [text_transition](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.js) | [.ts](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.ts)
+### [text_transition](https://github.com/D10f/javascript_ramblings/blob/main/text_transition.ts)
 
 Changes the contents of the target HTML with a new value, transitioning characters individually in a random fashion.
 
-![animated gif showing the result of the script](assets/text_transition.gif)
+![animated gif showing the result of the script](assets/text_transition_new.gif)
+
+---
+
+### [typewritter](https://github.com/D10f/javascript_ramblings/blob/main/typewriter.ts)
+
+Changes the text content of an input element simulating a type writer effect, where each letter is entered at a time.
+
+![animated gif showing the result of the script](assets/typewriter.gif)
 
 ---
 
@@ -51,17 +59,17 @@ new Masonry(".grid-container");
 A parser to convert strings of byte size into it's numeric value. Supports byte prefixes.
 
 ```js
-parse("70 Mb") > // Accepts shorthand syntax
-  70000000;
+parse("70 Mb")        // Accepts shorthand syntax
+> 70000000;
 
-parse("0.1 peta") > // Accepts partial syntax
-  100000000000000;
+parse("0.1 peta")     // Accepts partial syntax
+> 100000000000000;
 
-parse("2 tebibytes") > // Accepts long syntax
-  2199023255552;
+parse("2 tebibytes")  // Accepts long syntax
+> 2199023255552;
 
-parse("5 Gibibytes") > // Accepts byte prefixes (kibi-, mebi-, gibi-, ...)
-  5368709120;
+parse("5 Gibibytes")  // Accepts byte prefixes (kibi-, mebi-, gibi-, ...)
+> 5368709120;
 ```
 
 ---
@@ -71,17 +79,17 @@ parse("5 Gibibytes") > // Accepts byte prefixes (kibi-, mebi-, gibi-, ...)
 A simple color code converter from hexadecimal format to RGB color format, and vice-versa.
 
 ```js
-hexToRgb("#56BCF1") > // from hex to rgb
-  "rgb(86, 188, 241)";
+hexToRgb("#56BCF1")           // from hex to rgb
+> "rgb(86, 188, 241)";
 
-rgbToHex(86, 188, 241) > // accepts numbers
-  "#56BCF1";
+rgbToHex(86, 188, 241)        // accepts numbers
+> "#56BCF1";
 
-rgbToHex("86", "188", "241") > // accepts strings
-  "#56BCF1";
+rgbToHex("86", "188", "241")  // accepts strings
+> "#56BCF1";
 
-rgbToHex([86, 188, 241]) > // accepts an array
-  "#56BCF1";
+rgbToHex([86, 188, 241])      // accepts an array
+> "#56BCF1";
 ```
 
 ---
@@ -133,9 +141,9 @@ Calculate time differences and output them as human-readable strings.
 ### [datetime_diff](https://github.com/D10f/javascript_ramblings/blob/main/datetime_diff.ts)
 
 ```ts
-document.querySelector('.post__publishedAt').textContent = DateTime.humanDiff(
+document.querySelector(".post__publishedAt").textContent = DateTime.humanDiff(
   new Date(post.publishedAt),
-  new Date()
+  new Date(),
 );
 ```
 

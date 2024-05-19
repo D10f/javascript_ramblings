@@ -1,114 +1,107 @@
-interface ITextTransition {
-  element: HTMLElement;
-  newText: string;
-  maxDuration?: number;
-  entropy?: number;
-  rate?: number;
-  highlight?: string | string[] | false;
-  callback?: Function;
-}
+type textTransitionProps = {
+  elementRef: HTMLElement | string;
+  speed?: number;
+  wordList?: string[];
+};
 
-interface ITransitionCharObject {
-  charCode: number;
-  done: boolean;
-}
+class TextTransition {
+  private element: HTMLElement;
+  private speed: number;
 
-/**
- * Changes the contents of the target HTML with a new value, transitioning characters individually in a random fashion.
- */
-export function textTransition({
-  element,
-  newText,
-  maxDuration = 1000,
-  entropy = 0.8,
-  rate = 125,
-  highlight = "#f4c862",
-  callback,
-}: ITextTransition) {
-  const currentTextCharCodeArray: number[] = element
-    .textContent!.split("")
-    .map((letter: string) => letter.charCodeAt(0));
+  constructor({ elementRef, speed = 50 }: textTransitionProps) {
+    this.speed = speed;
+    this.element =
+      typeof elementRef === "string"
+        ? document.querySelector(elementRef)
+        : elementRef;
+  }
 
-  const newTextCharCodeArray: number[] = newText
-    .split("")
-    .map((letter: string) => letter.charCodeAt(0));
+  private get text() {
+    return this.element.innerText;
+  }
 
-  let transitionTextCharCodeArray: ITransitionCharObject[] = new Array(
-    newText.length
-  ).fill({ charCode: 0, done: false });
+  private get children() {
+    return this.element.children;
+  }
 
-  requestAnimationFrame(_textTransition);
+  private get length() {
+    return this.text.length;
+  }
 
-  let previousTick = 0;
-  let rateCounter = 0;
-  let intervalCounter = 0;
+  private get randomIdx() {
+    return Math.floor(Math.random() * this.length);
+  }
 
-  function _textTransition(timestamp: number) {
-    const delta = timestamp - previousTick;
-    previousTick = timestamp;
-    intervalCounter += delta;
-    rateCounter += delta;
+  private set text(value: string) {
+    this.element.innerText = value;
+  }
 
-    if (intervalCounter >= rate) {
-      intervalCounter = 0;
+  private set html(value: string) {
+    this.element.innerHTML = value;
+  }
 
-      transitionTextCharCodeArray = newTextCharCodeArray.map(
-        (charCode, idx) => {
-          if (
-            charCode === currentTextCharCodeArray[idx] ||
-            charCode === transitionTextCharCodeArray[idx]?.charCode ||
-            Math.random() > entropy
-          ) {
-            return {
-              charCode,
-              done: true,
-            };
-          }
+  private getRandomChar() {
+    // included characters: A-Z a-z 0-9 "#$%&\'()*+,-./:;<=>?@[\\]^_`{|}
+    return String.fromCharCode(Math.max(33, Math.floor(Math.random() * 126)));
+  }
 
-          // included characters: A-Z a-z 0-9 "#$%&\'()*+,-./:;<=>?@[\\]^_`{|}
-          const randomNum = Math.max(32, Math.floor(Math.random() * 126));
-
-          return {
-            charCode: randomNum,
-            done: false,
-          };
-        }
-      );
-
-      if (rateCounter >= maxDuration) {
-        element.textContent = newText;
-        if (callback) {
-          callback();
-        }
-        return;
-      }
-
-      if (!highlight) {
-        element.textContent = transitionTextCharCodeArray
-          .map(({ charCode }: ITransitionCharObject) =>
-            String.fromCharCode(charCode)
-          )
-          .join("");
-        return;
-      }
-
-      element.innerHTML = transitionTextCharCodeArray
-        .map(({ charCode, done }: ITransitionCharObject) => {
-          let color = "";
-
-          if (highlight instanceof Array) {
-            color = highlight[Math.floor(Math.random() * highlight.length)];
-          }
-
-          return done
-            ? `<span>${String.fromCharCode(charCode)}</span>`
-            : `<span style="color: ${color || highlight}">${String.fromCharCode(
-                charCode
-              )}</span>`;
-        })
-        .join("");
+  private getRandomStr(length: number) {
+    let randomStr = "";
+    for (let i = 0; i < length; ++i) {
+      randomStr += this.getRandomChar();
     }
+    return randomStr;
+  }
 
-    requestAnimationFrame(_textTransition);
+  private updateText(replacement: string, length: number) {
+    let newText = "";
+    for (let i = 0; i <= length; ++i) {
+      setTimeout(() => {
+        this.text = replacement.substring(0, i) + this.text.substring(i);
+      }, this.speed * i);
+    }
+  }
+
+  private createSpan(text: string, color?: string) {
+    return color
+      ? `<span style="color: ${color};">${text}</span>`
+      : `<span>${text}</span>`;
+  }
+
+  private updateHtml(replacement: string, length: number, color: string) {
+    let html = "";
+    for (let i = 0; i <= length + 1; ++i) {
+      setTimeout(() => {
+        const rn = replacement
+          .substring(0, i)
+          .split("")
+          .map((letter, idx) => {
+            return idx === i - 1
+              ? this.createSpan(letter, color)
+              : this.createSpan(letter);
+          })
+          .join("");
+        
+        const nn = this.text
+          .substring(i)
+          .split("")
+          .map((letter) => this.createSpan(letter))
+          .join("");
+        
+        this.html = rn + nn;
+        
+      }, this.speed * i);
+    }
+  }
+
+  linearTransition(text: string) {
+    const length = Math.max(this.length, text.length);
+
+    // initial loop to change all letters to a random character
+    this.updateHtml(this.getRandomStr(length), length, 'coral');
+
+    setTimeout(() => {
+      this.updateHtml(text, length, '#333');
+    }, this.speed * length);
   }
 }

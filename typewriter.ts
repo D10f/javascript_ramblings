@@ -43,6 +43,16 @@ const ubuntuCodenames = [
 
 type TypeWriterCursorType = "line" | "block" | "underline";
 
+type TypeWriterCursorOptions = {
+  type: TypeWriterCursorType;
+  color?: string;
+  blinkingSpeed?: number;
+};
+
+type TypeWriterCursor = TypeWriterCursorOptions & {
+  elementRef: HTMLSpanElement;
+};
+
 type TypeWriterProps = {
   wordList: string[];
   typeSpeed?: number;
@@ -50,7 +60,7 @@ type TypeWriterProps = {
   showTextDuration?: number;
   pauseBeforeNext?: number;
   elementRef: HTMLElement | string;
-  cursor?: TypeWriterCursorType;
+  cursor?: TypeWriterCursorType | TypeWriterCursorOptions;
 };
 
 class TypeWriter {
@@ -62,6 +72,7 @@ class TypeWriter {
   private element: HTMLElement;
   private letterIdx = 0;
   private wordIdx = 0;
+  private cursor: TypeWriterCursor;
 
   constructor({
     wordList,
@@ -82,26 +93,58 @@ class TypeWriter {
         ? document.querySelector(elementRef)
         : elementRef;
 
-    cursor && this.setCursor(cursor);
+    this.setCursor(cursor);
   }
 
-  private setCursor(cursorType: TypeWriterCursorType) {
-    const span = document.createElement("span");
-    span.className = `typewriter__cursor typewriter__cursor--${cursorType}`;
+  private setCursor(
+    cursorOptions: TypeWriterCursorType | TypeWriterCursorOptions,
+  ) {
+    if (!cursorOptions) return;
 
-    switch (cursorType) {
+    const _cursor: TypeWriterCursor =
+      typeof cursorOptions === "string"
+        ? {
+            type: "block",
+            color: "currentColor",
+            blinkingSpeed: 0,
+            elementRef: null,
+          }
+        : { ...cursorOptions, elementRef: null };
+
+    this.cursor = {
+      type: _cursor.type || "block",
+      color: _cursor.color || "currentColor",
+      blinkingSpeed: _cursor.blinkingSpeed || 0,
+      elementRef: document.createElement("span"),
+    };
+
+    this.cursor.elementRef = document.createElement("span");
+    this.cursor.elementRef.className = `typewriter_this.cursor typewriter_this.cursor--${this.cursor.type}`;
+    this.cursor.elementRef.style.color = this.cursor.color;
+
+    switch (this.cursor.type) {
       case "block":
-        span.textContent = "❚";
+        this.cursor.elementRef.textContent = "❚";
         break;
       case "line":
-        span.textContent = "|";
+        this.cursor.elementRef.textContent = "|";
         break;
       case "underline":
-        span.textContent = "_";
+        this.cursor.elementRef.textContent = "_";
         break;
     }
 
-    this.element.insertAdjacentElement("afterend", span);
+    if (this.cursor.blinkingSpeed > 0) {
+      this.cursor.elementRef.classList.add("typewriter_this.cursor--blink");
+      this.cursor.elementRef.style.animationDuration = `${this.cursor.blinkingSpeed}ms`;
+    }
+
+    this.element.insertAdjacentElement("afterend", this.cursor.elementRef);
+  }
+
+  private toggleCursorBlink() {
+    if (this.cursor.blinkingSpeed <= 0) return;
+    this.cursor.elementRef.classList.toggle("typewriter__cursor--blink");
   }
 
   private get word() {
@@ -129,14 +172,23 @@ class TypeWriter {
     const pauseBeforeNext =
       this.deleteSpeed * wordLength + this.pauseBeforeNext;
 
+    this.toggleCursorBlink();
+
     for (let i = 0; i < wordLength; i++) {
       setTimeout(this.typeKey.bind(this), this.typeSpeed * i);
     }
+
+    setTimeout(this.toggleCursorBlink.bind(this), this.typeSpeed * wordLength);
+    setTimeout(this.toggleCursorBlink.bind(this), showTextDuration);
 
     setTimeout(() => {
       for (let j = wordLength; j >= 0; j--) {
         setTimeout(this.backspace.bind(this), this.deleteSpeed * j);
       }
+      setTimeout(
+        this.toggleCursorBlink.bind(this),
+        this.deleteSpeed * wordLength,
+      );
 
       setTimeout(this.next.bind(this), pauseBeforeNext);
     }, showTextDuration);
@@ -146,11 +198,15 @@ class TypeWriter {
 const typeWriter = new TypeWriter({
   wordList: ubuntuCodenames,
   elementRef: "#typewriter",
-  typeSpeed: 100,
-  deleteSpeed: 60,
-  showTextDuration: 500,
-  pauseBeforeNext: 500,
-  cursor: "block",
+  typeSpeed: 120,
+  deleteSpeed: 80,
+  showTextDuration: 2000,
+  pauseBeforeNext: 2000,
+  cursor: {
+    type: "block",
+    color: "#333",
+    blinkingSpeed: 800,
+  },
 });
 
 typeWriter.start();

@@ -23,6 +23,7 @@ javascript: (function () {
 /**
  *  Replaces all references to Youtube, including link href attributes, and
  *  replaces them with invidious links.
+ *  Credit: https://www.techighness.com/post/get-user-country-and-region-on-browser-with-javascript-only/
  */
 javascript: (async function () {
   const INVIDIOUS_JSON_API = "https://api.invidious.io/instances.json";
@@ -31,6 +32,11 @@ javascript: (async function () {
   const SA_REGIONS = ["CL"];
   const AS_REGIONS = ["IN", "JP"];
   const OC_REGIONS = ["AU", "NZ"];
+
+  const REGIONS = {
+    Europe: {},
+    America: {},
+  };
 
   /**
    * Determines the algorithm used to select the invidious instance to use.
@@ -54,12 +60,32 @@ javascript: (async function () {
   switch (REGION_SELECTOR_ALGO) {
     case "local":
       const { timezone } = Intl.DateTimeFormat().resolvedOptions();
+      // returns something like Europe/Berlin
       break;
     case "external":
       throw new Error("Not implemented.");
       break;
     default:
       throw new Error("Unrecognized region selector algorithm.");
+      break;
+  }
+
+  switch (INSTANCE_SELECTOR_ALGO) {
+    case "nearest":
+      throw new Error("Not implemented.");
+      // convert into random instance from nearest region -> DE
+      // if timezone does not match directly to a server region e.g., Europe/Lisbon
+      // find nearest server
+      break;
+    case "region":
+      throw new Error("Not implemented.");
+      break;
+    case "all":
+      throw new Error("Not implemented.");
+      // just pick one at random
+      break;
+    default:
+      throw new Error("Unrecognized instance selector algorithm.");
       break;
   }
 
